@@ -4,6 +4,10 @@ A simple, free CRM for **MSMEs and small businesses of any kind**: shops, manufa
 
 It runs entirely in the web browser. There is nothing to install, no server and no monthly fee. Your data stays on your device.
 
+## New: InstaRank (Instagram SEO SaaS)
+
+The [`instarank/`](instarank/) folder contains a full SaaS for **Instagram keyword research, live trending-Reel tracking and SEO + AEO caption writing**, with accounts, plans and the Instagram Graph API. See [instarank/README.md](instarank/README.md).
+
 ## Features
 
 | Module | What it does |

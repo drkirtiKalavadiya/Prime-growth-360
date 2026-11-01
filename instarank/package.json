@@ -1,0 +1,19 @@
+{
+  "name": "instarank",
+  "version": "1.0.0",
+  "description": "Prime Growth 360 InstaRank: Instagram keyword research, live Reel trend tracking and SEO + AEO caption studio.",
+  "type": "module",
+  "private": true,
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test tests/*.test.js"
+  },
+  "engines": {
+    "node": ">=18.17"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.3.0"
+  }
+}

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>InstaRank by Prime Growth 360</title>
+  <meta name="description" content="Instagram keyword research, live Reel trend tracking and SEO + AEO caption studio.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Auth -->
+  <main id="auth" class="auth hidden">
+    <section class="auth-hero">
+      <div class="brand"><span class="logo">IR</span> InstaRank</div>
+      <h1>Rank in Instagram search.<br>Ride Reels while they're hot.</h1>
+      <ul class="bullets">
+        <li><b>Keyword research</b> from real search phrases, scored for demand, competition and AEO fit.</li>
+        <li><b>Live Reel tracker</b> shows which Reels are gaining engagement right now, per minute.</li>
+        <li><b>SEO + AEO caption studio</b> writes and audits captions that answer what people search.</li>
+      </ul>
+      <p class="muted small">Part of Prime Growth 360.</p>
+    </section>
+    <section class="auth-card card">
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-auth-tab="login" role="tab">Sign in</button>
+        <button class="tab" data-auth-tab="signup" role="tab">Create account</button>
+      </div>
+      <form id="authForm" autocomplete="on">
+        <label class="signup-only hidden">Name<input name="name" maxlength="80" autocomplete="name"></label>
+        <label>Email<input name="email" type="email" required autocomplete="email"></label>
+        <label>Password<input name="password" type="password" required minlength="8" autocomplete="current-password"></label>
+        <p class="error" id="authError" role="alert"></p>
+        <button class="btn primary block" type="submit" id="authSubmit">Sign in</button>
+      </form>
+      <p class="muted small center">Free plan included. No card required.</p>
+    </section>
+  </main>
+
+  <!-- App -->
+  <div id="app" class="shell hidden">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand"><span class="logo">IR</span> InstaRank</div>
+      <nav>
+        <a href="#dashboard" data-view="dashboard">📊 Dashboard</a>
+        <a href="#keywords" data-view="keywords">🔍 Keyword Research</a>
+        <a href="#reels" data-view="reels">🔥 Trending Reels</a>
+        <a href="#live" data-view="live">📡 Live Tracker</a>
+        <a href="#competitors" data-view="competitors">🕵️ Competitors</a>
+        <a href="#captions" data-view="captions">✍️ Caption Studio</a>
+        <a href="#audit" data-view="audit">✅ Caption Audit</a>
+        <a href="#saved" data-view="saved">⭐ Saved</a>
+        <a href="#settings" data-view="settings">⚙️ Settings &amp; Plan</a>
+      </nav>
+      <div class="sidebar-foot">
+        <div id="modeBadge" class="badge"></div>
+        <div class="muted small" id="whoami"></div>
+        <button class="btn ghost small" id="logoutBtn">Sign out</button>
+      </div>
+    </aside>
+    <div class="main">
+      <header class="topbar">
+        <button class="btn ghost icon" id="menuBtn" aria-label="Menu">☰</button>
+        <h2 id="viewTitle">Dashboard</h2>
+        <span id="planBadge" class="badge plan"></span>
+      </header>
+      <div id="demoBanner" class="banner hidden">
+        You're viewing <b>demo data</b>. Connect your Instagram Business/Creator account in <a href="#settings">Settings</a> for live data.
+      </div>
+      <section id="view" class="view" aria-live="polite"></section>
+    </div>
+  </div>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="app.js" type="module"></script>
+</body>
+</html>
