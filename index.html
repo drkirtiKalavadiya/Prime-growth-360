@@ -177,8 +177,9 @@
           <div class="mini-head">Profile &amp; data</div>
           <label>Your name <input id="nameInput" maxlength="30" /></label>
           <div class="btn-row">
-            <button class="btn" id="exportBtn">⬇ Export backup</button>
-            <label class="btn">⬆ Import backup<input type="file" id="importFile" accept="application/json" hidden /></label>
+            <button class="btn" id="exportBtn">⬆ Save backup</button>
+            <button class="btn" id="pasteBackupBtn">⬇ Restore backup</button>
+            <label class="btn">📂 Restore from file<input type="file" id="importFile" accept="application/json,.json" hidden /></label>
             <button class="btn danger" id="resetBtn">Reset all</button>
           </div>
           <p class="muted small">All data stays private on this device (browser storage).</p>

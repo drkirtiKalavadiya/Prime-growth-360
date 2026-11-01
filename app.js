@@ -100,7 +100,7 @@
       badges: {},
       milestones: {},
       games: { lastFreeSpin: '', rushBest: 0, rush: {}, timer: {} },
-      settings: { theme: 'dark' },
+      settings: { theme: 'auto' },
     };
   }
 
@@ -484,6 +484,18 @@
     onMount && onMount($('#modalBody'));
   }
   const closeModal = () => { $('#modal').hidden = true; $('#modalBody').innerHTML = ''; };
+  // In-app confirmation (browser confirm() boxes are blocked in some app views).
+  function askConfirm(message, okLabel = 'Yes', danger = false) {
+    return new Promise((resolve) => {
+      openModal(`<h3>Are you sure?</h3><p>${esc(message)}</p>
+        <div class="modal-actions"><button type="button" class="btn" id="cNo">Cancel</button>
+        <button type="button" class="btn ${danger ? 'danger' : 'primary'}" id="cYes">${esc(okLabel)}</button></div>`, (root) => {
+        $('#cNo', root).onclick = () => { closeModal(); resolve(false); };
+        $('#cYes', root).onclick = () => { closeModal(); resolve(true); };
+        $('#cYes', root).focus();
+      });
+    });
+  }
   $('#modal').addEventListener('click', (e) => { if (e.target.id === 'modal' && !firstRun) closeModal(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('#modal').hidden && !firstRun) closeModal(); });
 
@@ -620,7 +632,8 @@
     if (ed) habitForm(state.habits.find((h) => h.id === ed.dataset.edit));
     if (del) {
       const h = state.habits.find((x) => x.id === del.dataset.del);
-      if (h && confirm(`Delete "${h.name}"? Earned points are kept.`)) { state.habits = state.habits.filter((x) => x !== h); afterChange(); }
+      if (h) askConfirm(`Delete "${h.name}"? Points you already earned are kept.`, 'Delete', true)
+        .then((ok) => { if (ok) { state.habits = state.habits.filter((x) => x !== h); afterChange(); } });
     }
   });
 
@@ -629,42 +642,78 @@
     const r = e.target.closest('[data-redeem]'); const d = e.target.closest('[data-rdel]');
     if (r) {
       const rw = state.rewards.find((x) => x.id === r.dataset.redeem);
-      if (rw && state.points >= rw.cost && confirm(`Redeem "${rw.name}" for ${rw.cost} ★?`)) {
+      if (rw && state.points >= rw.cost) askConfirm(`Spend ${rw.cost} ★ on "${rw.name}"?`, 'Redeem').then((ok) => {
+        if (!ok || state.points < rw.cost) return;
         addPoints(-rw.cost, `🎁 Redeemed: ${rw.name}`, true); unlock('treat');
         toast(`🎉 Enjoy your ${rw.name}! You earned it.`); bigConfetti(); afterChange();
-      }
+      });
     }
     if (d) { state.rewards = state.rewards.filter((x) => x.id !== d.dataset.rdel); afterChange(); }
   });
 
-  $('#themeToggle').onclick = () => { state.settings.theme = state.settings.theme === 'light' ? 'dark' : 'light'; applyTheme(); save(); };
+  $('#themeToggle').onclick = () => {
+    const cur = document.documentElement.dataset.theme || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    state.settings.theme = cur === 'light' ? 'dark' : 'light'; applyTheme(); save();
+  };
   function applyTheme() {
-    document.documentElement.dataset.theme = state.settings.theme;
-    document.querySelector('meta[name=theme-color]').content = state.settings.theme === 'light' ? '#f4f5fb' : '#0d0f1a';
+    const t = state.settings.theme;
+    if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    const meta = document.querySelector('meta[name=theme-color]');
+    if (meta) meta.content = t === 'light' ? '#f4f5fb' : '#0d0f1a';
     drawWheel();
   }
 
   $('#nameInput').addEventListener('change', (e) => { state.profile.name = e.target.value.trim().slice(0, 30); afterChange(); });
   $('#exportBtn').onclick = () => {
-    const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-    a.download = `prime-growth-360-backup-${todayKey()}.json`; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    const json = JSON.stringify(state);
+    openModal(`<h3>Your backup</h3>
+      <p class="muted small">Copy this text and keep it somewhere safe (notes app, email to yourself). To restore, use “Import backup”.</p>
+      <textarea id="backupText" rows="6" readonly>${esc(json)}</textarea>
+      <div class="modal-actions"><button type="button" class="btn" id="dlBackup">⬇ Download file</button>
+      <button type="button" class="btn primary" id="copyBackup">📋 Copy</button></div>
+      <div class="modal-actions"><button type="button" class="btn" id="closeBackup">Close</button></div>`, (root) => {
+      $('#closeBackup', root).onclick = closeModal;
+      $('#copyBackup', root).onclick = () => {
+        const ta = $('#backupText', root);
+        const fallback = () => { ta.focus(); ta.select(); toast('Text selected — press Copy on your keyboard/menu'); };
+        try { navigator.clipboard.writeText(json).then(() => toast('✅ Backup copied'), fallback); } catch { fallback(); }
+      };
+      if ($('#dlBackup', root)) $('#dlBackup', root).onclick = () => {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob([json], { type: 'application/json' }));
+        a.download = `prime-growth-360-backup-${todayKey()}.json`; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+      };
+    });
   };
+  $('#pasteBackupBtn').onclick = () => {
+    openModal(`<h3>Restore backup</h3><p class="muted small">Paste the backup text you copied earlier.</p>
+      <textarea id="restoreText" rows="6"></textarea>
+      <div class="modal-actions"><button type="button" class="btn" id="cancelRestore">Cancel</button>
+      <button type="button" class="btn primary" id="doRestore">Restore</button></div>`, (root) => {
+      $('#cancelRestore', root).onclick = closeModal;
+      $('#doRestore', root).onclick = () => { if (restore($('#restoreText', root).value)) closeModal(); };
+    });
+  };
+  function restore(text) {
+    try {
+      const s = JSON.parse(text);
+      if (!s || !Array.isArray(s.habits) || typeof s.log !== 'object') throw new Error('bad');
+      state = Object.assign(defaultState(), s, { games: Object.assign(defaultState().games, s.games || {}) });
+      save(); applyTheme(); render(); toast('✅ Backup restored'); return true;
+    } catch { toast('⚠️ That is not a valid backup'); return false; }
+  }
+
   $('#importFile').addEventListener('change', async (e) => {
     const file = e.target.files[0]; if (!file) return;
-    try {
-      const s = JSON.parse(await file.text());
-      if (!Array.isArray(s.habits) || typeof s.log !== 'object') throw new Error('bad');
-      state = Object.assign(defaultState(), s, { games: Object.assign(defaultState().games, s.games || {}) });
-      save(); applyTheme(); render(); toast('✅ Backup restored');
-    } catch { toast('⚠️ That file is not a valid backup'); }
+    restore(await file.text());
     e.target.value = '';
   });
   $('#resetBtn').onclick = () => {
-    if (confirm('Erase ALL habits, points and history? This cannot be undone.')) {
+    askConfirm('Erase ALL habits, points and history? This cannot be undone.', 'Erase everything', true).then((ok) => {
+      if (!ok) return;
       try { localStorage.removeItem(STORE_KEY); } catch { /* ignore */ }
       state = defaultState(); firstRun = true; save(); render(); onboarding();
-    }
+    });
   };
 
   // ---------- Game: Lucky Spin Wheel ----------
@@ -700,12 +749,13 @@
     for (let i = 0; i < WHEEL_WEIGHTS.length; i++) { if ((r -= WHEEL_WEIGHTS[i]) < 0) return i; }
     return 0;
   }
-  $('#spinBtn').onclick = () => {
+  $('#spinBtn').onclick = async () => {
     if (spinning) return;
     const free = state.games.lastFreeSpin !== todayKey();
     if (!free) {
       if (state.points < SPIN_COST) { $('#spinMsg').textContent = `You need ${SPIN_COST} ★ for an extra spin. Come back tomorrow for a free one!`; return; }
-      if (!confirm(`Use ${SPIN_COST} ★ for an extra spin?`)) return;
+      if (!(await askConfirm(`Use ${SPIN_COST} ★ for an extra spin?`, 'Spin'))) return;
+      if (spinning || state.points < SPIN_COST) return;
       addPoints(-SPIN_COST, '🎡 Extra spin', true);
     } else state.games.lastFreeSpin = todayKey();
     save(); render();
