@@ -1,0 +1,1064 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Saragvo Moringa</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Saragvo: shade-dried moringa leaf powder, capsules, tea and cold-pressed oil from Saurashtra farms. Lab-tested every batch, shipped across India.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anek+Gujarati:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout concept: leaf-to-jar journey. Hero canvas of swaying moringa fronds → seed-packet shelf → nutrition label → farm process → recipes. */
+:root {
+  --paper: #f2f4e8;      /* dried-leaf paper, slight green bias */
+  --card: #ffffff;
+  --ink: #18230f;        /* deep frond green-black */
+  --ink-2: #4d5a41;
+  --line: #d9dfc6;
+  --leaf: #3f6d1c;       /* fresh moringa leaf */
+  --powder: #9fb33a;     /* milled powder */
+  --pod: #6b7d2a;        /* drumstick pod */
+  --turmeric: #e3a018;   /* CTA: market turmeric */
+  --turmeric-ink: #2a1d00;
+  --flower: #fbf7e3;     /* moringa flower cream */
+  --danger: #b4321f;
+  --ok: #2f7a3a;
+  --shadow: 0 1px 0 rgba(24,35,15,.04), 0 14px 34px rgba(24,35,15,.10);
+  --f-display: 'Bricolage Grotesque', 'Anek Gujarati', ui-sans-serif, system-ui, sans-serif;
+  --f-body: 'Figtree', 'Anek Gujarati', ui-sans-serif, system-ui, sans-serif;
+  --f-gu: 'Anek Gujarati', 'Figtree', system-ui, sans-serif;
+  --f-mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --r: 14px;
+  --max: 1180px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #10160b; --card: #182111; --ink: #ecf1dc; --ink-2: #b1bc9d; --line: #2c3a20;
+  --leaf: #8fc44f; --powder: #b8cc4e; --pod: #9cb04a; --turmeric: #f0b234; --turmeric-ink: #241900; --flower: #1d2614;
+  --danger: #ff7a63; --ok: #7ccf86; --shadow: 0 1px 0 rgba(0,0,0,.2), 0 14px 34px rgba(0,0,0,.35); color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #10160b; --card: #182111; --ink: #ecf1dc; --ink-2: #b1bc9d; --line: #2c3a20;
+  --leaf: #8fc44f; --powder: #b8cc4e; --pod: #9cb04a; --turmeric: #f0b234; --turmeric-ink: #241900; --flower: #1d2614;
+  --danger: #ff7a63; --ok: #7ccf86; --shadow: 0 1px 0 rgba(0,0,0,.2), 0 14px 34px rgba(0,0,0,.35); color-scheme: dark }
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 16px/1.6 var(--f-body); -webkit-font-smoothing: antialiased; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 60; background: var(--paper); }
+html[lang="gu"] body { font-family: var(--f-gu); }
+h1, h2, h3 { font-family: var(--f-display); line-height: 1.08; text-wrap: balance; margin: 0; letter-spacing: -0.02em; }
+html[lang="gu"] h1, html[lang="gu"] h2, html[lang="gu"] h3 { font-family: var(--f-gu); letter-spacing: 0; line-height: 1.25; }
+p { margin: 0; }
+a { color: inherit; }
+button, input, select, textarea { font: inherit; color: inherit; }
+img, svg, canvas { max-width: 100%; }
+:focus-visible { outline: 3px solid var(--turmeric); outline-offset: 2px; border-radius: 6px; }
+.wrap { max-width: var(--max); margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.eyebrow { font: 500 12px/1 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--leaf); }
+.muted { color: var(--ink-2); }
+.num { font-variant-numeric: tabular-nums; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* buttons */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; padding: 0 20px; border-radius: 999px; border: 1.5px solid var(--ink); background: transparent; font-weight: 700; cursor: pointer; text-decoration: none; transition: transform .15s ease, background .15s ease; }
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(0) scale(.98); }
+.btn.primary { background: var(--turmeric); border-color: var(--turmeric); color: var(--turmeric-ink); }
+.btn.dark { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.btn.small { min-height: 38px; padding: 0 14px; font-size: 14px; }
+.btn.block { width: 100%; }
+.icon-btn { position: relative; width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--line); background: var(--card); display: inline-grid; place-items: center; cursor: pointer; }
+.icon-btn svg { width: 20px; height: 20px; }
+.count { position: absolute; top: -4px; right: -4px; min-width: 19px; height: 19px; padding: 0 5px; border-radius: 99px; background: var(--turmeric); color: var(--turmeric-ink); font: 700 11px/19px var(--f-body); text-align: center; }
+.count[data-n="0"] { display: none; }
+
+/* announcement + header */
+.announce { background: var(--ink); color: var(--paper); font-size: 13px; }
+.announce .wrap { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; padding-block: 8px; text-align: center; }
+header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 40; background: color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+header.top .wrap { display: flex; align-items: center; gap: 18px; padding-block: 12px; }
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo b { font: 800 22px/1 var(--f-display); letter-spacing: -0.03em; }
+.logo small { display: block; font: 500 10px/1.2 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); }
+nav.main { display: flex; gap: 22px; margin-left: 12px; font-weight: 600; font-size: 15px; }
+nav.main a { text-decoration: none; opacity: .85; }
+nav.main a:hover { opacity: 1; color: var(--leaf); }
+.tools { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+.lang { display: inline-flex; border: 1px solid var(--line); border-radius: 99px; overflow: hidden; background: var(--card); }
+.lang button { border: 0; background: none; padding: 0 12px; min-width: 42px; line-height: 1.6; height: 40px; cursor: pointer; font-weight: 700; font-size: 13px; color: var(--ink-2); }
+.lang button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+@media (max-width: 900px) { nav.main { display: none; } }
+@media (max-width: 480px) { .logo small { display: none; } .tools { gap: 6px; } .icon-btn { width: 38px; height: 38px; } }
+
+/* hero */
+.hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--line); }
+.hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hero .wrap { position: relative; display: grid; grid-template-columns: 1.1fr .9fr; gap: 32px; align-items: center; padding-block: 64px 56px; }
+.hero h1 { font-size: clamp(40px, 6.4vw, 82px); font-weight: 800; }
+.hero h1 em { font-style: normal; color: var(--leaf); }
+.hero .lede { font-size: 19px; max-width: 34ch; margin-top: 18px; color: var(--ink-2); }
+.hero .ctas { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 26px; }
+.proof { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 30px; font-size: 14px; }
+.proof div { display: flex; align-items: center; gap: 8px; }
+.proof svg { width: 18px; height: 18px; color: var(--leaf); flex: none; }
+.hero-shelf { position: relative; min-height: 360px; }
+.hero-shelf .p { position: absolute; filter: drop-shadow(0 24px 30px rgba(24,35,15,.22)); transition: transform .4s ease; }
+.hero-shelf .p:hover { transform: translateY(-8px) rotate(-1deg); }
+.batch { position: absolute; right: 0; bottom: 4px; background: var(--card); border: 1px dashed var(--pod); border-radius: 10px; padding: 10px 12px; font: 500 12px/1.5 var(--f-mono); box-shadow: var(--shadow); }
+.batch b { color: var(--leaf); }
+@media (max-width: 860px) { .hero canvas { opacity: .45; } .hero .wrap { grid-template-columns: 1fr; padding-block: 40px; } .hero-shelf { min-height: 300px; } }
+
+/* sections */
+section.block { padding-block: 76px; }
+.sec-head { display: flex; align-items: end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 28px; }
+.sec-head h2 { font-size: clamp(30px, 4vw, 48px); font-weight: 800; margin-top: 8px; }
+.sec-head p { max-width: 46ch; }
+
+/* shop */
+.shopbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 22px; }
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip { border: 1px solid var(--line); background: var(--card); border-radius: 99px; padding: 8px 14px; font-weight: 600; font-size: 14px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--leaf); border-color: var(--leaf); color: var(--paper); }
+.search { flex: 1 1 220px; display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: var(--card); border-radius: 99px; padding: 0 14px; min-height: 42px; }
+.search input { border: 0; background: none; outline: none; width: 100%; min-width: 0; }
+.select { border: 1px solid var(--line); background: var(--card); border-radius: 99px; min-height: 42px; padding: 0 14px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 18px; }
+.card { position: relative; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); display: flex; flex-direction: column; overflow: hidden; transition: box-shadow .2s ease, transform .2s ease; }
+.card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+.card .art { position: relative; aspect-ratio: 1 / .86; background: radial-gradient(80% 70% at 50% 60%, color-mix(in srgb, var(--powder) 22%, var(--card)), var(--card)); display: grid; place-items: center; cursor: pointer; border: 0; padding: 0; width: 100%; }
+.card .art svg { width: 78%; height: auto; }
+.badge { position: absolute; left: 12px; top: 12px; font: 700 11px/1 var(--f-body); letter-spacing: .04em; text-transform: uppercase; padding: 6px 9px; border-radius: 6px; background: var(--ink); color: var(--paper); }
+.badge.new { background: var(--turmeric); color: var(--turmeric-ink); }
+.heart { position: absolute; right: 10px; top: 10px; }
+.heart[aria-pressed="true"] svg { fill: var(--danger); color: var(--danger); }
+.card .body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.card h3 { font-size: 19px; font-weight: 700; }
+.card .desc { font-size: 14px; color: var(--ink-2); min-height: 2.9em; }
+.sizes { display: flex; gap: 6px; flex-wrap: wrap; }
+.size { border: 1px solid var(--line); background: none; border-radius: 8px; padding: 5px 9px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.size[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+.priceline { display: flex; align-items: baseline; gap: 8px; margin-top: auto; padding-top: 4px; }
+.price { font: 700 22px/1 var(--f-body); }
+.mrp { text-decoration: line-through; color: var(--ink-2); font-size: 14px; }
+.off { color: var(--ok); font-weight: 700; font-size: 13px; }
+.perday { font: 400 12px/1.3 var(--f-mono); color: var(--ink-2); }
+.card .actions { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+.empty { padding: 40px; text-align: center; border: 1px dashed var(--line); border-radius: var(--r); grid-column: 1 / -1; }
+
+/* ritual builder */
+.ritual { background: var(--ink); color: var(--paper); border-radius: 22px; padding: 34px; display: grid; grid-template-columns: .9fr 1.1fr; gap: 30px; align-items: center; }
+.ritual h2 { font-size: clamp(28px, 3.4vw, 42px); font-weight: 800; }
+.ritual .eyebrow { color: var(--powder); }
+.slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.slot { aspect-ratio: 1; border: 1.5px dashed color-mix(in srgb, var(--paper) 40%, transparent); border-radius: 14px; display: grid; place-items: center; text-align: center; font-size: 12px; padding: 8px; position: relative; }
+.slot svg { width: 80%; }
+.slot button { position: absolute; top: 6px; right: 6px; width: 24px; height: 24px; border-radius: 50%; border: 0; background: var(--paper); color: var(--ink); cursor: pointer; font-weight: 700; line-height: 1; }
+.picks { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+.picks .chip { background: transparent; color: var(--paper); border-color: color-mix(in srgb, var(--paper) 35%, transparent); }
+.picks .chip[aria-pressed="true"] { background: var(--powder); color: var(--ink); border-color: var(--powder); }
+.ritual-total { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
+@media (max-width: 820px) { .ritual { grid-template-columns: 1fr; padding: 24px; } }
+
+/* benefits */
+.benefits { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0; border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+.benefit { padding: 24px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 10px; }
+.benefit svg { width: 34px; height: 34px; color: var(--leaf); }
+.benefit h3 { font-size: 20px; }
+.note { font-size: 12.5px; color: var(--ink-2); margin-top: 16px; max-width: 80ch; }
+
+/* nutrition label */
+.nutri-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+.label { background: var(--card); border: 2px solid var(--ink); border-radius: 6px; padding: 16px 18px; font-family: var(--f-body); max-width: 440px; }
+.label h3 { font: 800 30px/1 var(--f-display); border-bottom: 8px solid var(--ink); padding-bottom: 8px; }
+.label .serv { display: flex; justify-content: space-between; align-items: center; gap: 10px; border-bottom: 4px solid var(--ink); padding: 8px 0; font-size: 14px; flex-wrap: wrap; }
+.seg { display: inline-flex; border: 1.5px solid var(--ink); border-radius: 99px; overflow: hidden; }
+.seg button { border: 0; background: none; padding: 5px 11px; font-weight: 700; font-size: 13px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.nrow { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; padding: 7px 0; border-bottom: 1px solid var(--ink); font-size: 15px; }
+.nrow b { font-weight: 700; }
+.nrow .bar { grid-column: 1 / -1; height: 5px; background: color-mix(in srgb, var(--powder) 25%, transparent); border-radius: 3px; overflow: hidden; }
+.nrow .bar i { display: block; height: 100%; background: var(--leaf); border-radius: 3px; transition: width .5s ease; }
+.label .foot { font-size: 11.5px; padding-top: 8px; color: var(--ink-2); }
+.calc { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 22px; display: grid; gap: 14px; }
+.calc h3 { font-size: 24px; }
+.field { display: grid; gap: 6px; }
+.field label { font-weight: 600; font-size: 14px; }
+.field input, .field select, .field textarea { border: 1px solid var(--line); background: var(--paper); border-radius: 10px; padding: 10px 12px; min-height: 44px; width: 100%; }
+.field input[type="range"] { padding: 0; min-height: 30px; accent-color: var(--leaf); background: none; border: 0; }
+.field .err { color: var(--danger); font-size: 13px; min-height: 0; }
+.calc-out { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.calc-out div { background: var(--paper); border-radius: 10px; padding: 12px; }
+.calc-out b { display: block; font: 700 24px/1.1 var(--f-body); }
+.calc-out span { font-size: 12.5px; color: var(--ink-2); }
+@media (max-width: 860px) { .nutri-wrap { grid-template-columns: 1fr; } .calc-out { grid-template-columns: 1fr 1fr; } }
+
+/* process */
+.process { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; counter-reset: step; }
+.step { position: relative; padding-top: 52px; }
+.step::before { counter-increment: step; content: counter(step, decimal-leading-zero); position: absolute; top: 0; left: 0; font: 500 13px/1 var(--f-mono); color: var(--leaf); border: 1.5px solid var(--leaf); border-radius: 99px; padding: 8px 10px; background: var(--paper); z-index: 1; }
+.step::after { content: ""; position: absolute; top: 15px; left: 44px; right: -14px; height: 1.5px; background: repeating-linear-gradient(90deg, var(--pod) 0 6px, transparent 6px 11px); }
+.step:last-child::after { display: none; }
+.step h3 { font-size: 18px; margin-bottom: 6px; }
+.step p { font-size: 14px; color: var(--ink-2); }
+.step .stat { font: 500 12px/1.4 var(--f-mono); color: var(--leaf); margin-top: 8px; }
+@media (max-width: 960px) { .process { grid-template-columns: repeat(2, 1fr); row-gap: 28px; } .step::after { display: none; } }
+
+/* recipes */
+.tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+.recipe { display: grid; grid-template-columns: .8fr 1.2fr; gap: 28px; background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 28px; }
+.recipe .rart { display: grid; place-items: center; background: color-mix(in srgb, var(--powder) 18%, var(--card)); border-radius: 16px; min-height: 240px; }
+.recipe h3 { font-size: 28px; }
+.recipe ol { margin: 14px 0 0; padding-left: 20px; display: grid; gap: 8px; }
+.recipe .meta { display: flex; gap: 14px; flex-wrap: wrap; font: 500 13px/1 var(--f-mono); color: var(--ink-2); margin-top: 10px; }
+@media (max-width: 760px) { .recipe { grid-template-columns: 1fr; padding: 20px; } }
+
+/* reviews + faq */
+.reviews { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.review { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; display: grid; gap: 10px; align-content: start; }
+.stars { color: var(--turmeric); letter-spacing: 2px; }
+.review .who { font-size: 14px; color: var(--ink-2); }
+.sample-tag { font: 500 11px/1 var(--f-mono); color: var(--ink-2); border: 1px dashed var(--line); padding: 5px 8px; border-radius: 6px; }
+details.faq { border-bottom: 1px solid var(--line); padding-block: 4px; }
+details.faq summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: 16px; padding-block: 16px; font-weight: 700; font-size: 18px; }
+details.faq summary::after { content: "+"; font: 400 26px/1 var(--f-body); color: var(--leaf); transition: transform .2s ease; }
+details.faq[open] summary::after { transform: rotate(45deg); }
+details.faq p { padding-bottom: 16px; color: var(--ink-2); max-width: 70ch; }
+
+/* newsletter + footer */
+.news { background: var(--leaf); color: var(--paper); border-radius: 22px; padding: 36px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: center; }
+.news h2 { font-size: clamp(26px, 3vw, 38px); }
+.news form { display: flex; gap: 8px; flex-wrap: wrap; }
+.news input { flex: 1 1 200px; min-height: 48px; border-radius: 99px; border: 0; padding: 0 18px; background: var(--paper); color: var(--ink); }
+@media (max-width: 760px) { .news { grid-template-columns: 1fr; padding: 24px; } }
+footer { border-top: 1px solid var(--line); margin-top: 76px; }
+footer .wrap { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 24px; padding-block: 44px 28px; font-size: 14px; }
+footer h4 { margin: 0 0 10px; font: 700 13px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; }
+footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; color: var(--ink-2); }
+.legal { border-top: 1px solid var(--line); }
+.legal .wrap { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-block: 16px; font-size: 12.5px; color: var(--ink-2); grid-template-columns: none; }
+@media (max-width: 760px) { footer .wrap { grid-template-columns: 1fr 1fr; } }
+
+/* drawer + modals */
+.scrim { position: fixed; inset: 0; background: rgba(10,14,6,.5); z-index: 70; opacity: 0; pointer-events: none; transition: opacity .2s ease; }
+.scrim.on { opacity: 1; pointer-events: auto; }
+.drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(440px, 100%); background: var(--paper); z-index: 80; transform: translateX(100%); transition: transform .28s cubic-bezier(.2,.8,.2,1); display: flex; flex-direction: column;
+  padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); padding-right: env(safe-area-inset-right, 0px); }
+.drawer.on { transform: none; }
+.drawer header { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px; border-bottom: 1px solid var(--line); }
+.drawer header h3 { font-size: 22px; }
+.drawer .items { flex: 1; overflow: auto; padding: 10px 20px; }
+.line { display: grid; grid-template-columns: 72px 1fr auto; gap: 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.line .thumb { background: var(--card); border-radius: 10px; aspect-ratio: 1; display: grid; place-items: center; }
+.line .thumb svg { width: 86%; }
+.line h4 { margin: 0; font-size: 15px; }
+.line small { color: var(--ink-2); display: block; }
+.qty { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 99px; background: var(--card); margin-top: 6px; }
+.qty button { width: 32px; height: 32px; border: 0; background: none; cursor: pointer; font-weight: 700; font-size: 16px; }
+.qty span { min-width: 22px; text-align: center; font-weight: 700; }
+.link { border: 0; background: none; color: var(--ink-2); text-decoration: underline; cursor: pointer; font-size: 13px; padding: 0; }
+.drawer footer { margin: 0; padding: 16px 20px 20px; border-top: 1px solid var(--line); display: grid; gap: 10px; background: var(--card); }
+.ship { font-size: 13px; }
+.ship .track { height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; margin-top: 6px; }
+.ship .track i { display: block; height: 100%; background: var(--leaf); transition: width .3s ease; }
+.coupon { display: flex; gap: 8px; }
+.coupon input { flex: 1; min-width: 0; border: 1px solid var(--line); border-radius: 99px; padding: 0 14px; min-height: 40px; background: var(--paper); text-transform: uppercase; }
+.sum { display: grid; gap: 4px; font-size: 14.5px; }
+.sum div { display: flex; justify-content: space-between; }
+.sum .total { font-size: 19px; font-weight: 800; padding-top: 6px; border-top: 1px dashed var(--line); margin-top: 4px; }
+.modal { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); pointer-events: none; opacity: 0; transition: opacity .2s ease; }
+.modal.on { pointer-events: auto; opacity: 1; }
+.dialog { background: var(--paper); border-radius: 22px; width: min(920px, 100%); max-height: 100%; overflow: auto; box-shadow: 0 30px 80px rgba(0,0,0,.35); position: relative; transform: translateY(14px) scale(.98); transition: transform .25s ease; }
+.modal.on .dialog { transform: none; }
+.close { position: absolute; top: 12px; right: 12px; z-index: 2; }
+.qv { display: grid; grid-template-columns: 1fr 1fr; }
+.qv .big { background: radial-gradient(80% 70% at 50% 60%, color-mix(in srgb, var(--powder) 25%, var(--card)), var(--card)); display: grid; place-items: center; padding: 30px; min-height: 360px; }
+.qv .big svg { width: 90%; }
+.qv .info { padding: 30px; display: grid; gap: 14px; align-content: start; }
+.qv h3 { font-size: 30px; }
+.toggle { display: flex; align-items: center; gap: 10px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px; cursor: pointer; }
+.toggle input { width: 20px; height: 20px; accent-color: var(--leaf); }
+ul.ticks { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; font-size: 14.5px; }
+ul.ticks li::before { content: "✓"; color: var(--leaf); font-weight: 800; margin-right: 8px; }
+@media (max-width: 760px) { .qv { grid-template-columns: 1fr; } .qv .big { min-height: 240px; } .qv .info { padding: 20px; } }
+
+/* checkout */
+.co { display: grid; grid-template-columns: 1.2fr .8fr; }
+.co .form { padding: 30px; display: grid; gap: 14px; }
+.co .form h3 { font-size: 26px; }
+.co .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.co aside { background: var(--card); padding: 30px; display: grid; gap: 14px; align-content: start; border-left: 1px solid var(--line); }
+.pay-box { border: 1.5px dashed var(--pod); border-radius: 14px; padding: 14px; display: grid; gap: 8px; font-size: 14px; }
+.pay-box .methods { display: flex; gap: 6px; flex-wrap: wrap; }
+.pay-box .methods span { font: 500 12px/1 var(--f-mono); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; color: var(--ink-2); }
+.notice { border-radius: 14px; padding: 16px; background: color-mix(in srgb, var(--turmeric) 18%, var(--card)); border: 1px solid var(--turmeric); display: grid; gap: 10px; }
+.notice h4 { margin: 0; font-size: 17px; }
+.notice pre { margin: 0; white-space: pre-wrap; font: 400 12.5px/1.5 var(--f-mono); background: var(--paper); border-radius: 10px; padding: 10px; max-height: 200px; overflow: auto; }
+@media (max-width: 760px) { .co { grid-template-columns: 1fr; } .co aside { border-left: 0; border-top: 1px solid var(--line); } .co .form, .co aside { padding: 20px; } .co .two { grid-template-columns: 1fr; } }
+
+/* toast + float */
+.toasts { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 100; display: grid; gap: 8px; width: min(420px, calc(100% - 32px)); }
+.toast { background: var(--ink); color: var(--paper); border-radius: 12px; padding: 12px 16px; font-weight: 600; font-size: 14.5px; box-shadow: 0 10px 30px rgba(0,0,0,.25); animation: tin .25s ease; }
+@keyframes tin { from { transform: translateY(10px); opacity: 0; } }
+.recent { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; }
+.recent button { flex: none; width: 92px; border: 1px solid var(--line); background: var(--card); border-radius: 12px; padding: 6px; cursor: pointer; font-size: 11.5px; }
+.recent svg { width: 100%; }
+.reveal { transition: transform .6s ease; }
+.reveal.pre { transform: translateY(18px); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } .reveal.pre { transform: none; opacity: 1; } }
+</style>
+</head>
+<body>
+
+<div class="announce"><div class="wrap">
+  <span data-i18n="ann1">Free shipping above ₹499</span>
+  <span data-i18n="ann2">Lab-tested every batch</span>
+  <span data-i18n="ann3">Use code WELCOME10 for 10% off</span>
+</div></div>
+
+<header class="top"><div class="wrap">
+  <a class="logo" href="#top" aria-label="Saragvo home">
+    <svg width="34" height="34" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="var(--leaf)"/><g fill="var(--paper)"><path d="M20 30 C20 22 20 16 21 9" stroke="var(--paper)" stroke-width="1.6" fill="none"/><ellipse cx="15.5" cy="13" rx="3.4" ry="2" transform="rotate(-30 15.5 13)"/><ellipse cx="25.5" cy="15" rx="3.4" ry="2" transform="rotate(30 25.5 15)"/><ellipse cx="15" cy="20" rx="3.6" ry="2.1" transform="rotate(-25 15 20)"/><ellipse cx="25.5" cy="22" rx="3.6" ry="2.1" transform="rotate(25 25.5 22)"/><ellipse cx="21.5" cy="8" rx="2.2" ry="3.2"/></g></svg>
+    <span><b>Saragvo</b><small data-i18n="tagline">Moringa · Saurashtra</small></span>
+  </a>
+  <nav class="main" aria-label="Main">
+    <a href="#shop" data-i18n="navShop">Shop</a>
+    <a href="#benefits" data-i18n="navBenefits">Benefits</a>
+    <a href="#nutrition" data-i18n="navNutrition">Nutrition</a>
+    <a href="#recipes" data-i18n="navRecipes">Recipes</a>
+    <a href="#farm" data-i18n="navFarm">Our farm</a>
+    <a href="#faq" data-i18n="navFaq">FAQ</a>
+  </nav>
+  <div class="tools">
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" id="lang-en" aria-pressed="true">EN</button>
+      <button type="button" id="lang-gu" aria-pressed="false">ગુ</button>
+    </div>
+    <button class="icon-btn" type="button" id="theme-btn" aria-label="Switch colour theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+    <button class="icon-btn" type="button" id="wish-btn" aria-label="Wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></svg><span class="count num" id="wish-count" data-n="0">0</span></button>
+    <button class="icon-btn" type="button" id="cart-btn" aria-label="Cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.6 8.2a2 2 0 0 1-2 1.6H9.1a2 2 0 0 1-2-1.6L5 3H2"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg><span class="count num" id="cart-count" data-n="0">0</span></button>
+  </div>
+</div></header>
+
+<main id="top">
+  <section class="hero" aria-labelledby="hero-title">
+    <canvas id="fronds" aria-hidden="true"></canvas>
+    <div class="wrap">
+      <div>
+        <div class="eyebrow" data-i18n="heroEyebrow">Shade-dried moringa from Saurashtra</div>
+        <h1 id="hero-title" data-i18n-html="heroTitle">The greenest <em>teaspoon</em> of your day.</h1>
+        <p class="lede" data-i18n="heroLede">Young sargava leaves, picked at sunrise, dried in shade below 40 °C and milled the same week. Nothing added. Every batch lab-tested.</p>
+        <div class="ctas">
+          <a class="btn primary" href="#shop" data-i18n="heroCta">Shop moringa</a>
+          <a class="btn" href="#nutrition" data-i18n="heroCta2">See the nutrition label</a>
+        </div>
+        <div class="proof">
+          <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6 9 17l-5-5"/></svg><span data-i18n="proof1">No fillers or colour</span></div>
+          <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6 9 17l-5-5"/></svg><span data-i18n="proof2">Batch lab report</span></div>
+          <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6 9 17l-5-5"/></svg><span data-i18n="proof3">Ships across India</span></div>
+        </div>
+      </div>
+      <div class="hero-shelf" id="hero-shelf" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <section class="block reveal" id="shop" aria-labelledby="shop-title"><div class="wrap">
+    <div class="sec-head">
+      <div><div class="eyebrow" data-i18n="shopEyebrow">The shelf</div><h2 id="shop-title" data-i18n="shopTitle">Pick your form of green</h2></div>
+      <p class="muted" data-i18n="shopLede">Same farm, same leaf. Choose powder for the kitchen, capsules for travel, tea for evenings and oil for skin and hair.</p>
+    </div>
+    <div class="shopbar">
+      <div class="chips" id="cats" role="group" aria-label="Category"></div>
+      <label class="search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="sr" data-i18n="searchLabel">Search products</span><input id="q" type="search" placeholder="Search powder, tea, oil…" data-i18n-ph="searchPh"></label>
+      <select class="select" id="sort" aria-label="Sort products">
+        <option value="pop" data-i18n="sortPop">Most loved</option>
+        <option value="low" data-i18n="sortLow">Price: low to high</option>
+        <option value="high" data-i18n="sortHigh">Price: high to low</option>
+        <option value="off" data-i18n="sortOff">Biggest saving</option>
+      </select>
+    </div>
+    <div class="grid" id="grid"></div>
+    <div id="recent-wrap" hidden style="margin-top:28px"><div class="eyebrow" data-i18n="recent">Recently viewed</div><div class="recent" id="recent" style="margin-top:10px"></div></div>
+  </div></section>
+
+  <section class="block reveal" aria-labelledby="ritual-title" style="padding-top:0"><div class="wrap">
+    <div class="ritual">
+      <div>
+        <div class="eyebrow" data-i18n="ritualEyebrow">Build a 30-day ritual</div>
+        <h2 id="ritual-title" data-i18n="ritualTitle">Pick any 3. Save 15%.</h2>
+        <p style="margin-top:10px;opacity:.85" data-i18n="ritualLede">Mix forms to fit your day: powder in the morning, capsules on the go, tea at night.</p>
+        <div class="picks" id="picks" role="group" aria-label="Choose ritual products"></div>
+      </div>
+      <div>
+        <div class="slots" id="slots"></div>
+        <div class="ritual-total"><div><div class="num" style="font-size:26px;font-weight:800" id="ritual-price">₹0</div><small id="ritual-save" style="opacity:.8"></small></div>
+          <button class="btn primary" type="button" id="ritual-add" data-i18n="ritualAdd">Add ritual to cart</button></div>
+      </div>
+    </div>
+  </div></section>
+
+  <section class="block reveal" id="benefits" aria-labelledby="ben-title"><div class="wrap">
+    <div class="sec-head"><div><div class="eyebrow" data-i18n="benEyebrow">Why moringa</div><h2 id="ben-title" data-i18n="benTitle">One leaf, a lot of nutrition</h2></div></div>
+    <div class="benefits" id="benefit-list"></div>
+    <p class="note" data-i18n="benNote">Moringa is a food, not a medicine. It does not diagnose, treat or cure any condition. If you are pregnant, nursing, on medication or managing a health condition, ask your doctor before adding it to your diet.</p>
+  </div></section>
+
+  <section class="block reveal" id="nutrition" aria-labelledby="nut-title" style="padding-top:0"><div class="wrap">
+    <div class="sec-head"><div><div class="eyebrow" data-i18n="nutEyebrow">Read the label</div><h2 id="nut-title" data-i18n="nutTitle">What's in a teaspoon</h2></div><p class="muted" data-i18n="nutLede">Switch between a 5 g serving and 100 g. Then work out how long a pack lasts your family.</p></div>
+    <div class="nutri-wrap">
+      <div class="label" aria-live="polite">
+        <h3 data-i18n="nfTitle">Nutrition facts</h3>
+        <div class="serv"><span data-i18n="nfLeaf">Moringa leaf powder</span>
+          <div class="seg" role="group" aria-label="Serving size"><button type="button" id="serv-5" aria-pressed="true">5 g</button><button type="button" id="serv-100" aria-pressed="false">100 g</button></div></div>
+        <div id="nf-rows"></div>
+        <p class="foot" data-i18n="nfFoot">Typical values for shade-dried leaf powder. Natural variation between harvests is normal; the batch lab report on each pack has the measured values.</p>
+      </div>
+      <div class="calc">
+        <h3 data-i18n="calcTitle">How long will a pack last?</h3>
+        <div class="field"><label for="c-pack" data-i18n="calcPack">Pack</label><select id="c-pack"></select></div>
+        <div class="field"><label for="c-people"><span data-i18n="calcPeople">People in your home</span>: <b id="c-people-v" class="num">2</b></label><input id="c-people" type="range" min="1" max="8" value="2"></div>
+        <div class="field"><label for="c-dose" data-i18n="calcDose">Daily amount per person</label>
+          <select id="c-dose"><option value="2.5" data-i18n="dose1">Starter: ½ tsp (2.5 g)</option><option value="5" selected data-i18n="dose2">Daily: 1 tsp (5 g)</option><option value="7.5" data-i18n="dose3">Active: 1½ tsp (7.5 g)</option></select></div>
+        <div class="calc-out">
+          <div><b class="num" id="c-days">10</b><span data-i18n="calcDays">days per pack</span></div>
+          <div><b class="num" id="c-cost">₹12</b><span data-i18n="calcCost">per person per day</span></div>
+          <div><b class="num" id="c-month">3</b><span data-i18n="calcMonth">packs a month</span></div>
+        </div>
+        <button class="btn dark" type="button" id="c-add" data-i18n="calcAdd">Add this pack to cart</button>
+      </div>
+    </div>
+  </div></section>
+
+  <section class="block reveal" id="farm" aria-labelledby="farm-title" style="padding-top:0"><div class="wrap">
+    <div class="sec-head"><div><div class="eyebrow" data-i18n="farmEyebrow">Leaf to jar in 7 days</div><h2 id="farm-title" data-i18n="farmTitle">How a batch is made</h2></div></div>
+    <div class="process" id="process"></div>
+  </div></section>
+
+  <section class="block reveal" id="recipes" aria-labelledby="rec-title" style="padding-top:0"><div class="wrap">
+    <div class="sec-head"><div><div class="eyebrow" data-i18n="recEyebrow">From our kitchen</div><h2 id="rec-title" data-i18n="recTitle">Four ways to eat it</h2></div></div>
+    <div class="tabs" id="rtabs" role="tablist" aria-label="Recipes"></div>
+    <div id="recipe"></div>
+  </div></section>
+
+  <section class="block reveal" aria-labelledby="rev-title" style="padding-top:0"><div class="wrap">
+    <div class="sec-head"><div><div class="eyebrow" data-i18n="revEyebrow">Customer stories</div><h2 id="rev-title" data-i18n="revTitle">What people tell us</h2></div><span class="sample-tag" data-i18n="sampleTag">Sample reviews: replace with your real customer reviews before launch</span></div>
+    <div class="reviews" id="reviews"></div>
+  </div></section>
+
+  <section class="block reveal" id="faq" aria-labelledby="faq-title" style="padding-top:0"><div class="wrap">
+    <div class="sec-head"><div><div class="eyebrow" data-i18n="faqEyebrow">Questions</div><h2 id="faq-title" data-i18n="faqTitle">Before you order</h2></div></div>
+    <div id="faqs"></div>
+  </div></section>
+
+  <section class="reveal" aria-labelledby="news-title"><div class="wrap">
+    <div class="news">
+      <div><h2 id="news-title" data-i18n="newsTitle">Recipes and harvest news, twice a month</h2><p style="margin-top:8px;opacity:.9" data-i18n="newsLede">Plus first access to fresh batches.</p></div>
+      <form id="news-form" novalidate>
+        <label class="sr" for="news-email" data-i18n="email">Email</label>
+        <input id="news-email" type="email" placeholder="you@example.com" required autocomplete="email">
+        <button class="btn primary" type="submit" data-i18n="subscribe">Subscribe</button>
+      </form>
+    </div>
+  </div></section>
+</main>
+
+<footer><div class="wrap">
+  <div><a class="logo" href="#top"><b>Saragvo</b></a><p class="muted" style="margin-top:10px;max-width:36ch" data-i18n="footAbout">Moringa grown and dried in Saurashtra, Gujarat. Packed in small batches so it reaches you green.</p></div>
+  <div><h4 data-i18n="footShop">Shop</h4><ul><li><a href="#shop" data-cat="powder" data-i18n="catPowder">Powder</a></li><li><a href="#shop" data-cat="capsules" data-i18n="catCapsules">Capsules</a></li><li><a href="#shop" data-cat="tea" data-i18n="catTea">Tea</a></li><li><a href="#shop" data-cat="care" data-i18n="catCare">Oil &amp; care</a></li></ul></div>
+  <div><h4 data-i18n="footHelp">Help</h4><ul><li><a href="#faq" data-i18n="navFaq">FAQ</a></li><li data-i18n="footShipping">Shipping: 3–6 days</li><li data-i18n="footReturns">7-day returns on sealed packs</li></ul></div>
+  <div><h4 data-i18n="footContact">Contact</h4><ul><li>hello@saragvo.example</li><li>WhatsApp: +91 00000 00000</li><li data-i18n="footFssai">FSSAI Lic. No.: add yours</li></ul></div>
+</div>
+<div class="legal"><div class="wrap"><span>© <span id="yr"></span> Saragvo</span><span data-i18n="legal">Prices include GST. This is a demo store: online payment is not connected yet.</span></div></div>
+</footer>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Cart" aria-hidden="true">
+  <header><h3 data-i18n="cart">Your cart</h3><button class="icon-btn" type="button" id="drawer-close" aria-label="Close cart">✕</button></header>
+  <div class="items" id="items"></div>
+  <footer id="cart-foot"></footer>
+</aside>
+<div class="modal" id="modal" aria-hidden="true"><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dlg-title"><button class="icon-btn close" type="button" id="modal-close" aria-label="Close">✕</button><div id="dialog-body"></div></div></div>
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+'use strict';
+/* ---------- store ---------- */
+const S = {
+  get(k, d) { try { const v = localStorage.getItem('sgv-' + k); return v ? JSON.parse(v) : d; } catch { return d; } },
+  set(k, v) { try { localStorage.setItem('sgv-' + k, JSON.stringify(v)); } catch {} },
+};
+const FREE_SHIP = 499, SHIP_FEE = 49, SUB_OFF = 0.10, RITUAL_OFF = 0.15;
+const COUPONS = { WELCOME10: { pct: 10 }, SARAGVO15: { pct: 15, min: 999 } };
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const inr = (n) => '₹' + Math.round(n).toLocaleString('en-IN');
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+/* ---------- copy (EN / ગુજરાતી) ---------- */
+const T = {
+  en: {},
+  gu: {
+    ann1: '₹499 થી વધુ પર ફ્રી શિપિંગ', ann2: 'દરેક batch લેબ-ટેસ્ટેડ', ann3: 'WELCOME10 કોડથી 10% છૂટ', tagline: 'સરગવો · સૌરાષ્ટ્ર',
+    navShop: 'ખરીદો', navBenefits: 'ફાયદા', navNutrition: 'પોષણ', navRecipes: 'વાનગીઓ', navFarm: 'અમારું ખેતર', navFaq: 'પ્રશ્નો',
+    heroEyebrow: 'સૌરાષ્ટ્રનો છાંયડે સૂકવેલો સરગવો', heroTitle: 'તમારા દિવસની સૌથી <em>લીલી</em> ચમચી.',
+    heroLede: 'સવારે તોડેલાં કૂણાં સરગવાનાં પાન, 40 °C થી ઓછા તાપમાને છાંયડે સૂકવેલાં અને એ જ અઠવાડિયે દળેલાં. કંઈ ભેળવ્યું નથી. દરેક batch લેબ-ટેસ્ટેડ.',
+    heroCta: 'સરગવો ખરીદો', heroCta2: 'પોષણ લેબલ જુઓ', proof1: 'કોઈ filler કે રંગ નહીં', proof2: 'Batch લેબ રિપોર્ટ', proof3: 'આખા ભારતમાં ડિલિવરી',
+    shopEyebrow: 'અમારી શેલ્ફ', shopTitle: 'તમને ગમે એ સ્વરૂપ પસંદ કરો', shopLede: 'એ જ ખેતર, એ જ પાન. રસોઈ માટે પાવડર, મુસાફરી માટે કેપ્સ્યુલ, સાંજ માટે ચા અને ત્વચા-વાળ માટે તેલ.',
+    searchLabel: 'પ્રોડક્ટ શોધો', searchPh: 'પાવડર, ચા, તેલ શોધો…', sortPop: 'સૌથી લોકપ્રિય', sortLow: 'કિંમત: ઓછીથી વધુ', sortHigh: 'કિંમત: વધુથી ઓછી', sortOff: 'સૌથી વધુ બચત',
+    recent: 'હમણાં જોયેલી', ritualEyebrow: '30 દિવસની દિનચર્યા બનાવો', ritualTitle: 'કોઈ પણ 3 પસંદ કરો. 15% બચાવો.', ritualLede: 'સવારે પાવડર, બહાર જાવ ત્યારે કેપ્સ્યુલ, રાત્રે ચા. તમારા દિવસ પ્રમાણે ભેગું કરો.', ritualAdd: 'દિનચર્યા કાર્ટમાં ઉમેરો',
+    benEyebrow: 'સરગવો કેમ', benTitle: 'એક પાન, ભરપૂર પોષણ', benNote: 'સરગવો ખોરાક છે, દવા નથી. તે કોઈ રોગનું નિદાન, સારવાર કે ઈલાજ કરતો નથી. ગર્ભાવસ્થા, સ્તનપાન, દવા ચાલુ હોય કે કોઈ બીમારી હોય તો ખોરાકમાં ઉમેરતાં પહેલાં ડૉક્ટરને પૂછો.',
+    nutEyebrow: 'લેબલ વાંચો', nutTitle: 'એક ચમચીમાં શું છે', nutLede: '5 g અને 100 g વચ્ચે બદલો. પછી ગણો કે તમારા પરિવારને એક પેક કેટલું ચાલશે.',
+    nfTitle: 'પોષણ માહિતી', nfLeaf: 'સરગવાના પાનનો પાવડર', nfFoot: 'છાંયડે સૂકવેલા પાવડરની સામાન્ય કિંમતો. દરેક ફસલમાં થોડો ફેર સામાન્ય છે; પેક પરના batch લેબ રિપોર્ટમાં માપેલી કિંમતો હોય છે.',
+    calcTitle: 'એક પેક કેટલું ચાલશે?', calcPack: 'પેક', calcPeople: 'ઘરમાં કેટલા લોકો', calcDose: 'દરરોજ વ્યક્તિ દીઠ', dose1: 'શરૂઆત: ½ ચમચી (2.5 g)', dose2: 'રોજ: 1 ચમચી (5 g)', dose3: 'સક્રિય: 1½ ચમચી (7.5 g)',
+    calcDays: 'દિવસ એક પેક', calcCost: 'વ્યક્તિ દીઠ રોજ', calcMonth: 'પેક મહિને', calcAdd: 'આ પેક કાર્ટમાં ઉમેરો',
+    farmEyebrow: 'પાનથી બરણી સુધી 7 દિવસ', farmTitle: 'એક batch કેવી રીતે બને છે', recEyebrow: 'અમારા રસોડામાંથી', recTitle: 'ખાવાની ચાર રીત',
+    revEyebrow: 'ગ્રાહકોની વાત', revTitle: 'લોકો અમને શું કહે છે', sampleTag: 'નમૂનાના રિવ્યૂ: launch પહેલાં સાચા ગ્રાહક રિવ્યૂ મૂકો',
+    faqEyebrow: 'પ્રશ્નો', faqTitle: 'ઓર્ડર કરતાં પહેલાં', newsTitle: 'વાનગીઓ અને ફસલના સમાચાર, મહિને બે વાર', newsLede: 'સાથે તાજા batch નો પહેલો મોકો.', email: 'ઈમેલ', subscribe: 'Subscribe કરો',
+    footAbout: 'સૌરાષ્ટ્ર, ગુજરાતમાં ઉગાડેલો અને સૂકવેલો સરગવો. નાના batch માં પેક, જેથી તમારા સુધી લીલો પહોંચે.', footShop: 'ખરીદો', footHelp: 'મદદ', footShipping: 'શિપિંગ: 3–6 દિવસ', footReturns: 'સીલ પેક પર 7 દિવસમાં રિટર્ન', footContact: 'સંપર્ક', footFssai: 'FSSAI લાઇસન્સ નં.: તમારો ઉમેરો',
+    legal: 'કિંમતમાં GST સામેલ છે. આ demo store છે: online payment હજુ જોડાયેલું નથી.', cart: 'તમારું કાર્ટ',
+    catAll: 'બધું', catPowder: 'પાવડર', catCapsules: 'કેપ્સ્યુલ', catTea: 'ચા', catCare: 'તેલ અને કેર', catCombo: 'કૉમ્બો',
+    add: 'કાર્ટમાં ઉમેરો', view: 'વિગત', added: 'કાર્ટમાં ઉમેર્યું', wishAdded: 'Wishlist માં ઉમેર્યું', wishRemoved: 'Wishlist માંથી કાઢ્યું', perDay: 'દિવસ દીઠ', noResults: 'આ શોધ માટે કંઈ મળ્યું નહીં.', clear: 'શોધ સાફ કરો',
+    emptyCart: 'કાર્ટ ખાલી છે. શેલ્ફ પરથી કંઈક લીલું ઉમેરો.', shopNow: 'ખરીદી શરૂ કરો', remove: 'કાઢો', subtotal: 'પેટા કુલ', discount: 'છૂટ', shipping: 'શિપિંગ', free: 'ફ્રી', total: 'કુલ',
+    toFree: (n) => `ફ્રી શિપિંગ માટે ${n} વધુ ઉમેરો`, gotFree: 'તમને ફ્રી શિપિંગ મળ્યું ✓', coupon: 'Coupon કોડ', apply: 'લાગુ કરો', checkout: 'Checkout', badCoupon: 'આ કોડ માન્ય નથી.', minCoupon: (n) => `આ કોડ ${n} થી વધુના ઓર્ડર પર જ છે.`, couponOk: (c) => `${c} લાગુ થયો`,
+    subscribe2: 'Subscribe કરીને 10% બચાવો', every: 'દર', days: 'દિવસે ડિલિવરી', qty: 'જથ્થો', buyNow: 'હમણાં ખરીદો', howUse: 'કેવી રીતે વાપરવું', size: 'સાઇઝ',
+    coTitle: 'Checkout', coContact: 'સંપર્ક અને સરનામું', name: 'પૂરું નામ', phone: 'મોબાઇલ નંબર', addr: 'સરનામું', city: 'શહેર', pin: 'પિનકોડ', state: 'રાજ્ય', slot: 'ડિલિવરી સમય', slotAny: 'ગમે ત્યારે', slotMorning: 'સવારે 9–1', slotEvening: 'સાંજે 4–8',
+    summary: 'ઓર્ડર સારાંશ', payTitle: 'Payment', payNote: 'Payment gateway જોડાયા પછી UPI, કાર્ડ અને નેટબેંકિંગ અહીં દેખાશે.', pay: (n) => `${n} ચૂકવો`,
+    errName: 'તમારું નામ લખો.', errPhone: '10 આંકડાનો ભારતીય મોબાઇલ નંબર લખો.', errAddr: 'સરનામું લખો.', errCity: 'શહેર લખો.', errPin: '6 આંકડાનો પિનકોડ લખો.',
+    noPayTitle: 'Online payment હજુ જોડાયેલું નથી', noPayBody: 'કોઈ પૈસા કપાયા નથી. તમારો ઓર્ડર request તૈયાર છે: નીચેની વિગત copy કરીને WhatsApp પર મોકલો, અથવા store owner payment gateway (જેમ કે Razorpay) જોડે પછી અહીંથી ચૂકવો.', copy: 'ઓર્ડર વિગત copy કરો', copied: 'Copy થયું', copyFail: 'Copy ન થયું. ટેક્સ્ટ select કરીને copy કરો.', orderId: 'Order request',
+    newsOk: 'આભાર! Subscribe થઈ ગયું.', newsBad: 'માન્ય ઈમેલ લખો.', ritualPick: 'નીચેથી 3 પ્રોડક્ટ પસંદ કરો', ritualFull: '3 પસંદ થઈ ગયા', ritualSave: (n) => `દિનચર્યામાં ${n} બચત`, ritualNeed: 'પહેલાં 3 પ્રોડક્ટ પસંદ કરો.', ritualOk: 'દિનચર્યા કાર્ટમાં ઉમેરી (15% છૂટ)', bundle: 'દિનચર્યા (15%)',
+  },
+};
+const DEF = {
+  catAll: 'All', catPowder: 'Powder', catCapsules: 'Capsules', catTea: 'Tea', catCare: 'Oil & care', catCombo: 'Combos',
+  add: 'Add to cart', view: 'Details', added: 'Added to cart', wishAdded: 'Saved to wishlist', wishRemoved: 'Removed from wishlist', perDay: 'per day', noResults: 'Nothing matches that search.', clear: 'Clear search',
+  emptyCart: 'Your cart is empty. Add something green from the shelf.', shopNow: 'Start shopping', remove: 'Remove', subtotal: 'Subtotal', discount: 'Discount', shipping: 'Shipping', free: 'Free', total: 'Total',
+  toFree: (n) => `Add ${n} more for free shipping`, gotFree: 'You have free shipping ✓', coupon: 'Coupon code', apply: 'Apply', checkout: 'Checkout', badCoupon: 'That code is not valid.', minCoupon: (n) => `This code works on orders above ${n}.`, couponOk: (c) => `${c} applied`,
+  subscribe2: 'Subscribe & save 10%', every: 'Every', days: 'days', qty: 'Quantity', buyNow: 'Buy now', howUse: 'How to use', size: 'Size',
+  coTitle: 'Checkout', coContact: 'Contact & delivery', name: 'Full name', phone: 'Mobile number', addr: 'Address', city: 'City', pin: 'PIN code', state: 'State', slot: 'Delivery slot', slotAny: 'Any time', slotMorning: 'Morning 9–1', slotEvening: 'Evening 4–8',
+  summary: 'Order summary', payTitle: 'Payment', payNote: 'UPI, cards and netbanking will appear here once a payment gateway is connected.', pay: (n) => `Pay ${n}`,
+  errName: 'Enter your name.', errPhone: 'Enter a 10-digit Indian mobile number.', errAddr: 'Enter your address.', errCity: 'Enter your city.', errPin: 'Enter a 6-digit PIN code.',
+  noPayTitle: 'Online payment is not connected yet', noPayBody: 'No money has been charged. Your order request is ready: copy the details below and send them on WhatsApp, or pay here once the store owner connects a payment gateway such as Razorpay.', copy: 'Copy order details', copied: 'Copied', copyFail: 'Could not copy. Select the text and copy it.', orderId: 'Order request',
+  newsOk: 'Thanks! You are subscribed.', newsBad: 'Enter a valid email address.', ritualPick: 'Pick 3 products below', ritualFull: '3 picked', ritualSave: (n) => `You save ${n} with the ritual`, ritualNeed: 'Pick 3 products first.', ritualOk: 'Ritual added to cart (15% off)', bundle: 'Ritual (15%)',
+};
+let lang = S.get('lang', 'en');
+const t = (k, ...a) => { const v = (lang === 'gu' && T.gu[k] !== undefined) ? T.gu[k] : DEF[k]; return typeof v === 'function' ? v(...a) : v ?? k; };
+const L = (o) => (o && typeof o === 'object' ? (o[lang] || o.en) : o);
+
+/* ---------- product art (original SVG illustrations) ---------- */
+const leafMark = (x, y, s, c) => `<g transform="translate(${x} ${y}) scale(${s})" fill="${c}"><path d="M0 18 C0 10 0 5 1 -6" stroke="${c}" stroke-width="1.4" fill="none"/>${[[-4,-2,-30],[5,0,30],[-4.5,6,-25],[5,8,25],[1.5,-7,0]].map(([a,b,r])=>`<ellipse cx="${a}" cy="${b}" rx="3.3" ry="1.9" transform="rotate(${r} ${a} ${b})"/>`).join('')}</g>`;
+function art(kind, o = {}) {
+  const id = 'g' + Math.random().toString(36).slice(2, 7);
+  const name = o.label || 'MORINGA', sub = o.sub || '';
+  const ground = `<ellipse cx="150" cy="268" rx="96" ry="12" fill="#000" opacity=".12"/>`;
+  const defs = `<defs>
+    <linearGradient id="${id}k" x1="0" x2="1"><stop offset="0" stop-color="#c79a63"/><stop offset=".55" stop-color="#e2bd88"/><stop offset="1" stop-color="#b8874f"/></linearGradient>
+    <linearGradient id="${id}g" x1="0" x2="1"><stop offset="0" stop-color="#2f5414"/><stop offset=".5" stop-color="#477a20"/><stop offset="1" stop-color="#284a11"/></linearGradient>
+    <linearGradient id="${id}a" x1="0" x2="1"><stop offset="0" stop-color="#6e3a0c"/><stop offset=".45" stop-color="#b8681b"/><stop offset="1" stop-color="#5e300a"/></linearGradient>
+    <linearGradient id="${id}w" x1="0" x2="1"><stop offset="0" stop-color="#e9ecd9"/><stop offset=".5" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe3cc"/></linearGradient>
+    <pattern id="${id}p" width="7" height="7" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="#7f9a2a"/><circle cx="2" cy="2" r="1.2" fill="#9cb83a"/><circle cx="5.5" cy="5" r="1" fill="#62801c"/></pattern>
+  </defs>`;
+  let body = '';
+  if (kind === 'pouch') {
+    const fill = o.kraft === false ? `url(#${id}g)` : `url(#${id}k)`;
+    body = `<path d="M84 46 H216 L222 236 Q222 256 202 256 H98 Q78 256 78 236 Z" fill="${fill}"/>
+      <rect x="84" y="46" width="132" height="12" fill="#000" opacity=".12"/>
+      <path d="M84 62 H216" stroke="#000" opacity=".18" stroke-width="2" stroke-dasharray="4 3"/>
+      <rect x="104" y="80" width="92" height="64" rx="12" fill="url(#${id}p)" stroke="#fff" stroke-opacity=".6" stroke-width="3"/>
+      <rect x="96" y="156" width="108" height="78" rx="8" fill="#fbf7e3"/>
+      ${leafMark(150, 172, 0.9, '#3f6d1c')}
+      <text x="150" y="204" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-weight="800" font-size="16" fill="#18230f">SARAGVO</text>
+      <text x="150" y="220" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#3f6d1c">${esc(name)}</text>
+      <text x="150" y="230" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="7.5" fill="#4d5a41">${esc(sub)}</text>
+      <path d="M90 50 L96 250" stroke="#fff" opacity=".18" stroke-width="6"/>`;
+  } else if (kind === 'bottle') {
+    body = `<rect x="104" y="40" width="92" height="34" rx="8" fill="#f4f4ee"/><rect x="104" y="64" width="92" height="8" fill="#000" opacity=".08"/>
+      <path d="M96 84 Q96 74 110 74 H190 Q204 74 204 84 V242 Q204 256 190 256 H110 Q96 256 96 242 Z" fill="url(#${id}a)"/>
+      <rect x="104" y="124" width="92" height="100" rx="6" fill="#fbf7e3"/>${leafMark(150, 142, 0.8, '#3f6d1c')}
+      <text x="150" y="176" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-weight="800" font-size="15" fill="#18230f">SARAGVO</text>
+      <text x="150" y="192" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#3f6d1c">${esc(name)}</text>
+      <text x="150" y="206" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="7.5" fill="#4d5a41">${esc(sub)}</text>
+      <path d="M108 86 V244" stroke="#fff" opacity=".22" stroke-width="7"/>
+      <g opacity=".95"><rect x="210" y="226" width="32" height="13" rx="6.5" fill="#6f8f25" transform="rotate(-24 226 232)"/><rect x="226" y="232" width="16" height="13" rx="6" fill="#f4f1dd" transform="rotate(-24 226 232)"/></g>`;
+  } else if (kind === 'tea') {
+    body = `<path d="M70 92 L178 70 L230 96 L122 120 Z" fill="#5d8a2a"/>
+      <path d="M70 92 L122 120 V256 L70 230 Z" fill="#2f5414"/>
+      <path d="M122 120 L230 96 V232 L122 256 Z" fill="#477a20"/>
+      <path d="M130 140 L222 120 V214 L130 236 Z" fill="#fbf7e3"/>
+      <g transform="skewY(-12) translate(0 36)">${leafMark(176, 150, 0.85, '#3f6d1c')}
+      <text x="176" y="180" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-weight="800" font-size="14" fill="#18230f">SARAGVO</text>
+      <text x="176" y="195" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" fill="#3f6d1c">${esc(name)}</text>
+      <text x="176" y="207" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="7" fill="#4d5a41">${esc(sub)}</text></g>
+      <path d="M86 238 Q76 252 84 262" stroke="#c9a46a" stroke-width="1.5" fill="none"/><rect x="74" y="258" width="18" height="12" rx="2" fill="#e3a018"/>`;
+  } else if (kind === 'oil') {
+    body = `<rect x="136" y="26" width="28" height="34" rx="12" fill="#1d1d1a"/><rect x="128" y="56" width="44" height="22" rx="5" fill="#2a2a26"/>
+      <path d="M116 92 Q116 78 132 78 H168 Q184 78 184 92 L194 240 Q194 256 178 256 H122 Q106 256 106 240 Z" fill="#c7a12a" opacity=".92"/>
+      <path d="M116 92 Q116 78 132 78 H168 Q184 78 184 92 L188 140 H112 Z" fill="#a8851c" opacity=".7"/>
+      <rect x="114" y="150" width="72" height="86" rx="6" fill="#fbf7e3"/>${leafMark(150, 166, 0.7, '#3f6d1c')}
+      <text x="150" y="198" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-weight="800" font-size="12.5" fill="#18230f">SARAGVO</text>
+      <text x="150" y="212" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="7.5" fill="#3f6d1c">${esc(name)}</text>
+      <text x="150" y="224" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="7" fill="#4d5a41">${esc(sub)}</text>
+      <path d="M120 96 L114 240" stroke="#fff" opacity=".3" stroke-width="6"/>`;
+  } else if (kind === 'jar') {
+    let leaves = '';
+    for (let i = 0; i < 26; i++) { const x = 112 + (i * 37) % 78, y = 120 + ((i * 53) % 110), r = (i * 47) % 180; leaves += `<ellipse cx="${x}" cy="${y}" rx="9" ry="5" transform="rotate(${r} ${x} ${y})" fill="${i % 3 ? '#4f7a1f' : '#6f9a2c'}"/>`; }
+    body = `<rect x="106" y="56" width="88" height="30" rx="6" fill="#3f6d1c"/><rect x="106" y="78" width="88" height="6" fill="#000" opacity=".15"/>
+      <path d="M100 96 Q100 88 110 88 H190 Q200 88 200 96 V244 Q200 256 188 256 H112 Q100 256 100 244 Z" fill="#eef3e0" opacity=".55" stroke="#c8d1b0" stroke-width="2"/>
+      ${leaves}<rect x="114" y="168" width="72" height="54" rx="6" fill="#fbf7e3" opacity=".96"/>
+      <text x="150" y="190" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-weight="800" font-size="13" fill="#18230f">SARAGVO</text>
+      <text x="150" y="204" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="7.5" fill="#3f6d1c">${esc(name)}</text>
+      <text x="150" y="215" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="7" fill="#4d5a41">${esc(sub)}</text>
+      <path d="M108 100 V246" stroke="#fff" opacity=".6" stroke-width="5"/>`;
+  } else if (kind === 'soap') {
+    body = `<path d="M70 168 Q70 140 98 136 L206 124 Q234 122 236 150 L238 196 Q238 222 210 226 L102 238 Q72 240 70 214 Z" fill="#a9bf5a"/>
+      <path d="M70 168 Q70 140 98 136 L206 124 Q234 122 236 150 Q234 164 206 166 L98 178 Q70 182 70 168 Z" fill="#c2d47a"/>
+      <g opacity=".55">${leafMark(152, 150, 1.4, '#5a7a22')}</g>
+      <rect x="98" y="196" width="112" height="30" rx="4" fill="#fbf7e3" transform="rotate(-5 154 211)"/>
+      <text x="154" y="215" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#3f6d1c" transform="rotate(-5 154 211)">${esc(name)}</text>`;
+  } else if (kind === 'gift') {
+    body = `<rect x="70" y="128" width="160" height="128" rx="8" fill="#2f5414"/><rect x="62" y="104" width="176" height="34" rx="6" fill="#477a20"/>
+      <rect x="142" y="104" width="16" height="152" fill="#e3a018"/><path d="M150 104 C120 70 96 84 110 100 Z M150 104 C180 70 204 84 190 100 Z" fill="#e3a018"/>
+      <rect x="92" y="170" width="116" height="54" rx="6" fill="#fbf7e3"/>
+      <text x="150" y="193" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-weight="800" font-size="14" fill="#18230f">SARAGVO</text>
+      <text x="150" y="210" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" fill="#3f6d1c">${esc(name)}</text>`;
+  } else if (kind === 'glass') { // recipe art: smoothie glass
+    body = `<path d="M104 70 H196 L184 252 Q183 260 175 260 H125 Q117 260 116 252 Z" fill="#7fae3a" opacity=".9"/><path d="M104 70 H196 L194 96 H106 Z" fill="#a9cf5a"/>
+      <circle cx="132" cy="84" r="5" fill="#fbf7e3"/><circle cx="166" cy="80" r="4" fill="#fbf7e3"/><rect x="160" y="30" width="8" height="90" rx="4" fill="#e3a018" transform="rotate(14 164 75)"/>
+      ${leafMark(200, 66, 1.2, '#3f6d1c')}`;
+  } else if (kind === 'thepla') {
+    body = `<ellipse cx="150" cy="200" rx="104" ry="34" fill="#d9d2b8"/><ellipse cx="150" cy="190" rx="88" ry="28" fill="#c79a4a"/><ellipse cx="146" cy="176" rx="86" ry="27" fill="#d8ac58"/>
+      ${Array.from({ length: 22 }, (_, i) => `<circle cx="${82 + (i * 31) % 130}" cy="${164 + (i * 17) % 26}" r="2.4" fill="#3f6d1c"/>`).join('')}<ellipse cx="146" cy="160" rx="84" ry="26" fill="#e2b964"/>
+      ${Array.from({ length: 18 }, (_, i) => `<circle cx="${86 + (i * 29) % 124}" cy="${150 + (i * 13) % 22}" r="2.2" fill="#4f7a1f"/>`).join('')}`;
+  } else if (kind === 'bowl') {
+    body = `<path d="M70 150 H230 Q226 230 150 236 Q74 230 70 150 Z" fill="#b8642a"/><ellipse cx="150" cy="150" rx="80" ry="18" fill="#f0c650"/>
+      ${Array.from({ length: 14 }, (_, i) => `<ellipse cx="${96 + (i * 23) % 108}" cy="${146 + (i * 7) % 10}" rx="5" ry="2.6" fill="#3f6d1c" transform="rotate(${i * 40} ${96 + (i * 23) % 108} ${146 + (i * 7) % 10})"/>`).join('')}`;
+  } else if (kind === 'cup') {
+    body = `<path d="M96 120 H196 L188 236 Q186 252 170 252 H122 Q106 252 104 236 Z" fill="#f4f1e2"/><ellipse cx="146" cy="122" rx="50" ry="10" fill="#b9a246"/>
+      <path d="M196 140 Q228 142 222 176 Q216 206 190 202" stroke="#f4f1e2" stroke-width="12" fill="none"/>
+      <path d="M130 100 Q120 82 134 66 M156 100 Q148 80 162 62" stroke="#c8ceb4" stroke-width="3" fill="none" stroke-linecap="round"/>${leafMark(146, 190, 1.1, '#3f6d1c')}`;
+  }
+  return `<svg viewBox="0 0 300 300" role="img" aria-label="${esc(o.alt || name)}" xmlns="http://www.w3.org/2000/svg">${defs}${ground}${body}</svg>`;
+}
+
+/* ---------- catalogue (example prices; set your own) ---------- */
+const PRODUCTS = [
+  { id: 'powder', cat: 'powder', art: 'pouch', badge: 'best', pop: 10, name: { en: 'Moringa Leaf Powder', gu: 'સરગવાના પાનનો પાવડર' }, sub: 'SHADE-DRIED',
+    desc: { en: 'Single-ingredient leaf powder. Stir into water, smoothies, dal or thepla dough.', gu: 'ફક્ત પાન, બીજું કંઈ નહીં. પાણી, smoothie, દાળ કે થેપલાના લોટમાં ભેળવો.' },
+    use: { en: 'Start with ½ tsp a day after food, build up to 1 tsp.', gu: 'જમ્યા પછી રોજ ½ ચમચીથી શરૂ કરો, પછી 1 ચમચી સુધી.' },
+    variants: [{ l: '100 g', p: 249, m: 299, g: 100 }, { l: '250 g', p: 549, m: 699, g: 250 }, { l: '500 g', p: 999, m: 1299, g: 500 }] },
+  { id: 'capsules', cat: 'capsules', art: 'bottle', badge: 'best', pop: 9, name: { en: 'Moringa Capsules', gu: 'સરગવા કેપ્સ્યુલ' }, sub: '60 × 500 mg',
+    desc: { en: 'The same leaf powder in plant-based capsules. No taste, easy to carry.', gu: 'એ જ પાવડર, વનસ્પતિ કેપ્સ્યુલમાં. સ્વાદ નહીં, સાથે રાખવામાં સરળ.' },
+    use: { en: '1–2 capsules a day with water after a meal.', gu: 'જમ્યા પછી પાણી સાથે દિવસમાં 1–2 કેપ્સ્યુલ.' },
+    variants: [{ l: '60 caps', p: 399, m: 499, g: 30 }, { l: '120 caps', p: 699, m: 899, g: 60 }] },
+  { id: 'tea', cat: 'tea', art: 'tea', badge: 'new', pop: 8, name: { en: 'Moringa Tulsi Tea', gu: 'સરગવો તુલસી ચા' }, sub: '25 TEA BAGS',
+    desc: { en: 'Moringa leaf with tulsi and lemongrass. Caffeine-free, for the evening.', gu: 'સરગવો, તુલસી અને લીલી ચા. Caffeine વગર, સાંજ માટે.' },
+    use: { en: 'Steep one bag in hot water for 3–4 minutes.', gu: 'ગરમ પાણીમાં એક bag 3–4 મિનિટ રાખો.' },
+    variants: [{ l: '25 bags', p: 299, m: 349, g: 50 }, { l: '50 bags', p: 549, m: 699, g: 100 }] },
+  { id: 'oil', cat: 'care', art: 'oil', pop: 7, name: { en: 'Cold-pressed Moringa Oil', gu: 'કોલ્ડ-પ્રેસ્ડ સરગવા તેલ' }, sub: 'FOR SKIN & HAIR',
+    desc: { en: 'Pressed from moringa seeds. A light oil for face, hair ends and dry skin.', gu: 'સરગવાના બીજમાંથી કાઢેલું. ચહેરા, વાળ અને સૂકી ત્વચા માટે હળવું તેલ.' },
+    use: { en: 'For external use. Warm 3–4 drops between palms and apply.', gu: 'ફક્ત બહારના ઉપયોગ માટે. 3–4 ટીપાં હથેળીમાં ગરમ કરી લગાવો.' },
+    variants: [{ l: '30 ml', p: 499, m: 599 }, { l: '100 ml', p: 1299, m: 1599 }] },
+  { id: 'leaves', cat: 'powder', art: 'jar', pop: 6, name: { en: 'Whole Dried Leaves', gu: 'આખાં સૂકાં પાન' }, sub: 'FOR KADHI & DAL',
+    desc: { en: 'Whole leaflets for cooking. Crush into kadhi, dal or rice just before serving.', gu: 'રસોઈ માટે આખાં પાન. પીરસતાં પહેલાં કઢી, દાળ કે ભાતમાં ચોળીને નાખો.' },
+    use: { en: 'Add a tablespoon to dishes in the last minute of cooking.', gu: 'રસોઈની છેલ્લી મિનિટે એક ચમચો ઉમેરો.' },
+    variants: [{ l: '100 g', p: 199, m: 249, g: 100 }] },
+  { id: 'amla', cat: 'powder', art: 'pouch', kraft: false, badge: 'new', pop: 5, name: { en: 'Moringa + Amla Mix', gu: 'સરગવો + આમળાં મિક્સ' }, sub: 'MORNING MIX',
+    desc: { en: 'Moringa with amla and a little ginger. Tangy in warm water.', gu: 'સરગવો, આમળાં અને થોડું આદુ. ગરમ પાણીમાં ખાટું-મીઠું.' },
+    use: { en: '1 tsp in a glass of warm water in the morning.', gu: 'સવારે ગરમ પાણીના ગ્લાસમાં 1 ચમચી.' },
+    variants: [{ l: '200 g', p: 349, m: 399, g: 200 }] },
+  { id: 'soap', cat: 'care', art: 'soap', pop: 4, name: { en: 'Moringa Neem Soap', gu: 'સરગવો લીમડો સાબુ' }, sub: 'HANDMADE · 100 g',
+    desc: { en: 'Cold-process bar with moringa oil and neem leaf.', gu: 'સરગવાના તેલ અને લીમડાના પાનથી હાથે બનાવેલો સાબુ.' },
+    use: { en: 'Lather, rinse, and keep the bar dry between uses.', gu: 'ફીણ કરી ધોઈ લો; વાપર્યા પછી સાબુ સૂકો રાખો.' },
+    variants: [{ l: '1 bar', p: 149, m: 179 }, { l: '3 bars', p: 399, m: 537 }] },
+  { id: 'gift', cat: 'combo', art: 'gift', pop: 3, name: { en: 'Festive Gift Box', gu: 'તહેવાર ગિફ્ટ બોક્સ' }, sub: 'POWDER · TEA · OIL',
+    desc: { en: 'Leaf powder 100 g, tulsi tea 25 bags and moringa oil 30 ml in a gift box.', gu: 'પાવડર 100 g, તુલસી ચા 25 bags અને તેલ 30 ml, ગિફ્ટ બોક્સમાં.' },
+    use: { en: 'Ships with a handwritten note if you add one at checkout.', gu: 'Checkout વખતે સંદેશ લખશો તો હાથે લખેલી નોંધ સાથે મોકલીશું.' },
+    variants: [{ l: 'Box', p: 899, m: 1147 }] },
+];
+const productArt = (p, extra = {}) => art(p.art, { label: (p.name.en).toUpperCase().slice(0, 22), sub: p.sub, kraft: p.kraft, alt: L(p.name), ...extra });
+
+/* ---------- state ---------- */
+let cart = S.get('cart', []);           // [{ key, id, v, qty, sub, ritual }]
+let wish = new Set(S.get('wish', []));
+let recent = S.get('recent', []);
+let coupon = S.get('coupon', null);
+let filter = 'all', query = '', sort = 'pop';
+const chosen = {};                       // product id -> variant index on cards
+let ritual = [];
+const save = () => { S.set('cart', cart); S.set('wish', [...wish]); S.set('recent', recent); S.set('coupon', coupon); };
+const prod = (id) => PRODUCTS.find((p) => p.id === id);
+const linePrice = (it) => { const v = prod(it.id).variants[it.v]; let p = v.p; if (it.sub) p *= 1 - SUB_OFF; if (it.ritual) p *= 1 - RITUAL_OFF; return p; };
+
+function totals() {
+  const sub = cart.reduce((s, it) => s + linePrice(it) * it.qty, 0);
+  const list = cart.reduce((s, it) => s + prod(it.id).variants[it.v].p * it.qty, 0);
+  let disc = 0, cpn = null;
+  if (coupon && COUPONS[coupon]) { const c = COUPONS[coupon]; if (!c.min || sub >= c.min) { disc = sub * c.pct / 100; cpn = coupon; } }
+  const after = sub - disc;
+  const ship = after === 0 || after >= FREE_SHIP ? 0 : SHIP_FEE;
+  return { sub, list, disc, cpn, ship, total: after + ship, saved: list - sub + disc };
+}
+
+/* ---------- toasts ---------- */
+function toast(msg) {
+  const el = document.createElement('div'); el.className = 'toast'; el.textContent = msg;
+  $('#toasts').appendChild(el); setTimeout(() => el.remove(), 2600);
+}
+
+/* ---------- i18n apply ---------- */
+function applyLang() {
+  document.documentElement.lang = lang;
+  $('#lang-en').setAttribute('aria-pressed', lang === 'en'); $('#lang-gu').setAttribute('aria-pressed', lang === 'gu');
+  $$('[data-i18n]').forEach((el) => { if (!el.dataset.en) el.dataset.en = el.textContent; el.textContent = lang === 'gu' && T.gu[el.dataset.i18n] ? T.gu[el.dataset.i18n] : el.dataset.en; });
+  $$('[data-i18n-html]').forEach((el) => { if (!el.dataset.en) el.dataset.en = el.innerHTML; el.innerHTML = lang === 'gu' && T.gu[el.dataset.i18nHtml] ? T.gu[el.dataset.i18nHtml] : el.dataset.en; });
+  $$('[data-i18n-ph]').forEach((el) => { if (!el.dataset.en) el.dataset.en = el.placeholder; el.placeholder = lang === 'gu' && T.gu[el.dataset.i18nPh] ? T.gu[el.dataset.i18nPh] : el.dataset.en; });
+  renderAll();
+}
+
+/* ---------- shop ---------- */
+const CATS = ['all', 'powder', 'capsules', 'tea', 'care', 'combo'];
+const catKey = { all: 'catAll', powder: 'catPowder', capsules: 'catCapsules', tea: 'catTea', care: 'catCare', combo: 'catCombo' };
+function renderCats() {
+  $('#cats').innerHTML = CATS.map((c) => `<button class="chip" type="button" data-cat="${c}" aria-pressed="${filter === c}">${t(catKey[c])}</button>`).join('');
+}
+function card(p) {
+  const vi = chosen[p.id] ?? 0, v = p.variants[vi];
+  const off = Math.round((1 - v.p / v.m) * 100);
+  const perDay = v.g ? `${inr((v.p / (v.g / 5)))} ${t('perDay')} · 5 g` : '';
+  return `<article class="card">
+    <button class="art" type="button" data-qv="${p.id}" aria-label="${esc(t('view'))}: ${esc(L(p.name))}">${productArt(p)}${p.badge ? `<span class="badge ${p.badge === 'new' ? 'new' : ''}">${p.badge === 'new' ? (lang === 'gu' ? 'નવું' : 'New') : (lang === 'gu' ? 'બેસ્ટસેલર' : 'Bestseller')}</span>` : ''}</button>
+    <button class="icon-btn heart" type="button" data-wish="${p.id}" aria-pressed="${wish.has(p.id)}" aria-label="Wishlist ${esc(L(p.name))}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></svg></button>
+    <div class="body">
+      <h3>${esc(L(p.name))}</h3>
+      <p class="desc">${esc(L(p.desc))}</p>
+      ${p.variants.length > 1 ? `<div class="sizes" role="group" aria-label="${t('size')}">${p.variants.map((x, i) => `<button class="size" type="button" data-size="${p.id}:${i}" aria-pressed="${i === vi}">${x.l}</button>`).join('')}</div>` : `<div class="sizes"><span class="size" style="cursor:default">${v.l}</span></div>`}
+      <div class="priceline"><span class="price num">${inr(v.p)}</span><span class="mrp num">${inr(v.m)}</span><span class="off">${off}% off</span></div>
+      <div class="perday num">${perDay}</div>
+      <div class="actions"><button class="btn primary small" type="button" data-add="${p.id}">${t('add')}</button><button class="btn small" type="button" data-qv="${p.id}">${t('view')}</button></div>
+    </div></article>`;
+}
+function renderGrid() {
+  const q = query.trim().toLowerCase();
+  let list = PRODUCTS.filter((p) => (filter === 'all' || p.cat === filter) && (!q || [p.name.en, p.name.gu, p.desc.en, p.desc.gu, p.cat].join(' ').toLowerCase().includes(q)));
+  const price = (p) => p.variants[chosen[p.id] ?? 0].p;
+  const save_ = (p) => { const v = p.variants[chosen[p.id] ?? 0]; return 1 - v.p / v.m; };
+  list.sort(sort === 'low' ? (a, b) => price(a) - price(b) : sort === 'high' ? (a, b) => price(b) - price(a) : sort === 'off' ? (a, b) => save_(b) - save_(a) : (a, b) => b.pop - a.pop);
+  $('#grid').innerHTML = list.length ? list.map(card).join('') : `<div class="empty"><p>${t('noResults')}</p><button class="btn small" type="button" id="clear-q" style="margin-top:12px">${t('clear')}</button></div>`;
+}
+function renderRecent() {
+  $('#recent-wrap').hidden = !recent.length;
+  $('#recent').innerHTML = recent.map((id) => { const p = prod(id); return p ? `<button type="button" data-qv="${id}">${productArt(p)}<span>${esc(L(p.name))}</span></button>` : ''; }).join('');
+}
+function counts() {
+  const n = cart.reduce((s, it) => s + it.qty, 0);
+  $('#cart-count').textContent = n; $('#cart-count').dataset.n = n;
+  $('#wish-count').textContent = wish.size; $('#wish-count').dataset.n = wish.size;
+}
+
+/* ---------- cart ---------- */
+function addToCart(id, v = 0, qty = 1, sub = false, ritualFlag = false, silent = false) {
+  const key = `${id}|${v}|${sub ? 's' : ''}|${ritualFlag ? 'r' : ''}`;
+  const it = cart.find((x) => x.key === key);
+  if (it) it.qty += qty; else cart.push({ key, id, v, qty, sub, ritual: ritualFlag });
+  save(); counts(); renderCart();
+  if (!silent) toast(`${t('added')}: ${L(prod(id).name)}`);
+  const b = $('#cart-btn'); b.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.18)' }, { transform: 'scale(1)' }], { duration: 300 });
+}
+function renderCart() {
+  const box = $('#items');
+  if (!cart.length) {
+    box.innerHTML = `<div style="text-align:center;padding:50px 10px;display:grid;gap:14px;justify-items:center">${art('pouch', { label: 'EMPTY FOR NOW' })}<p class="muted">${t('emptyCart')}</p><button class="btn primary" type="button" data-close-cart>${t('shopNow')}</button></div>`;
+    $('#cart-foot').hidden = true; return;
+  }
+  $('#cart-foot').hidden = false;
+  box.innerHTML = cart.map((it) => { const p = prod(it.id), v = p.variants[it.v];
+    return `<div class="line"><div class="thumb">${productArt(p)}</div><div><h4>${esc(L(p.name))}</h4><small>${v.l}${it.sub ? ' · ' + t('subscribe2') : ''}${it.ritual ? ' · ' + t('bundle') : ''}</small>
+      <div class="qty"><button type="button" data-dec="${it.key}" aria-label="Decrease">−</button><span class="num">${it.qty}</span><button type="button" data-inc="${it.key}" aria-label="Increase">+</button></div></div>
+      <div style="text-align:right"><b class="num">${inr(linePrice(it) * it.qty)}</b><br><button class="link" type="button" data-rm="${it.key}">${t('remove')}</button></div></div>`; }).join('');
+  const x = totals(); const left = Math.max(0, FREE_SHIP - (x.sub - x.disc));
+  $('#cart-foot').innerHTML = `<div class="ship">${left > 0 ? t('toFree', inr(left)) : t('gotFree')}<div class="track"><i style="width:${Math.min(100, ((x.sub - x.disc) / FREE_SHIP) * 100)}%"></i></div></div>
+    <form class="coupon" id="coupon-form"><label class="sr" for="coupon-in">${t('coupon')}</label><input id="coupon-in" placeholder="${t('coupon')}" value="${coupon || ''}" autocomplete="off"><button class="btn small" type="submit">${t('apply')}</button></form>
+    <div class="sum"><div><span>${t('subtotal')}</span><span class="num">${inr(x.sub)}</span></div>${x.disc ? `<div style="color:var(--ok)"><span>${t('discount')} (${x.cpn})</span><span class="num">−${inr(x.disc)}</span></div>` : ''}
+    <div><span>${t('shipping')}</span><span class="num">${x.ship ? inr(x.ship) : t('free')}</span></div><div class="total"><span>${t('total')}</span><span class="num">${inr(x.total)}</span></div></div>
+    <button class="btn primary block" type="button" id="go-checkout">${t('checkout')} · ${inr(x.total)}</button>`;
+}
+function openCart() { $('#drawer').classList.add('on'); $('#drawer').setAttribute('aria-hidden', 'false'); $('#scrim').classList.add('on'); renderCart(); setTimeout(() => $('#drawer-close').focus(), 50); }
+function closeCart() { $('#drawer').classList.remove('on'); $('#drawer').setAttribute('aria-hidden', 'true'); if (!$('#modal').classList.contains('on')) $('#scrim').classList.remove('on'); }
+
+/* ---------- modal: quick view + checkout ---------- */
+let lastFocus = null;
+function openModal(html) { lastFocus = document.activeElement; $('#dialog-body').innerHTML = html; $('#modal').classList.add('on'); $('#modal').setAttribute('aria-hidden', 'false'); $('#scrim').classList.add('on'); setTimeout(() => $('#modal-close').focus(), 50); }
+function closeModal() { $('#modal').classList.remove('on'); $('#modal').setAttribute('aria-hidden', 'true'); if (!$('#drawer').classList.contains('on')) $('#scrim').classList.remove('on'); if (lastFocus) lastFocus.focus(); }
+function quickView(id) {
+  const p = prod(id); let vi = chosen[id] ?? 0, qty = 1, sub = false, every = 30;
+  recent = [id, ...recent.filter((x) => x !== id)].slice(0, 6); save(); renderRecent();
+  const draw = () => {
+    const v = p.variants[vi]; const price = v.p * (sub ? 1 - SUB_OFF : 1);
+    openModal(`<div class="qv"><div class="big">${productArt(p)}</div><div class="info">
+      <div class="eyebrow">${t(catKey[p.cat])}</div><h3 id="dlg-title">${esc(L(p.name))}</h3><p class="muted">${esc(L(p.desc))}</p>
+      <div class="priceline"><span class="price num">${inr(price)}</span><span class="mrp num">${inr(v.m)}</span><span class="off">${Math.round((1 - price / v.m) * 100)}% off</span></div>
+      <div><b style="font-size:14px">${t('size')}</b><div class="sizes" style="margin-top:6px">${p.variants.map((x, i) => `<button class="size" type="button" data-qvsize="${i}" aria-pressed="${i === vi}">${x.l}</button>`).join('')}</div></div>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><b style="font-size:14px">${t('qty')}</b><div class="qty"><button type="button" data-qvq="-1" aria-label="Decrease">−</button><span class="num">${qty}</span><button type="button" data-qvq="1" aria-label="Increase">+</button></div></div>
+      ${p.cat !== 'combo' ? `<label class="toggle"><input type="checkbox" id="qv-sub" ${sub ? 'checked' : ''}><span><b>${t('subscribe2')}</b><br><small class="muted">${t('every')} <select id="qv-every" class="select" style="min-height:30px;padding:0 8px">${[30, 45, 60].map((d) => `<option ${d === every ? 'selected' : ''}>${d}</option>`).join('')}</select> ${t('days')}</small></span></label>` : ''}
+      <div><b style="font-size:14px">${t('howUse')}</b><p class="muted" style="font-size:14.5px">${esc(L(p.use))}</p></div>
+      <ul class="ticks"><li>${lang === 'gu' ? 'Batch લેબ રિપોર્ટ સાથે' : 'Batch lab report included'}</li><li>${lang === 'gu' ? '₹499 થી વધુ પર ફ્રી શિપિંગ' : 'Free shipping above ₹499'}</li><li>${lang === 'gu' ? 'સીલ પેક પર 7 દિવસમાં રિટર્ન' : '7-day returns on sealed packs'}</li></ul>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><button class="btn primary" type="button" id="qv-add">${t('add')}</button><button class="btn dark" type="button" id="qv-buy">${t('buyNow')}</button></div>
+    </div></div>`);
+    $$('[data-qvsize]').forEach((b) => b.onclick = () => { vi = +b.dataset.qvsize; chosen[id] = vi; draw(); });
+    $$('[data-qvq]').forEach((b) => b.onclick = () => { qty = Math.max(1, Math.min(20, qty + +b.dataset.qvq)); draw(); });
+    const sb = $('#qv-sub'); if (sb) sb.onchange = () => { sub = sb.checked; draw(); };
+    const ev = $('#qv-every'); if (ev) ev.onchange = () => { every = +ev.value; };
+    $('#qv-add').onclick = () => { addToCart(id, vi, qty, sub); closeModal(); renderGrid(); };
+    $('#qv-buy').onclick = () => { addToCart(id, vi, qty, sub, false, true); checkout(); };
+  };
+  draw();
+}
+
+function checkout() {
+  if (!cart.length) return;
+  closeCart();
+  const x = totals(); const d = S.get('addr', {});
+  openModal(`<div class="co"><form class="form" id="co-form" novalidate>
+      <h3 id="dlg-title">${t('coTitle')}</h3><div class="eyebrow">${t('coContact')}</div>
+      <div class="field"><label for="co-name">${t('name')}</label><input id="co-name" autocomplete="name" value="${esc(d.name || '')}"><div class="err" id="e-name"></div></div>
+      <div class="field"><label for="co-phone">${t('phone')}</label><input id="co-phone" inputmode="numeric" autocomplete="tel-national" placeholder="98XXXXXXXX" value="${esc(d.phone || '')}"><div class="err" id="e-phone"></div></div>
+      <div class="field"><label for="co-addr">${t('addr')}</label><textarea id="co-addr" rows="2" autocomplete="street-address">${esc(d.addr || '')}</textarea><div class="err" id="e-addr"></div></div>
+      <div class="two"><div class="field"><label for="co-city">${t('city')}</label><input id="co-city" autocomplete="address-level2" value="${esc(d.city || '')}"><div class="err" id="e-city"></div></div>
+        <div class="field"><label for="co-pin">${t('pin')}</label><input id="co-pin" inputmode="numeric" maxlength="6" autocomplete="postal-code" value="${esc(d.pin || '')}"><div class="err" id="e-pin"></div></div></div>
+      <div class="two"><div class="field"><label for="co-state">${t('state')}</label><select id="co-state">${['Gujarat', 'Maharashtra', 'Rajasthan', 'Madhya Pradesh', 'Delhi', 'Karnataka', 'Tamil Nadu', 'Other'].map((s) => `<option ${s === (d.state || 'Gujarat') ? 'selected' : ''}>${s}</option>`).join('')}</select></div>
+        <div class="field"><label for="co-slot">${t('slot')}</label><select id="co-slot"><option>${t('slotAny')}</option><option>${t('slotMorning')}</option><option>${t('slotEvening')}</option></select></div></div>
+      <div class="pay-box"><b>${t('payTitle')}</b><span class="muted">${t('payNote')}</span><div class="methods"><span>UPI</span><span>Cards</span><span>Netbanking</span><span>Wallets</span></div></div>
+      <button class="btn primary block" type="submit" id="pay-btn">🔒 ${t('pay', inr(x.total))}</button>
+      <div id="pay-result"></div>
+    </form>
+    <aside><div class="eyebrow">${t('summary')}</div>
+      ${cart.map((it) => { const p = prod(it.id); return `<div style="display:grid;grid-template-columns:52px 1fr auto;gap:10px;align-items:center"><div class="line" style="padding:0;border:0;display:block"><div class="thumb">${productArt(p)}</div></div><div style="font-size:14px"><b>${esc(L(p.name))}</b><br><small class="muted">${p.variants[it.v].l} × ${it.qty}</small></div><b class="num">${inr(linePrice(it) * it.qty)}</b></div>`; }).join('')}
+      <div class="sum"><div><span>${t('subtotal')}</span><span class="num">${inr(x.sub)}</span></div>${x.disc ? `<div style="color:var(--ok)"><span>${t('discount')} (${x.cpn})</span><span class="num">−${inr(x.disc)}</span></div>` : ''}<div><span>${t('shipping')}</span><span class="num">${x.ship ? inr(x.ship) : t('free')}</span></div><div class="total"><span>${t('total')}</span><span class="num">${inr(x.total)}</span></div></div>
+    </aside></div>`);
+  $('#co-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const v = (id) => $('#' + id).value.trim();
+    const rules = [['co-name', 'e-name', (s) => s.length >= 2, 'errName'], ['co-phone', 'e-phone', (s) => /^[6-9]\d{9}$/.test(s.replace(/\D/g, '').slice(-10)) && s.replace(/\D/g, '').length >= 10, 'errPhone'],
+      ['co-addr', 'e-addr', (s) => s.length >= 6, 'errAddr'], ['co-city', 'e-city', (s) => s.length >= 2, 'errCity'], ['co-pin', 'e-pin', (s) => /^[1-9]\d{5}$/.test(s), 'errPin']];
+    let ok = true, first = null;
+    rules.forEach(([f, e2, test, msg]) => { const good = test(v(f)); $('#' + e2).textContent = good ? '' : t(msg); $('#' + f).setAttribute('aria-invalid', !good); if (!good && !first) first = f; ok = ok && good; });
+    if (!ok) { $('#' + first).focus(); return; }
+    S.set('addr', { name: v('co-name'), phone: v('co-phone'), addr: v('co-addr'), city: v('co-city'), pin: v('co-pin'), state: $('#co-state').value });
+    // Payment button exists but no payment method is connected: never pretend to charge.
+    const id = 'SGV-' + Date.now().toString(36).toUpperCase().slice(-6);
+    const tot = totals();
+    const text = [`${t('orderId')} ${id}`, ...cart.map((it) => `• ${prod(it.id).name.en} ${prod(it.id).variants[it.v].l} × ${it.qty} = ${inr(linePrice(it) * it.qty)}`),
+      `${t('total')}: ${inr(tot.total)}${tot.cpn ? ` (${tot.cpn})` : ''}`, `${v('co-name')} · ${v('co-phone')}`, `${v('co-addr')}, ${v('co-city')} ${v('co-pin')}, ${$('#co-state').value}`, `${t('slot')}: ${$('#co-slot').value}`].join('\n');
+    $('#pay-result').innerHTML = `<div class="notice" role="alert"><h4>${t('noPayTitle')}</h4><p style="font-size:14px">${t('noPayBody')}</p><pre id="order-text">${esc(text)}</pre><button class="btn small" type="button" id="copy-order">${t('copy')}</button></div>`;
+    $('#copy-order').onclick = async () => {
+      try { await navigator.clipboard.writeText(text); toast(t('copied')); }
+      catch { const r = document.createRange(); r.selectNodeContents($('#order-text')); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); toast(t('copyFail')); }
+    };
+    $('#pay-result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+}
+
+/* ---------- ritual builder ---------- */
+const RITUAL_IDS = ['powder', 'capsules', 'tea', 'amla', 'leaves', 'oil'];
+function renderRitual() {
+  $('#picks').innerHTML = RITUAL_IDS.map((id) => `<button class="chip" type="button" data-pick="${id}" aria-pressed="${ritual.includes(id)}">${esc(L(prod(id).name))}</button>`).join('');
+  $('#slots').innerHTML = [0, 1, 2].map((i) => { const id = ritual[i]; return id ? `<div class="slot">${productArt(prod(id))}<button type="button" data-unpick="${id}" aria-label="${t('remove')}">×</button></div>` : `<div class="slot">${t('ritualPick')}</div>`; }).join('');
+  const full = ritual.reduce((s, id) => s + prod(id).variants[0].p, 0);
+  $('#ritual-price').textContent = inr(full * (ritual.length === 3 ? 1 - RITUAL_OFF : 1));
+  $('#ritual-save').textContent = ritual.length === 3 ? t('ritualSave', inr(full * RITUAL_OFF)) : `${ritual.length}/3`;
+}
+
+/* ---------- benefits, nutrition, calculator ---------- */
+const ICON = {
+  leaf: '<path d="M5 19c8 0 14-6 14-14C11 5 5 11 5 19Z"/><path d="M5 19 14 10"/>',
+  bone: '<path d="M7 7a2.5 2.5 0 1 1 3-3l7 7a2.5 2.5 0 1 1 3 3 2.5 2.5 0 1 1-3 3l-7-7a2.5 2.5 0 1 1-3-3Z"/>',
+  drop: '<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11Z"/>',
+  shield: '<path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/>',
+  bolt: '<path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/>',
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+};
+const BENEFITS = [
+  ['leaf', { en: 'Plant protein', gu: 'વનસ્પતિ પ્રોટીન' }, { en: 'Dried leaf is roughly a quarter protein by weight, with all essential amino acids.', gu: 'સૂકાં પાનના વજનનો આશરે ચોથો ભાગ પ્રોટીન છે, બધા જરૂરી amino acids સાથે.' }],
+  ['bone', { en: 'Calcium', gu: 'કેલ્શિયમ' }, { en: 'A teaspoon adds a useful amount of calcium to a vegetarian plate.', gu: 'એક ચમચી શાકાહારી થાળીમાં સારું એવું કેલ્શિયમ ઉમેરે છે.' }],
+  ['drop', { en: 'Iron', gu: 'આયર્ન' }, { en: 'A natural source of plant iron. Pair with amla or lemon to help absorption.', gu: 'વનસ્પતિ આયર્નનો કુદરતી સ્ત્રોત. શોષણ માટે આમળાં કે લીંબુ સાથે લો.' }],
+  ['shield', { en: 'Antioxidants', gu: 'એન્ટીઓક્સિડન્ટ' }, { en: 'Contains polyphenols such as quercetin and chlorogenic acid.', gu: 'Quercetin અને chlorogenic acid જેવા polyphenols ધરાવે છે.' }],
+  ['sun', { en: 'Vitamin A (β-carotene)', gu: 'વિટામિન A (β-કેરોટીન)' }, { en: 'Shade-drying keeps more of the leaf’s carotenoids than sun-drying.', gu: 'તડકાને બદલે છાંયડે સૂકવવાથી પાનના carotenoids વધુ સચવાય છે.' }],
+  ['bolt', { en: 'Fibre', gu: 'ફાઇબર' }, { en: 'Leaf fibre that sits easily in dal, thepla dough and smoothies.', gu: 'દાળ, થેપલાના લોટ અને smoothie માં સહેલાઈથી ભળી જતું ફાઇબર.' }],
+];
+// typical values per 100 g of moringa leaf powder (vary by harvest; label says so)
+const NF = [
+  ['energy', { en: 'Energy', gu: 'ઊર્જા' }, 205, 'kcal', 2000], ['protein', { en: 'Protein', gu: 'પ્રોટીન' }, 27, 'g', 50],
+  ['carbs', { en: 'Carbohydrate', gu: 'કાર્બોહાઇડ્રેટ' }, 38, 'g', 275], ['fibre', { en: 'Dietary fibre', gu: 'ફાઇબર' }, 19, 'g', 28],
+  ['fat', { en: 'Fat', gu: 'ચરબી' }, 2.3, 'g', 78], ['calcium', { en: 'Calcium', gu: 'કેલ્શિયમ' }, 2000, 'mg', 1000],
+  ['iron', { en: 'Iron', gu: 'આયર્ન' }, 28, 'mg', 18], ['potassium', { en: 'Potassium', gu: 'પોટેશિયમ' }, 1300, 'mg', 4700],
+];
+let serving = 5;
+function renderNF() {
+  $('#nf-rows').innerHTML = NF.map(([k, n, per100, unit, dv]) => { const val = per100 * serving / 100; const pct = Math.min(100, (val / dv) * 100);
+    const shown = val >= 100 ? Math.round(val) : val >= 10 ? val.toFixed(0) : val.toFixed(1);
+    return `<div class="nrow"><span><b>${esc(L(n))}</b></span><span class="num">${shown} ${unit} · ${Math.round((val / dv) * 100)}%</span><div class="bar"><i style="width:${pct}%"></i></div></div>`; }).join('');
+  $('#serv-5').setAttribute('aria-pressed', serving === 5); $('#serv-100').setAttribute('aria-pressed', serving === 100);
+}
+const PACKS = PRODUCTS.filter((p) => p.id === 'powder').flatMap((p) => p.variants.map((v, i) => ({ id: p.id, i, l: `${L(p.name)} · ${v.l}`, g: v.g, p: v.p })));
+function renderCalcOptions() { const sel = $('#c-pack'); const cur = sel.value || '1'; sel.innerHTML = PACKS.map((x, i) => `<option value="${i}" ${String(i) === cur ? 'selected' : ''}>${esc(x.l)} · ${inr(x.p)}</option>`).join(''); }
+function calc() {
+  const pk = PACKS[+$('#c-pack').value || 0], ppl = +$('#c-people').value, dose = +$('#c-dose').value;
+  $('#c-people-v').textContent = ppl;
+  const days = pk.g / (ppl * dose);
+  $('#c-days').textContent = Math.floor(days);
+  $('#c-cost').textContent = inr(pk.p / days / ppl);
+  $('#c-month').textContent = Math.max(1, Math.ceil(30 / days));
+}
+
+/* ---------- process, recipes, reviews, faq ---------- */
+const STEPS = [
+  [{ en: 'Harvest', gu: 'તોડણી' }, { en: 'Young leaf sprigs picked at sunrise from our Saurashtra plots.', gu: 'સૌરાષ્ટ્રના ખેતરમાંથી સવારે કૂણી ડાળીઓ તોડાય છે.' }, 'Day 1 · 6 am'],
+  [{ en: 'Wash', gu: 'ધોવું' }, { en: 'Triple-washed in RO water, then leaflets stripped from the stems by hand.', gu: 'RO પાણીમાં ત્રણ વાર ધોઈ, હાથથી પાન ડાળીથી અલગ કરાય છે.' }, 'Day 1'],
+  [{ en: 'Shade-dry', gu: 'છાંયડે સૂકવવું' }, { en: 'Dried on mesh racks in shade so colour and nutrients hold.', gu: 'રંગ અને પોષણ ટકી રહે એ માટે જાળી પર છાંયડે સૂકવાય છે.' }, '< 40 °C · 3–4 days'],
+  [{ en: 'Mill', gu: 'દળવું' }, { en: 'Cool-milled in small lots and sieved to a fine powder.', gu: 'નાના જથ્થામાં ઠંડી રીતે દળીને બારીક ચાળવામાં આવે છે.' }, '80 mesh'],
+  [{ en: 'Lab test', gu: 'લેબ ટેસ્ટ' }, { en: 'Each batch tested for moisture and microbes before packing.', gu: 'પેકિંગ પહેલાં દરેક batch નો ભેજ અને જીવાણુ ટેસ્ટ થાય છે.' }, 'Batch report'],
+  [{ en: 'Pack', gu: 'પેકિંગ' }, { en: 'Sealed in light-proof zip pouches with the batch code and date.', gu: 'Batch કોડ અને તારીખ સાથે પ્રકાશ-રોધક zip pouch માં સીલ.' }, 'Day 7'],
+];
+const RECIPES = [
+  { k: 'glass', n: { en: 'Morning green smoothie', gu: 'સવારની લીલી smoothie' }, m: '5 min · 1 glass', s: { en: ['Blend 1 banana, 1 cup curd or milk and 1 tsp moringa powder.', 'Add a few mint leaves and 1 tsp honey.', 'Blend 30 seconds and drink fresh.'], gu: ['1 કેળું, 1 કપ દહીં કે દૂધ અને 1 ચમચી સરગવા પાવડર blend કરો.', 'ફુદીનાનાં થોડાં પાન અને 1 ચમચી મધ ઉમેરો.', '30 સેકન્ડ blend કરી તાજું પીવો.'] } },
+  { k: 'thepla', n: { en: 'Moringa thepla', gu: 'સરગવાના થેપલા' }, m: '25 min · 8 thepla', s: { en: ['Mix 2 cups wheat flour, 2 tsp moringa powder, ½ tsp each turmeric, chilli and ajwain.', 'Add 2 tbsp oil and curd; knead a soft dough.', 'Roll thin and cook on a hot tawa with a little oil.'], gu: ['2 કપ ઘઉંનો લોટ, 2 ચમચી સરગવા પાવડર, ½ ચમચી હળદર, મરચું અને અજમો ભેળવો.', '2 ચમચા તેલ અને દહીં ઉમેરી નરમ લોટ બાંધો.', 'પાતળા વણી ગરમ તવી પર થોડા તેલમાં શેકો.'] } },
+  { k: 'bowl', n: { en: 'Sargava kadhi', gu: 'સરગવાની કઢી' }, m: '20 min · serves 4', s: { en: ['Whisk 1 cup curd, 2 tbsp besan and 3 cups water.', 'Simmer with ginger, chilli and a handful of whole dried leaves.', 'Temper with ghee, cumin and curry leaves.'], gu: ['1 કપ દહીં, 2 ચમચા ચણાનો લોટ અને 3 કપ પાણી વલોવો.', 'આદુ, મરચું અને મુઠ્ઠીભર સૂકાં પાન સાથે ઉકાળો.', 'ઘી, જીરું અને મીઠા લીમડાનો વઘાર કરો.'] } },
+  { k: 'cup', n: { en: 'Evening tulsi cup', gu: 'સાંજનો તુલસી કપ' }, m: '4 min · 1 cup', s: { en: ['Pour just-boiled water over one moringa tulsi tea bag.', 'Steep 3–4 minutes.', 'Add lemon or honey if you like.'], gu: ['ઉકળેલું પાણી એક સરગવો તુલસી ચાના bag પર રેડો.', '3–4 મિનિટ રહેવા દો.', 'ગમે તો લીંબુ કે મધ ઉમેરો.'] } },
+];
+let rtab = 0;
+const REVIEWS = [
+  [5, { en: 'Mixes into my morning water without clumping and tastes fresh, not like hay.', gu: 'સવારના પાણીમાં ગાંઠા વગર ભળી જાય છે અને સ્વાદ તાજો લાગે છે.' }, 'Sample · Ahmedabad'],
+  [5, { en: 'The thepla recipe is now a weekly thing at home. Kids do not notice the moringa.', gu: 'થેપલાની રેસીપી હવે ઘરે દર અઠવાડિયે બને છે. બાળકોને ખબર પણ નથી પડતી.' }, 'Sample · Rajkot'],
+  [4, { en: 'Capsules are easy on travel days. Would like a bigger bottle option.', gu: 'મુસાફરીમાં કેપ્સ્યુલ સરળ પડે છે. મોટી બોટલ હોય તો સારું.' }, 'Sample · Surat'],
+];
+const FAQS = [
+  [{ en: 'How much moringa should I take a day?', gu: 'રોજ કેટલો સરગવો લેવો?' }, { en: 'Most people start with ½ teaspoon (about 2.5 g) after food and move to 1 teaspoon (5 g). Ask your doctor if you are pregnant, nursing or on medication.', gu: 'મોટા ભાગના લોકો જમ્યા પછી ½ ચમચી (આશરે 2.5 g) થી શરૂ કરી 1 ચમચી (5 g) સુધી જાય છે. ગર્ભાવસ્થા, સ્તનપાન કે દવા ચાલુ હોય તો ડૉક્ટરને પૂછો.' }],
+  [{ en: 'Why is your powder bright green?', gu: 'તમારો પાવડર આટલો લીલો કેમ છે?' }, { en: 'We dry the leaves in shade below 40 °C and mill within the week. Sun-drying and old stock turn the powder brown.', gu: 'અમે પાન 40 °C થી ઓછા તાપમાને છાંયડે સૂકવીને એ જ અઠવાડિયે દળીએ છીએ. તડકે સૂકવવાથી કે જૂના સ્ટોકથી પાવડર ભૂરો થઈ જાય છે.' }],
+  [{ en: 'How do I store it?', gu: 'કેવી રીતે સાચવવું?' }, { en: 'Keep the zip pouch closed, away from light and moisture. Use within 6 months of opening.', gu: 'Zip pouch બંધ રાખો, પ્રકાશ અને ભેજથી દૂર. ખોલ્યા પછી 6 મહિનામાં વાપરો.' }],
+  [{ en: 'How long does delivery take?', gu: 'ડિલિવરીમાં કેટલો સમય લાગે?' }, { en: 'Gujarat: 2–3 days. Rest of India: 3–6 days. Shipping is free above ₹499.', gu: 'ગુજરાત: 2–3 દિવસ. બાકીનું ભારત: 3–6 દિવસ. ₹499 થી વધુ પર શિપિંગ ફ્રી.' }],
+  [{ en: 'Can I pay online?', gu: 'Online payment થઈ શકે?' }, { en: 'Online payment is not connected yet. You can place an order request at checkout and send it to us on WhatsApp; we will confirm and share payment details.', gu: 'Online payment હજુ જોડાયેલું નથી. Checkout માં ઓર્ડર request બનાવી WhatsApp પર મોકલો; અમે confirm કરી payment વિગત મોકલીશું.' }],
+];
+function renderStatic() {
+  $('#benefit-list').innerHTML = BENEFITS.map(([ic, h, p]) => `<div class="benefit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[ic]}</svg><h3>${esc(L(h))}</h3><p class="muted">${esc(L(p))}</p></div>`).join('');
+  $('#process').innerHTML = STEPS.map(([h, p, st]) => `<div class="step"><h3>${esc(L(h))}</h3><p>${esc(L(p))}</p><div class="stat">${st}</div></div>`).join('');
+  $('#rtabs').innerHTML = RECIPES.map((r, i) => `<button class="chip" type="button" role="tab" aria-selected="${i === rtab}" aria-pressed="${i === rtab}" data-rtab="${i}">${esc(L(r.n))}</button>`).join('');
+  const r = RECIPES[rtab];
+  $('#recipe').innerHTML = `<div class="recipe" role="tabpanel"><div class="rart">${art(r.k, { alt: L(r.n) })}</div><div><h3>${esc(L(r.n))}</h3><div class="meta"><span>${r.m}</span></div><ol>${L(r.s).map((x) => `<li>${esc(x)}</li>`).join('')}</ol>
+    <button class="btn primary small" type="button" data-add="${r.k === 'cup' ? 'tea' : r.k === 'bowl' ? 'leaves' : 'powder'}" style="margin-top:16px">${t('add')}: ${esc(L(prod(r.k === 'cup' ? 'tea' : r.k === 'bowl' ? 'leaves' : 'powder').name))}</button></div></div>`;
+  $('#reviews').innerHTML = REVIEWS.map(([s, q, w]) => `<figure class="review" style="margin:0"><div class="stars" aria-label="${s} of 5">${'★'.repeat(s)}${'☆'.repeat(5 - s)}</div><blockquote style="margin:0">${esc(L(q))}</blockquote><figcaption class="who">${w}</figcaption></figure>`).join('');
+  $('#faqs').innerHTML = FAQS.map(([q, a]) => `<details class="faq"><summary>${esc(L(q))}</summary><p>${esc(L(a))}</p></details>`).join('');
+}
+function renderHeroShelf() {
+  const items = [['powder', 'left:4%;top:26px;width:52%', -4], ['capsules', 'left:46%;top:0;width:40%', 3], ['tea', 'left:30%;top:150px;width:46%', -2]];
+  $('#hero-shelf').innerHTML = items.map(([id, pos, r]) => `<div class="p" style="${pos};transform:rotate(${r}deg)">${productArt(prod(id))}</div>`).join('') +
+    `<div class="batch">BATCH <b>SGV-26-K11</b><br>${lang === 'gu' ? 'તોડણી' : 'Harvested'}: Kartik<br>${lang === 'gu' ? 'ભેજ' : 'Moisture'}: 6.8%</div>`;
+}
+function renderAll() { renderCats(); renderGrid(); renderRecent(); renderRitual(); renderStatic(); renderNF(); renderCalcOptions(); calc(); renderCart(); renderHeroShelf(); counts(); }
+
+/* ---------- hero canvas: swaying moringa fronds ---------- */
+function fronds() {
+  const c = $('#fronds'), g = c.getContext('2d');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W = 0, H = 0, dpr = 1;
+  const resize = () => { dpr = Math.min(2, devicePixelRatio || 1); W = c.clientWidth; H = c.clientHeight; c.width = W * dpr; c.height = H * dpr; };
+  const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  const rnd = (i) => { const x = Math.sin(i * 9301 + 49297) * 233280; return x - Math.floor(x); };
+  const F = Array.from({ length: 9 }, (_, i) => ({ x: rnd(i) , len: 0.45 + rnd(i + 3) * 0.4, ang: (rnd(i + 7) - 0.5) * 0.9 + Math.PI, ph: rnd(i + 11) * 6, side: i % 2 }));
+  function frond(f, t) {
+    const x0 = (f.side ? 0.62 : 0.02) * W + f.x * W * 0.38, y0 = -10;
+    const L = Math.min(H * 1.1, 520) * f.len;
+    const sway = Math.sin(t * 0.0006 + f.ph) * 0.08;
+    const leaf = css('--leaf'), powder = css('--powder');
+    g.strokeStyle = leaf; g.lineWidth = 1.6; g.globalAlpha = 0.28;
+    let px = x0, py = y0, a = Math.PI / 2 + (f.ang - Math.PI) * 0.35 + sway;
+    const pts = [];
+    for (let s = 0; s <= 24; s++) { pts.push([px, py, a]); px += Math.cos(a) * L / 24; py += Math.sin(a) * L / 24; a += 0.012 * (f.side ? -1 : 1) + sway * 0.02; }
+    g.beginPath(); pts.forEach(([x, y], i) => (i ? g.lineTo(x, y) : g.moveTo(x, y))); g.stroke();
+    pts.forEach(([x, y, aa], i) => {
+      if (i < 2 || i % 2) return;
+      [-1, 1].forEach((sd) => {
+        const pl = 26 + (1 - i / 24) * 40, pa = aa + sd * (1.05 + Math.sin(t * 0.001 + i + f.ph) * 0.05);
+        const ex = x + Math.cos(pa) * pl, ey = y + Math.sin(pa) * pl;
+        g.globalAlpha = 0.22; g.lineWidth = 1; g.beginPath(); g.moveTo(x, y); g.lineTo(ex, ey); g.stroke();
+        for (let k = 1; k <= 4; k++) {
+          const lx = x + (ex - x) * k / 4.4, ly = y + (ey - y) * k / 4.4;
+          [-1, 1].forEach((s2) => { g.save(); g.translate(lx, ly); g.rotate(pa + s2 * 1.2); g.fillStyle = k % 2 ? leaf : powder; g.globalAlpha = 0.32; g.beginPath(); g.ellipse(5, 0, 5.5, 3, 0, 0, Math.PI * 2); g.fill(); g.restore(); });
+        }
+      });
+    });
+    // a drumstick pod hanging from the end
+    const [lx, ly] = pts[pts.length - 1];
+    g.globalAlpha = 0.35; g.strokeStyle = css('--pod'); g.lineWidth = 3; g.beginPath(); g.moveTo(lx, ly); g.quadraticCurveTo(lx + 8, ly + 60, lx + 2 + Math.sin(t * 0.0008 + f.ph) * 6, ly + 120); g.stroke();
+  }
+  function draw(t) { g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, W, H); F.forEach((f) => frond(f, t)); g.globalAlpha = 1; }
+  resize(); addEventListener('resize', resize);
+  let vis = true; new IntersectionObserver(([e]) => { vis = e.isIntersecting; }).observe(c);
+  const loop = (t) => { if (vis) draw(t); if (!reduce) requestAnimationFrame(loop); };
+  requestAnimationFrame(loop);
+  matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', () => draw(performance.now()));
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('button, a'); if (!b) return;
+  const d = b.dataset;
+  if (d.cat && b.closest('#cats')) { filter = d.cat; renderCats(); renderGrid(); }
+  else if (d.cat && b.closest('footer')) { filter = d.cat; renderCats(); renderGrid(); }
+  else if (d.size) { const [id, i] = d.size.split(':'); chosen[id] = +i; renderGrid(); }
+  else if (d.add) { addToCart(d.add, chosen[d.add] ?? 0); }
+  else if (d.qv) { quickView(d.qv); }
+  else if (d.wish) { wish.has(d.wish) ? (wish.delete(d.wish), toast(t('wishRemoved'))) : (wish.add(d.wish), toast(t('wishAdded'))); save(); counts(); renderGrid(); }
+  else if (d.inc || d.dec) { const it = cart.find((x) => x.key === (d.inc || d.dec)); if (it) { it.qty += d.inc ? 1 : -1; if (it.qty < 1) cart = cart.filter((x) => x !== it); save(); counts(); renderCart(); } }
+  else if (d.rm) { cart = cart.filter((x) => x.key !== d.rm); save(); counts(); renderCart(); }
+  else if (d.pick) { const id = d.pick; ritual = ritual.includes(id) ? ritual.filter((x) => x !== id) : ritual.length < 3 ? [...ritual, id] : ritual; if (!ritual.includes(id)) {} renderRitual(); }
+  else if (d.unpick) { ritual = ritual.filter((x) => x !== d.unpick); renderRitual(); }
+  else if (d.rtab) { rtab = +d.rtab; renderStatic(); }
+  else if (d.closeCart !== undefined) { closeCart(); location.hash = 'shop'; }
+  else if (b.id === 'clear-q') { query = ''; $('#q').value = ''; renderGrid(); }
+  else if (b.id === 'go-checkout') checkout();
+});
+$('#cart-btn').onclick = openCart;
+$('#wish-btn').onclick = () => { if (!wish.size) { toast(lang === 'gu' ? 'Wishlist ખાલી છે. ♡ દબાવીને સાચવો.' : 'Your wishlist is empty. Tap ♡ to save products.'); return; } filter = 'all'; renderCats(); query = ''; $('#q').value = ''; const ids = [...wish]; $('#grid').innerHTML = PRODUCTS.filter((p) => ids.includes(p.id)).map(card).join(''); location.hash = 'shop'; };
+$('#drawer-close').onclick = closeCart;
+$('#modal-close').onclick = closeModal;
+$('#scrim').onclick = () => { closeModal(); closeCart(); };
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeModal(); closeCart(); } });
+document.addEventListener('submit', (e) => {
+  if (e.target.id === 'coupon-form') {
+    e.preventDefault(); const code = $('#coupon-in').value.trim().toUpperCase();
+    if (!COUPONS[code]) { toast(t('badCoupon')); return; }
+    const sub = totals().sub; if (COUPONS[code].min && sub < COUPONS[code].min) { toast(t('minCoupon', inr(COUPONS[code].min))); return; }
+    coupon = code; save(); renderCart(); toast(t('couponOk', code));
+  }
+});
+$('#news-form').addEventListener('submit', (e) => { e.preventDefault(); const v = $('#news-email').value.trim(); if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) { toast(t('newsBad')); return; } $('#news-email').value = ''; toast(t('newsOk')); });
+$('#q').addEventListener('input', (e) => { query = e.target.value; renderGrid(); });
+$('#sort').addEventListener('change', (e) => { sort = e.target.value; renderGrid(); });
+$('#lang-en').onclick = () => { lang = 'en'; S.set('lang', lang); applyLang(); };
+$('#lang-gu').onclick = () => { lang = 'gu'; S.set('lang', lang); applyLang(); };
+$('#theme-btn').onclick = () => { const r = document.documentElement; const dark = r.dataset.theme ? r.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; r.dataset.theme = dark ? 'light' : 'dark'; S.set('theme', r.dataset.theme); };
+$('#serv-5').onclick = () => { serving = 5; renderNF(); };
+$('#serv-100').onclick = () => { serving = 100; renderNF(); };
+['#c-pack', '#c-people', '#c-dose'].forEach((s) => $(s).addEventListener('input', calc));
+$('#c-add').onclick = () => { const pk = PACKS[+$('#c-pack').value || 0]; addToCart(pk.id, pk.i); };
+$('#ritual-add').onclick = () => { if (ritual.length < 3) { toast(t('ritualNeed')); return; } ritual.forEach((id) => addToCart(id, 0, 1, false, true, true)); toast(t('ritualOk')); ritual = []; renderRitual(); openCart(); };
+
+/* ---------- boot ---------- */
+const th = S.get('theme', null); if (th) document.documentElement.dataset.theme = th;
+$('#yr').textContent = new Date().getFullYear();
+['powder', 'capsules', 'tea'].forEach((id, i) => { if (i < 2) ritual.push(id); });
+applyLang();
+fronds();
+// gentle reveal for sections below the fold (content stays visible if observers never fire)
+if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const io = new IntersectionObserver((es) => es.forEach((en) => { if (en.isIntersecting) { en.target.classList.remove('pre'); io.unobserve(en.target); } }), { rootMargin: '0px 0px -8% 0px' });
+  $$('.reveal').forEach((el) => { if (el.getBoundingClientRect().top > innerHeight) { el.classList.add('pre'); io.observe(el); } });
+}
+})();
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Store","name":"Saragvo","description":"Shade-dried moringa leaf powder, capsules, tea and cold-pressed oil from Saurashtra, Gujarat.","currenciesAccepted":"INR","areaServed":"IN"}
+</script>
+</body>
+</html>
