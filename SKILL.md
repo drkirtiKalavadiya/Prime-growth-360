@@ -23,7 +23,10 @@ silent with estimated caption timing. Ask once if they want voice, then help the
 - The visual types and fields are listed in `guides.md`. `at` means "caption line index"
   (1.5 = halfway through the 2nd line). Use `{ "sec": n }` for seconds.
 
-## 2. Voice → `npm run voice -- reels/<slug>.json`
+## 2. Voice (optional) → `npm run voice -- reels/<slug>.json`
+If the user wants it **without voice**, skip this step. The render then becomes a captions-first reel with
+a generated music bed and sound effects. Keep caption lines short (≤ 7 words) so they can be read.
+
 Language: if the user asks for Gujarati (or writes to you in Gujarati), write the `say` lines in natural
 spoken Gujarati, keeping tech words like Claude Code, folder and setup in English. Set `"lang": "gu"` and
 `"voice": {"provider": "google", "language": "gu-IN", "name": "gu-IN-Wavenet-B"}` (or ElevenLabs

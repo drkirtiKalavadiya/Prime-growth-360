@@ -19,6 +19,11 @@ npm run setup
 npm run check  -- reels/claude-code-6-steps.json   # layout + motion check, contact sheet
 npm run render -- reels/claude-code-6-steps.json   # → out/claude-code-6-steps/claude-code-6-steps.mp4
 ```
+**No voice needed.** Without a voiceover the reel is captions-first: every line gets extra reading time,
+and the audio is a soft music bed plus pop/whoosh effects on scene cuts. ffmpeg generates all of it,
+so there's nothing to download and no licence to clear. Loudness is normalized to -15 LUFS.
+Use `--no-music`, `--no-sfx` or `--silent` (or `"music": false` / `"sfx": false` in the spec) to turn these off.
+
 To add a voiceover, set `ELEVENLABS_API_KEY` (and optionally `ELEVENLABS_VOICE_ID`), then run
 `npm run voice -- reels/<name>.json` before rendering. The captions then sync to the real spoken words.
 

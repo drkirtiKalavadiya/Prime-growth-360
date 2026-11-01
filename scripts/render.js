@@ -6,7 +6,10 @@
  *     --fps 30          frame rate (default from spec, else 30)
  *     --scale 2         device pixel ratio; 2 = 1080×1920, 1 = fast 540×960 draft
  *     --from 0 --to 10  render only part of the timeline (seconds)
- *     --no-voice        ignore out/<name>/voice even if it exists
+ *     --no-voice        ignore out/<name>/voice even if it exists (captions-only reel)
+ *     --no-music        no background music      (spec: "music": false)
+ *     --no-sfx          no pop/whoosh effects     (spec: "sfx": false)
+ *     --silent          no audio at all
  *     --preview         only write out/<name>/preview.html (scrubbable, no video)
  *
  * Each frame is page.seek(t) + screenshot, piped straight into ffmpeg.
@@ -15,13 +18,18 @@ const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
 const { parseArgs, timelineFor, openEngine, fmt, ROOT } = require('./lib');
+const { buildSoundtrack } = require('./soundtrack');
 
 async function main() {
   const args = parseArgs(process.argv.slice(2));
-  const { name, outDir, tl, voice } = timelineFor(args._[0], { fps: args.fps, noVoice: args['no-voice'] });
+  const { reel, name, outDir, tl } = timelineFor(args._[0], { fps: args.fps, noVoice: args['no-voice'] });
 
   const voiceTrack = tl.audio.length ? mixVoice(tl, outDir) : null;
-  writePreview(outDir, tl, voice);
+  const silent = !!args.silent;
+  const music = !silent && !args['no-music'] && reel.music !== false;
+  const sfx = !silent && !args['no-sfx'] && reel.sfx !== false;
+  const audioTrack = silent ? null : buildSoundtrack(tl, outDir, { voiceTrack, music, sfx });
+  writePreview(outDir, tl, audioTrack);
   if (args.preview) {
     console.log(`Preview: ${path.relative(ROOT, path.join(outDir, 'preview.html'))}`);
     return;
@@ -35,9 +43,10 @@ async function main() {
   const out = path.resolve(args.out || path.join(outDir, `${name}.mp4`));
 
   console.log(`Rendering "${tl.title}" — ${tl.scenes.length} scenes, ${fmt(to - from)}, ${frames} frames @ ${fps}fps, ${540 * scale}×${960 * scale}`);
-  console.log(voiceTrack ? `Voiceover: ${tl.audio.length} lines` : 'Voiceover: none (silent track) — run `npm run voice` to add one');
+  const parts = [voiceTrack && `voiceover (${tl.audio.length} lines)`, music && 'music', sfx && 'sfx'].filter(Boolean);
+  console.log(`Audio: ${parts.length ? parts.join(' + ') : 'silent'}${voiceTrack ? '' : ' — no voice, captions carry the story'}`);
 
-  const ff = ffmpegArgs({ fps, out, voiceTrack, from, duration: to - from });
+  const ff = ffmpegArgs({ fps, out, audioTrack, from, duration: to - from });
   const proc = spawn('ffmpeg', ff, { stdio: ['pipe', 'ignore', 'pipe'] });
   let ffErr = '';
   proc.stderr.on('data', (d) => { ffErr += d; if (ffErr.length > 20000) ffErr = ffErr.slice(-10000); });
@@ -67,9 +76,9 @@ async function main() {
   console.log(`Done → ${path.relative(process.cwd(), out)}`);
 }
 
-function ffmpegArgs({ fps, out, voiceTrack, from, duration }) {
+function ffmpegArgs({ fps, out, audioTrack, from, duration }) {
   const a = ['-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(fps), '-c:v', 'mjpeg', '-i', '-'];
-  if (voiceTrack) a.push('-ss', String(from), '-i', voiceTrack);
+  if (audioTrack) a.push('-ss', String(from), '-i', audioTrack);
   else a.push('-f', 'lavfi', '-i', 'anullsrc=r=44100:cl=stereo');
   a.push(
     '-map', '0:v', '-map', '1:a',
@@ -100,13 +109,13 @@ function mixVoice(tl, outDir) {
 }
 
 /* Self-contained scrubbable preview: engine + timeline + (optional) audio, in one HTML file. */
-function writePreview(outDir, tl, voice) {
+function writePreview(outDir, tl, audioTrack) {
   const eng = path.join(ROOT, 'engine');
   let html = fs.readFileSync(path.join(eng, 'reel.html'), 'utf8');
   const css = fs.readFileSync(path.join(eng, 'reel.css'), 'utf8');
   const tlJs = fs.readFileSync(path.join(eng, 'timeline.js'), 'utf8');
   const js = fs.readFileSync(path.join(eng, 'reel.js'), 'utf8');
-  const audioRef = voice && fs.existsSync(path.join(outDir, 'voice', 'voiceover.m4a')) ? 'voice/voiceover.m4a' : null;
+  const audioRef = audioTrack ? path.relative(outDir, audioTrack).split(path.sep).join('/') : null;
   const safe = (s) => s.replace(/<\/script/gi, '<\\/script');
   html = html
     .replace('<link rel="stylesheet" href="reel.css">', () => `<style>${css}</style>`)

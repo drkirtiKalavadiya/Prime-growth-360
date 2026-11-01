@@ -16,6 +16,7 @@
   const PAUSE = { ',': 0.1, ':': 0.15, ';': 0.15, '.': 0.22, '?': 0.22, '!': 0.22 };
   const LINE_GAP = 0.12; // breath between caption lines
   const SCENE_TAIL = 0.35; // hold after a scene's last word
+  const READ_HOLD = 0.3; // silent reels: extra reading time once a line is fully shown
 
   /** "every *step* you need" -> [{text:'every',emph:false}, {text:'step',emph:true}, ...] */
   function parseWords(line) {
@@ -46,7 +47,7 @@
     for (const w of words) {
       starts.push(t);
       const last = w.text.slice(-1);
-      t += (indic ? WORD_SEC * 1.25 : WORD_SEC) + Math.min(0.12, w.text.length * 0.012) + (PAUSE[last] || PAUSE[last === '।' ? '.' : ''] || 0);
+      t += (indic ? WORD_SEC * 1.0 : WORD_SEC) + Math.min(0.12, w.text.length * 0.012) + (PAUSE[last] || PAUSE[last === '।' ? '.' : ''] || 0);
     }
     return { starts, duration: t };
   }
@@ -74,7 +75,9 @@
           duration = v.duration;
           audio.push({ file: v.file, at: start + local });
         } else {
+          // no voice: captions carry the story, so hold each finished line long enough to read
           ({ starts, duration } = estimateWordStarts(words));
+          duration += READ_HOLD;
         }
         lines.push({
           start: local,
