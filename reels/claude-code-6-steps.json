@@ -1,0 +1,271 @@
+{
+  "name": "claude-code-6-steps",
+  "title": "AI-animated reels with Claude Code — 6 steps",
+  "fps": 30,
+  "steps": 6,
+  "scenes": [
+    {
+      "kicker": "// 01 · the hook",
+      "theme": "dark",
+      "say": [
+        "Everyone's making AI-animated reels with Claude Code right now,",
+        "but nobody's showing you how."
+      ],
+      "visual": {
+        "type": "board",
+        "cards": ["AirTag", "My skill", "Google Maps", "The internet", "ChatLLM", "Touchscreens"],
+        "note": "AI?",
+        "stamp": { "top": "NOBODY SHOWS YOU", "big": "HOW?", "no": "002", "at": 1.35 }
+      }
+    },
+    {
+      "kicker": "// 02 · the roadmap",
+      "transition": "halftone",
+      "say": ["So I'll show you *everything:*", "every *step* you need to make reels like this *one.*"],
+      "visual": {
+        "type": "steps",
+        "at": 0.3,
+        "items": [
+          { "title": "Desktop app", "sub": "claude code" },
+          { "title": "Folder", "sub": "ai video editor" },
+          { "title": "Local chat", "sub": "new chat" },
+          { "title": "Setup", "sub": "check my setup" },
+          { "title": "1 line", "sub": "type the idea" },
+          { "title": "Feedback", "sub": "tell it what to fix" }
+        ],
+        "sweep": true,
+        "until": 1.99
+      }
+    },
+    {
+      "kicker": "// 03 · step 1 · desktop app",
+      "transition": "halftone",
+      "say": ["First, you need *Claude* Code."],
+      "label": "Get *Claude Code*",
+      "badge": 1,
+      "visual": { "type": "appIcon", "name": "Claude *Code*", "at": 0.3 }
+    },
+    {
+      "kicker": "// 03 · step 1 · desktop app",
+      "say": ["Don't use it in the *browser.*", "Download the *desktop* app."],
+      "label": "The *desktop* app",
+      "badge": 1,
+      "visual": [
+        { "type": "versus", "bad": "In the browser", "good": "Desktop app", "at": 0.4, "goodAt": 1.1 },
+        { "type": "window", "title": "Claude Code", "at": 1.3, "placeholder": "What should we build?" }
+      ]
+    },
+    {
+      "kicker": "// 04 · step 2 · folder",
+      "say": ["Next, make a *folder* on your", "computer and call it *AI* Video *Editor.*"],
+      "label": "Make a *folder*",
+      "badge": 2,
+      "visual": { "type": "finder", "folder": "AI Video Editor", "at": 0.3, "hint": "type the name · hit return" }
+    },
+    {
+      "kicker": "// 05 · its home",
+      "say": ["That's where your *skill files* and", "every finished reel will live."],
+      "visual": {
+        "type": "folder",
+        "name": "AI Video Editor",
+        "files": ["SKILL.md", "guides.md", "kit.js", "reel.mp4"],
+        "count": "skill files + reels",
+        "at": 0.1
+      }
+    },
+    {
+      "kicker": "// 06 · step three",
+      "transition": "halftone",
+      "say": ["Then start a new *Claude* Code chat,"],
+      "label": "New *chat*",
+      "badge": 3,
+      "visual": { "type": "number", "n": 3, "of": 6, "at": 0.15 }
+    },
+    {
+      "kicker": "// 06 · step three",
+      "say": ["choose *Local,* and select that *folder.*"],
+      "label": "Local + *folder*",
+      "badge": 3,
+      "visual": {
+        "type": "window",
+        "title": "New session",
+        "at": 0,
+        "placeholder": "What should we build?",
+        "menu": {
+          "at": 0.15,
+          "select": 0,
+          "until": 0.75,
+          "items": [
+            { "title": "Local", "sub": "runs on this computer" },
+            { "title": "Cloud", "sub": "runs on a remote machine" }
+          ]
+        },
+        "chips": [
+          { "text": "☁ Environment: Local", "at": 0.2, "hotAt": 0.45 },
+          { "text": "📁 AI Video Editor", "at": 0.6, "hotAt": 0.75 }
+        ]
+      }
+    },
+    {
+      "kicker": "// step 3 · read + write",
+      "say": ["Now *Claude* can read and write your *files.*"],
+      "visual": [
+        {
+          "type": "window",
+          "title": "AI Video Editor",
+          "sub": "Started on this computer · AI Video Editor",
+          "at": 0,
+          "rows": [
+            { "kind": "text", "text": "Working in AI Video Editor…", "at": 0.1 },
+            { "kind": "check", "text": "*Read* SKILL.md", "meta": "142 lines", "at": 0.35, "doneAt": 0.6, "hl": true },
+            { "kind": "check", "text": "*Write* script.json", "at": 0.7, "doneAt": 0.95 }
+          ]
+        },
+        { "type": "folder", "name": "AI Video Editor", "files": ["guides.md", "SKILL.md"], "count": "2 files", "at": 0.3, "dy": -20 }
+      ]
+    },
+    {
+      "kicker": "// step 4 · setup",
+      "transition": "halftone",
+      "say": ["*Claude* needs a few *tools* to animate,", "voice and render,", "so tell it to check your *setup.*"],
+      "label": "A few *tools*",
+      "badge": 4,
+      "visual": {
+        "type": "window",
+        "title": "AI Video Editor",
+        "sub": "Started on this computer · AI Video Editor",
+        "at": 0.2,
+        "rows": [
+          { "kind": "check", "text": "Animate", "pill": "canvas + node", "at": 0.6, "doneAt": 0.9 },
+          { "kind": "check", "text": "Voice", "pill": "ElevenLabs", "at": 1.0, "doneAt": 1.4 },
+          { "kind": "check", "text": "Render", "pill": "ffmpeg", "at": 1.5, "doneAt": 1.9 }
+        ],
+        "prompt": { "text": "check my setup", "at": 2.1, "cps": 16 }
+      }
+    },
+    {
+      "kicker": "// step 4 · setup",
+      "say": ["It installs what's missing", "and walks you through every click."],
+      "label": "Auto *install*",
+      "badge": 4,
+      "visual": {
+        "type": "window",
+        "title": "AI Video Editor",
+        "sub": "Started on this computer · AI Video Editor",
+        "at": 0,
+        "rows": [
+          { "kind": "text", "text": "Checking your setup…", "meta": "1/3", "at": 0.05 },
+          { "kind": "check", "text": "Node.js", "pill": "animate", "meta": "v22.11", "at": 0.2, "doneAt": 0.45 },
+          { "kind": "progress", "text": "ffmpeg", "pill": "render", "meta": "installed", "at": 0.4, "doneAt": 1.2, "hl": true },
+          { "kind": "progress", "text": "Voice key", "pill": "voice", "meta": "saved", "at": 1.0, "doneAt": 1.85 }
+        ]
+      }
+    },
+    {
+      "kicker": "// step 5 · one line",
+      "transition": "halftone",
+      "say": ["Now the *fun* part."],
+      "label": "The *fun*",
+      "badge": 5,
+      "visual": { "type": "number", "n": 5, "of": 6, "at": 0.1 },
+      "fx": [{ "type": "confetti", "at": 0.3, "x": 90, "y": 820 }, { "type": "confetti", "at": 0.45, "x": 450, "y": 840 }]
+    },
+    {
+      "kicker": "// step 5 · one line",
+      "say": ["Type what the reel is about", "in *1 line.*"],
+      "label": "*1* line",
+      "badge": 5,
+      "visual": { "type": "window", "title": "AI Video Editor", "sub": "Started on this computer · AI Video Editor", "at": 0, "placeholder": "What should we build?" }
+    },
+    {
+      "kicker": "// 11 · one line",
+      "say": ["Something like make a reel about", "why *airplane* food tastes so *bland.*"],
+      "label": "You type *10 words*",
+      "badge": 5,
+      "visual": {
+        "type": "window",
+        "title": "AI Video Editor",
+        "sub": "Started on this computer · AI Video Editor",
+        "at": 0,
+        "placeholder": "What should we build?",
+        "prompt": { "text": "make a reel about why airplane food tastes so bland", "at": 0.25, "cps": 22 }
+      }
+    },
+    {
+      "kicker": "// 12 · it builds the reel",
+      "transition": "halftone",
+      "say": ["It writes the *script,* records the *voiceover,*", "animates every *scene,*", "times the *captions* to every word", "and checks its own *motion.*"],
+      "visual": {
+        "type": "phone",
+        "title": "Why *airplane* food tastes so *bland*?",
+        "panelTitle": "Building your reel",
+        "at": 0,
+        "until": 3.7,
+        "steps": [
+          { "text": "Write script", "at": 0.1 },
+          { "text": "Record voiceover", "at": 0.6 },
+          { "text": "Animate scenes", "at": 1.0 },
+          { "text": "Time captions", "at": 2.0 },
+          { "text": "Check motion", "at": 3.0 }
+        ],
+        "captions": ["PLANE", "FOOD", "TASTES", "BLAND."]
+      }
+    },
+    {
+      "kicker": "// step 6 · tell it what to fix",
+      "transition": "halftone",
+      "say": ["If something feels off,", "just tell it,", "like you would a real editor,", "and it *fixes* it."],
+      "label": "Feels *off?*",
+      "badge": 6,
+      "visual": {
+        "type": "feedback",
+        "title": "AI Video Editor",
+        "file": "airplane_food.mp4",
+        "phoneTitle": "A video about *airplane* food.",
+        "checks": ["Voiceover recorded", "Captions synced to every word", "Motion check passed"],
+        "ask": { "text": "make the salt bit punchier", "at": 1.0 },
+        "fix": "EXTRA SALT.",
+        "fixedAt": 3.1,
+        "at": 0
+      }
+    },
+    {
+      "kicker": "// 15 · the entire workflow",
+      "transition": "halftone",
+      "say": ["That's the entire *workflow.*"],
+      "minDuration": 3.2,
+      "visual": {
+        "type": "steps",
+        "at": 0,
+        "items": [
+          { "title": "Desktop app", "sub": "claude code" },
+          { "title": "Folder", "sub": "ai video editor" },
+          { "title": "Local chat", "sub": "new chat" },
+          { "title": "Setup", "sub": "check my setup" },
+          { "title": "1 line", "sub": "type the idea" },
+          { "title": "Feedback", "sub": "tell it what to fix" }
+        ],
+        "sweep": true,
+        "until": { "sec": 3.0 }
+      }
+    },
+    {
+      "kicker": "// 16 · my system",
+      "say": ["And if you want the *skill files* behind it,", "they're all in this *folder.*"],
+      "label": "My *system*",
+      "visual": {
+        "type": "folder",
+        "name": "ai-video",
+        "files": ["SKILL.md", "guides.md", "render.js", "check.js"],
+        "count": "open source",
+        "at": 0.1
+      }
+    },
+    {
+      "kicker": "// comment to get it",
+      "say": ["Comment *SKILL* and I'll send it to you."],
+      "hold": 1.4,
+      "visual": { "type": "cta", "pre": "COMMENT", "word": "SKILL", "bubble": "and I'll send you the *whole system*", "at": 0.2 }
+    }
+  ]
+}

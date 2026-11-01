@@ -1,0 +1,19 @@
+{
+  "name": "ai-video-editor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Type one line, get an animated 9:16 reel. HTML scenes + Playwright frame capture + ElevenLabs voice + ffmpeg, driven by Claude Code.",
+  "scripts": {
+    "setup": "node scripts/setup.js",
+    "voice": "node scripts/voice.js",
+    "preview": "node scripts/render.js --preview",
+    "render": "node scripts/render.js",
+    "draft": "node scripts/render.js --scale 1 --fps 24",
+    "check": "node scripts/check.js",
+    "demo": "node scripts/check.js reels/claude-code-6-steps.json && node scripts/render.js reels/claude-code-6-steps.json"
+  },
+  "engines": { "node": ">=18" },
+  "dependencies": {
+    "playwright": "^1.47.0"
+  }
+}

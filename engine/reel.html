@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=540, initial-scale=1">
+<title>Reel Engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght@600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&display=block" rel="stylesheet">
+<link rel="stylesheet" href="reel.css">
+</head>
+<body>
+  <div id="stage" class="stage"></div>
+  <div id="player" class="player" hidden>
+    <button id="play" type="button">Play</button>
+    <input id="scrub" type="range" min="0" max="1000" value="0">
+    <span id="clock">0.0s</span>
+  </div>
+  <script src="timeline.js"></script>
+  <script src="reel.js"></script>
+</body>
+</html>

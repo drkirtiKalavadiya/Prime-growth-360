@@ -1,0 +1,44 @@
+{
+  "name": "airplane-food",
+  "title": "Why airplane food tastes so bland",
+  "steps": 3,
+  "scenes": [
+    {
+      "kicker": "// 01 · the hook",
+      "theme": "dark",
+      "say": ["Airplane food isn't bland.", "*You* are."],
+      "visual": { "type": "board", "cards": ["Chicken", "Pasta", "Cabin", "35,000 ft"], "note": "?!", "stamp": { "top": "IT'S NOT THE", "big": "FOOD", "at": 1 } }
+    },
+    {
+      "kicker": "// 02 · the air",
+      "transition": "halftone",
+      "say": ["Cabin air is *drier* than a desert,", "so your nose stops *smelling.*"],
+      "label": "Dry *air*",
+      "badge": 1,
+      "visual": { "type": "number", "n": 1, "of": 3, "at": 0.2 }
+    },
+    {
+      "kicker": "// 03 · the pressure",
+      "say": ["Low pressure dulls *salt* and *sweet*", "by up to *30 percent.*"],
+      "label": "Low *pressure*",
+      "badge": 2,
+      "visual": {
+        "type": "window", "title": "Taste test", "sub": "At 35,000 ft", "at": 0,
+        "rows": [
+          { "kind": "progress", "text": "Salt", "meta": "-30%", "at": 0.2, "doneAt": 1.2 },
+          { "kind": "progress", "text": "Sweet", "meta": "-30%", "at": 0.5, "doneAt": 1.5 },
+          { "kind": "check", "text": "Umami", "meta": "unchanged", "at": 1.0, "doneAt": 1.6 }
+        ]
+      }
+    },
+    {
+      "kicker": "// 04 · the fix",
+      "transition": "halftone",
+      "say": ["So airlines add *extra salt*", "and order *tomato juice.*"],
+      "label": "Extra *salt*",
+      "badge": 3,
+      "visual": { "type": "cta", "pre": "ORDER THE", "word": "TOMATO", "bubble": "umami survives the *altitude*", "at": 0.3 },
+      "fx": [{ "type": "confetti", "at": 1.2, "x": 270, "y": 900 }]
+    }
+  ]
+}
