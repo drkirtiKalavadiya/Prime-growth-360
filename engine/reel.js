@@ -187,7 +187,7 @@
     versus(v, { A }) {
       const el = h('div', 'versus');
       const bad = h('div', 'vcard bad shadow', `<div class="screen">${esc(v.badIcon || '⌂')}</div><div class="lbl">${esc(v.bad)}</div><div class="x"></div><div class="mark">✕</div>`);
-      const good = h('div', 'vcard good shadow', `<div class="screen">✳</div><div class="lbl">${esc(v.good)}</div><div class="mark">✓</div>`);
+      const good = h('div', 'vcard good shadow', `<div class="screen">${esc(v.goodIcon || '✳')}</div><div class="lbl">${esc(v.good)}</div><div class="mark">✓</div>`);
       el.appendChild(A(bad, v.at, 'slideL', 0.5, 'rotate(-4deg)'));
       el.appendChild(A(good, v.goodAt ?? (v.at || 0) + 0.6, 'pop', 0.5, 'rotate(3deg)'));
       A(bad.querySelector('.x'), (v.at || 0) + 0.45, 'pop', 0.35);
@@ -438,6 +438,91 @@
       A(fix, fixAt, 'stamp', 0.35, 'rotate(-4deg)');
       U((t) => { before.textContent = t >= fixAt ? 'AFTER' : 'BEFORE'; before.style.background = t >= fixAt ? '#e1251b' : '#fff'; before.style.color = t >= fixAt ? '#fff' : ''; });
       return wrap;
+    },
+
+    /* Chat app on a phone: messages pop in at their `at`, outgoing ones preceded by a typing indicator. */
+    chat(v, { A, U }) {
+      const ph = h('div', 'phone chatphone');
+      const scr = h('div', 'scr');
+      scr.appendChild(h('div', 'notch'));
+      scr.appendChild(h('div', 'chat-head', `<span class="back">‹</span><span class="av">${esc((v.name || 'B')[0])}</span><span class="who"><b>${esc(v.name || 'Business')}${v.verified ? ' <i class="tick">✓</i>' : ''}</b><small>${esc(v.status || 'online')}</small></span>`));
+      const log = h('div', 'chat-log');
+      scr.appendChild(log);
+      const typing = h('div', 'bubble out typing', '<i></i><i></i><i></i>');
+      const items = (v.messages || []).map((m, i) => {
+        const b = h('div', `bubble ${m.from === 'me' ? 'out' : 'in'}`);
+        b.innerHTML = `<div class="txt">${rich(m.text).replace(/<em>/g, '<b>').replace(/<\/em>/g, '</b>')}</div><div class="meta">${esc(m.time || '10:0' + i)}${m.from === 'me' ? ' <span class="ticks">✓✓</span>' : ''}</div>`;
+        if (m.buttons) {
+          const bt = h('div', 'btns');
+          m.buttons.forEach((x) => bt.appendChild(h('span', '', esc(x))));
+          b.appendChild(bt);
+        }
+        log.appendChild(b);
+        A(b, m.at, m.from === 'me' ? 'slideR' : 'slideL', 0.35);
+        return { b, m };
+      });
+      log.appendChild(typing);
+      scr.appendChild(h('div', 'chat-input', '<span>Message</span><i>➤</i>'));
+      ph.appendChild(scr);
+      A(ph, v.at, 'rise', 0.5, v.tilt ? `rotate(${v.tilt}deg)` : '');
+      U((t) => {
+        // typing dots for 0.7s before each outgoing message
+        const pending = items.find(({ m }) => m.from === 'me' && t >= m.at - 0.7 && t < m.at);
+        typing.style.display = pending ? '' : 'none';
+        if (pending) {
+          log.appendChild(typing);
+          typing.querySelectorAll('i').forEach((d, i) => { d.style.opacity = 0.35 + 0.65 * Math.max(0, Math.sin(t * 9 - i)); });
+        }
+        items.forEach(({ b, m }) => { b.style.display = t >= m.at - 0.001 ? '' : 'none'; });
+        // read ticks turn blue a moment after sending
+        items.forEach(({ b, m }) => { const tk = b.querySelector('.ticks'); if (tk) tk.classList.toggle('read', t >= m.at + 0.8); });
+        log.scrollTop = 0;
+        log.style.justifyContent = 'flex-end';
+      });
+      return ph;
+    },
+
+    /* One big number + what it means, with a grid of dots filling up. */
+    stat(v, { A, U }) {
+      const el = h('div', 'stat');
+      el.appendChild(A(h('div', 'num', rich(v.value)), v.at, 'stamp', 0.45, 'rotate(-2deg)'));
+      el.appendChild(A(h('div', 'what', rich(v.label || '')), (v.at || 0) + 0.3, 'rise', 0.45));
+      const grid = h('div', 'dotgrid');
+      const n = 60, fill = Math.round(n * (v.fill ?? 0.85));
+      const dots = [];
+      for (let i = 0; i < n; i++) { const d = h('i'); grid.appendChild(d); dots.push(d); }
+      el.appendChild(A(grid, (v.at || 0) + 0.4, 'fade', 0.3));
+      U((t) => {
+        const k = Math.floor(clamp((t - (v.at || 0) - 0.5) / 1.2) * fill);
+        dots.forEach((d, i) => d.classList.toggle('on', i < k));
+      });
+      if (v.note) el.appendChild(A(h('div', 'note', esc(v.note)), (v.at || 0) + 0.8, 'fade', 0.4));
+      return el;
+    },
+
+    /* Before / after bars per metric. Values are relative (0..1), illustrative, not data. */
+    bars(v, { A, U }) {
+      const el = h('div', 'bars');
+      const legend = h('div', 'legend', `<span><i class="b0"></i>${esc(v.before || 'Before')}</span><span><i class="b1"></i>${esc(v.after || 'After')}</span>`);
+      el.appendChild(A(legend, v.at, 'fade', 0.3));
+      const cols = h('div', 'cols');
+      const fills = [];
+      (v.items || []).forEach((it, i) => {
+        const c = h('div', 'col', `<div class="pair"><div class="bar b0"><span></span></div><div class="bar b1"><span></span><em>↑</em></div></div><div class="lbl">${esc(it.label)}</div>`);
+        cols.appendChild(A(c, (v.at || 0) + 0.15 + i * 0.2, 'rise', 0.4));
+        const [b0, b1] = c.querySelectorAll('.bar span');
+        fills.push({ b0, b1, arrow: c.querySelector('em'), it, start: (v.at || 0) + 0.3 + i * 0.25 });
+      });
+      el.appendChild(cols);
+      U((t) => fills.forEach((f) => {
+        const p0 = E.out(clamp((t - f.start) / 0.5));
+        const p1 = E.back(clamp((t - f.start - 0.4) / 0.7));
+        f.b0.style.height = (f.it.before * 100 * p0).toFixed(1) + '%';
+        f.b1.style.height = (f.it.after * 100 * p1).toFixed(1) + '%';
+        f.arrow.style.opacity = clamp((t - f.start - 1.0) * 4);
+        f.arrow.style.bottom = `calc(${(f.it.after * 100 * p1).toFixed(1)}% + 4px)`;
+      }));
+      return el;
     },
 
     /* Closing call to action. */

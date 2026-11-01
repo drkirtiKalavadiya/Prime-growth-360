@@ -1,0 +1,320 @@
+{
+  "name": "whatsapp-api-marketing-gu",
+  "title": "WhatsApp API માર્કેટિંગ કેમ જરૂરી છે?",
+  "lang": "gu",
+  "steps": 6,
+  "voice": {
+    "provider": "google",
+    "language": "gu-IN",
+    "name": "gu-IN-Wavenet-B",
+    "rate": 1.05
+  },
+  "scenes": [
+    {
+      "kicker": "// 01 · સવાલ",
+      "theme": "dark",
+      "say": [
+        "તમારો customer દિવસમાં કેટલી વાર *WhatsApp* ખોલે છે?",
+        "અને તમારો *email* કેટલી વાર?"
+      ],
+      "visual": {
+        "type": "board",
+        "cards": [
+          "Email",
+          "SMS",
+          "Call",
+          "Flyer",
+          "Ads",
+          "Website"
+        ],
+        "note": "📩?",
+        "stamp": {
+          "top": "તમારો મેસેજ",
+          "big": "વંચાયો?",
+          "no": "360",
+          "at": 1.2
+        }
+      }
+    },
+    {
+      "kicker": "// 02 · સમસ્યા",
+      "transition": "halftone",
+      "say": [
+        "Email *spam* માં જાય છે,",
+        "SMS કોઈ ખોલતું નથી,",
+        "અને *calls* ઉપડતા નથી."
+      ],
+      "label": "જૂની *રીત*",
+      "visual": {
+        "type": "versus",
+        "bad": "Email / SMS",
+        "badIcon": "✉",
+        "good": "WhatsApp",
+        "at": 0.2,
+        "goodAt": 2.3,
+        "goodIcon": "💬"
+      }
+    },
+    {
+      "kicker": "// 03 · આંકડો",
+      "transition": "halftone",
+      "say": [
+        "India માં *50 કરોડ*થી વધુ લોકો",
+        "દરરોજ *WhatsApp* વાપરે છે."
+      ],
+      "visual": {
+        "type": "stat",
+        "value": "50 કરોડ+",
+        "label": "India માં *WhatsApp* users",
+        "fill": 0.9,
+        "note": "સ્ત્રોત: ભારત સરકાર, 2021 (53 કરોડ users)",
+        "at": 0.1
+      }
+    },
+    {
+      "kicker": "// 04 · તક",
+      "say": [
+        "તમારા customers *પહેલેથી* ત્યાં જ છે.",
+        "બસ તમારે ત્યાં *પહોંચવાનું* છે."
+      ],
+      "visual": {
+        "type": "chat",
+        "name": "તમારો બિઝનેસ",
+        "status": "online",
+        "at": 0,
+        "messages": [
+          {
+            "from": "them",
+            "text": "Hi 👋 આ product નો *price* શું છે?",
+            "time": "10:02",
+            "at": 0.3
+          },
+          {
+            "from": "them",
+            "text": "Delivery મળશે?",
+            "time": "10:02",
+            "at": 0.8
+          },
+          {
+            "from": "them",
+            "text": "Reply આપો ને please 🙏",
+            "time": "10:41",
+            "at": 1.4
+          }
+        ]
+      }
+    },
+    {
+      "kicker": "// 05 · ઉકેલ",
+      "transition": "halftone",
+      "say": [
+        "WhatsApp *Business API* એટલે",
+        "હજારો customers સાથે *એકસાથે* વાત કરવાની સિસ્ટમ."
+      ],
+      "label": "Business *API*",
+      "visual": {
+        "type": "window",
+        "title": "WhatsApp Business API",
+        "sub": "Official Meta Business Platform",
+        "at": 0.1,
+        "rows": [
+          {
+            "kind": "progress",
+            "text": "Broadcast",
+            "pill": "offer",
+            "meta": "5,000 contacts",
+            "at": 0.5,
+            "doneAt": 1.2,
+            "hl": true
+          },
+          {
+            "kind": "check",
+            "text": "Chatbot",
+            "pill": "auto reply",
+            "meta": "24 × 7",
+            "at": 0.9,
+            "doneAt": 1.3
+          },
+          {
+            "kind": "check",
+            "text": "Team inbox",
+            "pill": "agents",
+            "meta": "5 users",
+            "at": 1.2,
+            "doneAt": 1.5
+          },
+          {
+            "kind": "check",
+            "text": "CRM sync",
+            "pill": "leads",
+            "meta": "auto",
+            "at": 1.5,
+            "doneAt": 1.8
+          }
+        ]
+      }
+    },
+    {
+      "kicker": "// 06 · ફાયદા",
+      "transition": "halftone",
+      "say": [
+        "ઓફર એક click માં *હજારો* લોકોને,",
+        "24 કલાક *auto reply,*",
+        "chat માં જ *catalog* અને *payment,*",
+        "અને verified *green tick* થી ભરોસો."
+      ],
+      "visual": {
+        "type": "steps",
+        "title": "*6* ફાયદા",
+        "at": 0,
+        "items": [
+          {
+            "title": "Broadcast",
+            "sub": "એક click માં ઓફર"
+          },
+          {
+            "title": "Chatbot",
+            "sub": "24 × 7 જવાબ"
+          },
+          {
+            "title": "Catalog",
+            "sub": "products બતાવો"
+          },
+          {
+            "title": "Payment",
+            "sub": "chat માં જ"
+          },
+          {
+            "title": "Green tick",
+            "sub": "verified ભરોસો"
+          },
+          {
+            "title": "Team inbox",
+            "sub": "આખી team સાથે"
+          }
+        ],
+        "sweep": true,
+        "until": 3.99
+      }
+    },
+    {
+      "kicker": "// 07 · live demo",
+      "transition": "halftone",
+      "say": [
+        "Customer પૂછે છે,",
+        "*bot* તરત જવાબ આપે છે,",
+        "અને order સીધો *chat* માં જ."
+      ],
+      "visual": {
+        "type": "chat",
+        "name": "Prime Store",
+        "status": "business account",
+        "verified": true,
+        "at": 0,
+        "messages": [
+          {
+            "from": "them",
+            "text": "Diwali *offer* છે? 🪔",
+            "time": "18:30",
+            "at": 0.2
+          },
+          {
+            "from": "me",
+            "text": "નમસ્તે! 🙏 Diwali offer: બધા products પર *30% OFF*",
+            "time": "18:30",
+            "at": 1.0,
+            "buttons": [
+              "📒 Catalog જુઓ",
+              "🛒 Order કરો"
+            ]
+          },
+          {
+            "from": "them",
+            "text": "🛒 Order કરો",
+            "time": "18:31",
+            "at": 2.0
+          },
+          {
+            "from": "me",
+            "text": "✅ Order confirmed! Payment link મોકલી છે.",
+            "time": "18:31",
+            "at": 2.6
+          }
+        ]
+      }
+    },
+    {
+      "kicker": "// 08 · પરિણામ",
+      "say": [
+        "પરિણામ? વધુ *replies,* વધુ *orders,*",
+        "અને એવા customers જે *પાછા* આવે છે."
+      ],
+      "label": "વધુ *વેચાણ*",
+      "visual": {
+        "type": "bars",
+        "before": "પહેલા",
+        "after": "WhatsApp API પછી",
+        "at": 0.1,
+        "items": [
+          {
+            "label": "Replies",
+            "before": 0.3,
+            "after": 0.85
+          },
+          {
+            "label": "Orders",
+            "before": 0.25,
+            "after": 0.7
+          },
+          {
+            "label": "Repeat",
+            "before": 0.2,
+            "after": 0.6
+          }
+        ]
+      }
+    },
+    {
+      "kicker": "// 09 · ધ્યાન રાખો",
+      "transition": "halftone",
+      "say": [
+        "પણ યાદ રાખો: મેસેજ ફક્ત એમને જ મોકલો",
+        "જેમણે *permission* આપી છે."
+      ],
+      "label": "*Opt-in* જરૂરી",
+      "visual": {
+        "type": "versus",
+        "bad": "Spam blast",
+        "badIcon": "📢",
+        "good": "Opt-in list",
+        "at": 0.2,
+        "goodAt": 1.0,
+        "goodIcon": "✅"
+      }
+    },
+    {
+      "kicker": "// 10 · હવે તમારો વારો",
+      "transition": "halftone",
+      "say": [
+        "તમારા બિઝનેસ માટે *WhatsApp API* શરૂ કરવું છે?",
+        "*DEMO* comment કરો."
+      ],
+      "hold": 1.6,
+      "visual": {
+        "type": "cta",
+        "pre": "COMMENT કરો",
+        "word": "DEMO",
+        "bubble": "*Prime Growth 360* તમારું setup કરી આપશે",
+        "at": 0.6
+      },
+      "fx": [
+        {
+          "type": "confetti",
+          "at": 1.2,
+          "x": 270,
+          "y": 900
+        }
+      ]
+    }
+  ]
+}
