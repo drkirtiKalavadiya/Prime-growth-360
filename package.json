@@ -13,7 +13,8 @@
     "demo": "node scripts/check.js reels/claude-code-6-steps.json && node scripts/render.js reels/claude-code-6-steps.json",
     "storyboard": "node scripts/storyboard.js",
     "direct": "node scripts/direct.js",
-    "make": "node scripts/make.js"
+    "make": "node scripts/make.js",
+    "edit": "node scripts/edit.js"
   },
   "engines": {
     "node": ">=18"

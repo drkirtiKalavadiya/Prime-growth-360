@@ -1,0 +1,391 @@
+{
+  "name": "edit-paisa-kem-nathi-bachta",
+  "title": "ધંધામાં પૈસા કેમ નથી બચતા? (Pro edit)",
+  "mode": "edit",
+  "lang": "gu",
+  "base": {
+    "video": "media/business-coach-paisa.mp4",
+    "crop": {
+      "x": 95,
+      "y": 300,
+      "w": 551,
+      "h": 980
+    },
+    "focusY": 0.42
+  },
+  "captions": {
+    "style": "pop",
+    "maxWords": 3
+  },
+  "music": {
+    "bpm": 98,
+    "key": 0.94
+  },
+  "tracker": {
+    "label": "ભૂલ",
+    "total": 3
+  },
+  "segments": [
+    {
+      "start": 0.7,
+      "end": 2.8,
+      "text": "ધંધામાં *પૈસા* કેમ નથી બચતા? કેમ કે",
+      "zoom": 1.08,
+      "fx": [
+        {
+          "type": "lowerthird",
+          "title": "Business *Coach*",
+          "sub": "Gujarat MSME Business Consultant",
+          "y": 150,
+          "at": 0,
+          "until": 1.15
+        },
+        {
+          "type": "sticker",
+          "emoji": "🤔",
+          "x": 440,
+          "y": 470,
+          "at": 0.45,
+          "rotate": 8
+        }
+      ]
+    },
+    {
+      "start": 3.2,
+      "end": 4.5,
+      "text": "તમારી દુકાનમાં *કમાણી* તો થાય છે પણ",
+      "concept": "Earnings: gold coins pour into the shop's vault.",
+      "broll": {
+        "env": "vault",
+        "palette": "gold",
+        "light": "golden",
+        "camera": {
+          "move": "dolly-in"
+        },
+        "fx": [
+          "sparks",
+          "bokeh"
+        ]
+      }
+    },
+    {
+      "start": 4.9,
+      "end": 6.5,
+      "text": "હાથમાં એક પણ *પૈસો* બચતો નથી. તો",
+      "zoom": 1.24,
+      "fx": [
+        {
+          "type": "sticker",
+          "emoji": "💸",
+          "text": "₹0 બચત",
+          "x": 458,
+          "y": 250,
+          "at": 0.25,
+          "rotate": -7
+        }
+      ]
+    },
+    {
+      "start": 6.9,
+      "end": 8.5,
+      "text": "તમે પણ આ *ત્રણ ભૂલ* કરતા હશો. પહેલું",
+      "zoom": 1.0,
+      "fx": [
+        {
+          "type": "sticker",
+          "emoji": "⚠️",
+          "text": "3 ભૂલ",
+          "x": 84,
+          "y": 250,
+          "at": 0.3,
+          "rotate": 7
+        }
+      ]
+    },
+    {
+      "start": 9.2,
+      "end": 11.5,
+      "text": "*ACCOUNTING* ને ગંભીરતાથી ન લેવું. યાદ",
+      "zoom": 1.16,
+      "mark": 1,
+      "fx": [
+        {
+          "type": "lowerthird",
+          "title": "ભૂલ #1: *Accounting* ને હળવાશથી લેવું",
+          "y": 150,
+          "at": 0.1
+        },
+        {
+          "type": "sticker",
+          "emoji": "📒",
+          "x": 462,
+          "y": 280,
+          "at": 0.4,
+          "rotate": 10
+        }
+      ]
+    },
+    {
+      "start": 11.9,
+      "end": 13.4,
+      "text": "રાખો *વિમાન* માટે જેટલું *રડાર* જરૂરી છે",
+      "concept": "Analogy: a radar scope sweeps while a plane flies its route: you can't fly blind.",
+      "broll": {
+        "env": "radar",
+        "palette": "emerald",
+        "light": "neon",
+        "camera": {
+          "move": "orbit-right"
+        },
+        "fx": [
+          "dust"
+        ]
+      }
+    },
+    {
+      "start": 13.8,
+      "end": 14.9,
+      "text": "એટલું જ *BUSINESS* માટે *ACCOUNTING*",
+      "concept": "Accounting as the business radar: a holographic dashboard of numbers.",
+      "broll": {
+        "env": "grid",
+        "palette": "midnight",
+        "light": "neon",
+        "camera": {
+          "move": "dolly-in"
+        },
+        "props": {
+          "words": [
+            "ACCOUNTING",
+            "PROFIT",
+            "STOCK",
+            "CASH",
+            "હિસાબ",
+            "GST"
+          ]
+        },
+        "fx": [
+          "dust",
+          "bokeh"
+        ]
+      }
+    },
+    {
+      "start": 15.3,
+      "end": 17.3,
+      "text": "*SYSTEM* જરૂરી છે. બીજી ભૂલ ગલ્લાને",
+      "zoom": 1.2,
+      "mark": 2,
+      "fx": [
+        {
+          "type": "lowerthird",
+          "title": "ભૂલ #2: ગલ્લો = *ATM?*",
+          "y": 150,
+          "at": 0.45
+        }
+      ]
+    },
+    {
+      "start": 17.7,
+      "end": 18.9,
+      "text": "*PERSONAL ATM* ન સમજવો જોઈએ.",
+      "cover": "light",
+      "transition": "flash",
+      "visual": {
+        "type": "iconx",
+        "icon": "🏧",
+        "label": "ગલ્લો ≠ *Personal ATM*",
+        "at": 0,
+        "crossAt": 0.45
+      }
+    },
+    {
+      "start": 19.5,
+      "end": 20.9,
+      "text": "ઘરના ખર્ચ માટે ગલ્લામાંથી *પૈસા*",
+      "concept": "Money leaking out of the business core into household channels.",
+      "broll": {
+        "env": "flow",
+        "palette": "crimson",
+        "light": "dramatic",
+        "camera": {
+          "move": "orbit-left"
+        },
+        "props": {
+          "reverse": true,
+          "sources": [
+            "ઘર ખર્ચ",
+            "EMI",
+            "શોપિંગ",
+            "ફી"
+          ]
+        },
+        "fx": [
+          "dust"
+        ]
+      }
+    },
+    {
+      "start": 21.3,
+      "end": 23.1,
+      "text": "ઉપાડવા કે ધંધા માટે *નુકસાનકારક*",
+      "zoom": 1.26,
+      "fx": [
+        {
+          "type": "sticker",
+          "emoji": "📉",
+          "text": "નુકસાન",
+          "x": 456,
+          "y": 270,
+          "at": 0.3,
+          "rotate": -6
+        }
+      ]
+    },
+    {
+      "start": 23.5,
+      "end": 25.3,
+      "text": "છે. ત્રીજી ભૂલ *CASH* અને *STOCK*",
+      "zoom": 1.04,
+      "mark": 3,
+      "fx": [
+        {
+          "type": "lowerthird",
+          "title": "ભૂલ #3: *Cash & Stock* ની ચોરી",
+          "y": 150,
+          "at": 0.2
+        }
+      ]
+    },
+    {
+      "start": 25.6,
+      "end": 27.5,
+      "text": "ની *ચોરી*. રોજ સાંજે વેચાણ અને STOCK",
+      "concept": "Theft prevention: a heavy padlock clicks shut under one hard spotlight.",
+      "broll": {
+        "env": "stage",
+        "palette": "midnight",
+        "light": "dramatic",
+        "camera": {
+          "move": "push-tilt"
+        },
+        "props": {
+          "hero": "lock"
+        },
+        "fx": [
+          "sparks",
+          "bokeh"
+        ]
+      }
+    },
+    {
+      "start": 27.8,
+      "end": 29.4,
+      "text": "નો *હિસાબ* મળવો જ જોઈએ. તમારા",
+      "cover": "light",
+      "transition": "flash",
+      "visual": {
+        "type": "window",
+        "title": "રોજનો હિસાબ · સાંજે 8 વાગે",
+        "sub": "Daily closing checklist",
+        "at": 0,
+        "rows": [
+          {
+            "kind": "check",
+            "text": "આજનું *વેચાણ*",
+            "meta": "₹",
+            "at": 0.15,
+            "doneAt": 0.3
+          },
+          {
+            "kind": "check",
+            "text": "*Stock* ગણતરી",
+            "meta": "pcs",
+            "at": 0.35,
+            "doneAt": 0.5
+          },
+          {
+            "kind": "check",
+            "text": "*Cash* ગલ્લામાં",
+            "meta": "₹",
+            "at": 0.55,
+            "doneAt": 0.7
+          }
+        ]
+      }
+    },
+    {
+      "start": 29.8,
+      "end": 30.7,
+      "text": "*BUSINESS PARTNER* સાથે આ VIDEO",
+      "zoom": 1.16,
+      "fx": [
+        {
+          "type": "sticker",
+          "emoji": "🤝",
+          "x": 78,
+          "y": 290,
+          "at": 0.15,
+          "rotate": -8
+        }
+      ]
+    },
+    {
+      "start": 31.0,
+      "end": 32.9,
+      "text": "ને તમે *SHARE* કરો. આવી વધુ TIPS માટે",
+      "zoom": 1.0,
+      "fx": [
+        {
+          "type": "sticker",
+          "emoji": "📤",
+          "text": "SHARE કરો",
+          "x": 452,
+          "y": 270,
+          "at": 0.15,
+          "rotate": 6
+        }
+      ]
+    },
+    {
+      "start": 33.2,
+      "end": 34.4,
+      "text": "અમને *FOLLOW* કરો અને વધુ માહિતી",
+      "zoom": 1.2,
+      "fx": [
+        {
+          "type": "sticker",
+          "emoji": "➕",
+          "text": "FOLLOW",
+          "x": 92,
+          "y": 280,
+          "at": 0.1,
+          "rotate": -6
+        }
+      ]
+    },
+    {
+      "start": 34.7,
+      "end": 36.4,
+      "text": "માટે મને *COMMENT* માં લખો *પૈસા*",
+      "zoom": 1.06,
+      "fx": [
+        {
+          "type": "sticker",
+          "emoji": "💬",
+          "text": "Comment: પૈસા",
+          "x": 270,
+          "y": 150,
+          "at": 0.2,
+          "rotate": -4
+        },
+        {
+          "type": "confetti",
+          "at": 0.55,
+          "x": 270,
+          "y": 880
+        }
+      ]
+    }
+  ]
+}

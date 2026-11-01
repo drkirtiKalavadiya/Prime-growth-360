@@ -12,6 +12,25 @@ Type one line, get an animated 9:16 reel. This is the "6 steps" workflow from th
 | 5. One line | *"make a reel about why airplane food tastes so bland"* → Claude writes `reels/<slug>.json`. |
 | 6. Feedback | *"the salt bit should hit harder"* → Claude edits the spec and re-renders. |
 
+## Pro edit for talking-head videos
+```bash
+npm run edit -- reels/edit-paisa-kem-nathi-bachta.json --stills   # quick look: one frame per segment
+npm run edit -- reels/edit-paisa-kem-nathi-bachta.json            # full render
+```
+Put your raw video in `media/` (git-ignored). The edit spec lists the caption segments (text + timing) and what happens
+in each one:
+- **Footage:** crop (e.g. to remove old burned-in captions) and zoom punches in/out at every segment.
+- **Captions:** auto pop captions, 3 words at a time, with the spoken word highlighted.
+- **B-roll:** full-screen 3D worlds or 2D motion graphics as cutaways.
+- **Graphics:** stickers, lower-thirds, and a progress tracker (e.g. "ભૂલ 1 · 2 · 3").
+- **Audio:** your voice cleaned up, music that ducks when you speak, and sound effects on every cut, at least every 3 seconds.
+
+## AI avatar + energetic tutorial reels
+Add `"avatar": {...}` to any reel for a talking presenter. Its mouth follows the caption words (or the real voiceover
+timings), it blinks, and it changes gesture every 2 seconds. `"energy": true` adds zoom punches and a sound effect on every
+caption line. The `adsmanager` visual walks through Ads Manager (Create → Objective → Budget → Audience → Placements →
+Creative → Publish → Results) with an animated cursor. Example: `reels/meta-ads-step-by-step-gu.json`.
+
 ## 3D creative reels: one script → one cinematic reel
 ```bash
 npm run make -- stories/paisa-ane-safalta-gu.txt     # direct → check → auto-fix → storyboard → render

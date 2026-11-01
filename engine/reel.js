@@ -47,7 +47,7 @@
   };
 
   function makeScene(sc) {
-    const root = h('div', `scene ${sc.world ? 'cinema text-' + sc.textStyle : sc.theme}`);
+    const root = h('div', `scene ${sc.world ? 'cinema text-' + sc.textStyle : sc.theme + ' text-' + sc.textStyle}`);
     if (sc.world) {
       const pal = (window.World3D && window.World3D.PALETTES[sc.world.palette]) || { accent: '#ffcf3f', dark: true };
       root.style.setProperty('--accent', sc.world.textAccent || pal.accent);
@@ -70,7 +70,8 @@
       L.words.forEach((w) => {
         const span = h('span', w.emph ? 'w e' : 'w', esc(w.text));
         wrap.appendChild(span);
-        A(span, w.start, sc.textStyle === 'impact' ? 'pop' : 'word', sc.textStyle === 'impact' ? 0.3 : 0.18);
+        if (sc.textStyle === 'pop') A(span, L.start, 'pop', 0.22);
+        else A(span, w.start, sc.textStyle === 'impact' ? 'pop' : 'word', sc.textStyle === 'impact' ? 0.3 : 0.18);
       });
       cap.appendChild(wrap);
       return wrap;
@@ -79,6 +80,10 @@
       let cur = 0;
       sc.lines.forEach((L, i) => { if (t >= L.start - 0.001) cur = i; });
       lineEls.forEach((el, i) => { el.style.display = i === cur ? 'block' : 'none'; });
+      if (sc.textStyle === 'pop' && sc.lines[cur]) { // karaoke highlight on the word being spoken
+        const ws = sc.lines[cur].words;
+        lineEls[cur].querySelectorAll('.w').forEach((el, k) => el.classList.toggle('act', t >= ws[k].start && (k === ws.length - 1 || t < ws[k + 1].start)));
+      }
     });
 
     if (sc.label) {
@@ -531,6 +536,98 @@
       return el;
     },
 
+
+    /* Ads Manager style screen, one step at a time, with an animated cursor that clicks the right control.
+       Generic mock for teaching: labels match the real flow, no logos. */
+    adsmanager(v, { A, U }) {
+      const el = h('div', 'ads shadow');
+      const at = v.at || 0, click = v.clickAt ?? at + 1.2;
+      el.innerHTML = `<div class="ads-top"><b>☰ Ads Manager</b><span class="acct">${esc(v.account || 'Prime Growth 360')} ▾</span></div>
+        <div class="ads-tabs"><span class="on">Campaigns</span><span>Ad sets</span><span>Ads</span></div><div class="ads-body"></div>`;
+      const body = el.querySelector('.ads-body');
+      const S = v.step || 'create';
+      const tgt = (html, cls = '') => `<span class="tgt ${cls}">${html}</span>`;
+      const steps = {
+        create: `<div class="ads-bar">${tgt('＋ Create', 'btn green')}<span class="btn ghost">Duplicate</span><span class="btn ghost">Edit</span></div>
+          <div class="ads-row head"><span>Campaign</span><span>Results</span><span>Spent</span></div>
+          <div class="ads-row"><span>Diwali Offer</span><span>—</span><span>₹0</span></div><div class="ads-row"><span>New Leads</span><span>—</span><span>₹0</span></div>`,
+        objective: `<div class="modal"><div class="mt">Choose a campaign objective</div>${['Awareness', 'Traffic', 'Engagement', 'Leads', 'App promotion', 'Sales'].map((o) => o === (v.pick || 'Leads') ? tgt(`<i class="rad"></i>${o}`, 'opt') : `<span class="opt"><i class="rad"></i>${o}</span>`).join('')}
+          <div class="mfoot"><span class="btn ghost">Cancel</span><span class="btn blue">Continue</span></div></div>`,
+        budget: `<div class="panel2"><div class="pt">Budget &amp; schedule</div><div class="fld"><label>Daily budget</label>${tgt('<span class="typed" data-text="' + esc(v.amount || '₹500') + '"></span>', 'input')}</div>
+          <div class="fld"><label>Start date</label><span class="input">Today</span></div><div class="hint">💡 ${esc(v.hint || 'નાના budget થી શરૂ કરો, પછી વધારો')}</div></div>`,
+        audience: `<div class="panel2"><div class="pt">Audience</div><div class="fld"><label>Locations</label><span class="chips2"><i>${esc(v.location || 'Gujarat, India')}</i></span></div>
+          <div class="fld"><label>Age</label><span class="range"><span style="left:${((25 - 18) / 47) * 100}%;right:${100 - ((45 - 18) / 47) * 100}%"></span></span><small>25 – 45</small></div>
+          <div class="fld"><label>Detailed targeting</label><span class="chips2">${(v.interests || ['Small business']).map((x) => `<i>${esc(x)}</i>`).join('')}${tgt('＋ ' + esc(v.add || 'Entrepreneurship'), 'chipadd')}</span></div></div>`,
+        placements: `<div class="panel2"><div class="pt">Placements</div>${tgt('<i class="rad on"></i><b>Advantage+ placements</b> <small>(Recommended)</small>', 'opt wide')}<span class="opt wide"><i class="rad"></i>Manual placements</span>
+          <div class="plc"><span>📱 Feeds</span><span>🎬 Reels</span><span>⭕ Stories</span><span>🔎 Explore</span></div></div>`,
+        creative: `<div class="panel2"><div class="pt">Ad setup</div><div class="media">▶ video.mp4</div>
+          <div class="fld"><label>Primary text</label><span class="input typedwrap"><span class="typed" data-text="${esc(v.text || 'Diwali Offer 🎉 30% OFF')}"></span></span></div>
+          <div class="fld"><label>Call to action</label>${tgt(esc(v.cta || 'Send WhatsApp message') + ' ▾', 'input')}</div></div>`,
+        publish: `<div class="panel2"><div class="pt">Review</div><div class="ads-row"><span>Objective</span><span>${esc(v.pick || 'Leads')}</span></div><div class="ads-row"><span>Budget</span><span>${esc(v.amount || '₹500')}/day</span></div><div class="ads-row"><span>Audience</span><span>${esc(v.location || 'Gujarat')} · 25–45</span></div></div>
+          <div class="ads-foot"><span class="btn ghost">Back</span>${tgt('Publish', 'btn green')}</div><div class="toast">✓ In review: usually within 24 hours</div>`,
+        results: `<div class="ads-row head"><span>Campaign</span><span>Results</span><span>CTR</span><span>Cost/result</span></div>
+          ${(v.rows || [['Diwali Offer', 128, '2.4%', '₹18'], ['New Leads', 64, '1.9%', '₹26']]).map((r, i) => `<div class="ads-row${i === 0 ? ' hl' : ''}"><span>${esc(r[0])}</span><span class="cnt" data-to="${r[1]}">0</span><span>${esc(r[2])}</span><span>${esc(r[3])}</span></div>`).join('')}
+          <div class="hint">${esc(v.note || 'ઉદાહરણ આંકડા')}</div>`,
+      };
+      body.innerHTML = steps[S] || steps.create;
+      const cursor = h('div', 'cursor', '<svg viewBox="0 0 24 24" width="30" height="30"><path d="M3 2l7 19 2.6-7.6L20 11z" fill="#111" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>');
+      const ripple = h('div', 'ripple');
+      el.appendChild(ripple); el.appendChild(cursor);
+      A(el, at, 'pop', 0.45);
+      const modal = el.querySelector('.modal');
+      if (modal) A(modal, at + 0.2, 'pop', 0.4);
+      const toast = el.querySelector('.toast');
+      let geo = null;
+      U((t) => {
+        const target = el.querySelector('.tgt');
+        if (!geo && target && el.offsetWidth) {
+          let x = 0, y = 0, n = target;
+          while (n && n !== el) { x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent; }
+          geo = { x: x + target.offsetWidth * 0.55, y: y + target.offsetHeight * 0.55 };
+        }
+        const g = geo || { x: 300, y: 200 };
+        const p = E.inOut(clamp((t - at - 0.3) / Math.max(0.3, click - at - 0.45)));
+        const x0 = el.offsetWidth * 0.85, y0 = el.offsetHeight * 0.95;
+        const press = t >= click && t < click + 0.15 ? 0.85 : 1;
+        cursor.style.transform = `translate(${x0 + (g.x - x0) * p}px, ${y0 + (g.y - y0) * p}px) scale(${press})`;
+        cursor.style.opacity = t >= at + 0.2 ? 1 : 0;
+        const rp = clamp((t - click) / 0.45);
+        ripple.style.transform = `translate(${g.x}px, ${g.y}px) scale(${0.2 + rp * 1.6})`;
+        ripple.style.opacity = t >= click && rp < 1 ? (1 - rp).toFixed(2) : 0;
+        if (target) target.classList.toggle('hit', t >= click);
+        if (target) target.classList.toggle('hover', t >= click - 0.35);
+        el.querySelectorAll('.typed').forEach((ty) => {
+          const txt = ty.dataset.text, start = click + 0.1, total = chars(txt).length;
+          const n2 = clamp(Math.floor((t - start) * 14), 0, total);
+          ty.textContent = t < start ? '' : typedSlice(txt, n2) + (n2 < total ? '|' : '');
+        });
+        el.querySelectorAll('.cnt').forEach((c) => { c.textContent = Math.round(Number(c.dataset.to) * E.out(clamp((t - at - 0.4) / 1.4))); });
+        if (toast) { toast.style.opacity = clamp((t - click - 0.2) * 4); toast.style.transform = `translateY(${(1 - clamp((t - click - 0.2) * 4)) * 14}px)`; }
+      });
+      return el;
+    },
+
+    /* Big tappable button with a finger tap (SHARE / FOLLOW / COMMENT). */
+    button(v, { A, U }) {
+      const el = h('div', 'bigbtn ' + (v.style || 'red'), `<span class="ic">${esc(v.icon || '👆')}</span><span>${rich(v.text)}</span>`);
+      A(el, v.at, 'pop', 0.4);
+      const tap = v.tapAt ?? (v.at || 0) + 0.8;
+      U((t) => {
+        const k = t >= tap && t < tap + 0.18 ? 0.9 : 1;
+        el.style.scale = String(k);
+        el.classList.toggle('done', t >= tap);
+      });
+      return el;
+    },
+
+    /* Icon that gets a red ✕ stamped over it ("Personal ATM" etc). */
+    iconx(v, { A }) {
+      const el = h('div', 'iconx', `<div class="ico">${esc(v.icon)}</div><div class="lbl">${rich(v.label || '')}</div><div class="xx"></div>`);
+      A(el, v.at, 'pop', 0.4);
+      A(el.querySelector('.xx'), v.crossAt ?? (v.at || 0) + 0.7, 'stamp', 0.35);
+      return el;
+    },
+
     /* Closing call to action. */
     cta(v, { A }) {
       const el = h('div', 'cta');
@@ -553,6 +650,38 @@
 
   // ---------- overlay effects ----------
   const FX = {
+
+    // emoji / word sticker that pops in with a wobble
+    sticker(f, { U, root }) {
+      const el = h('div', 'sticker', `${f.emoji ? `<span class="em">${esc(f.emoji)}</span>` : ''}${f.text ? `<span class="tx">${rich(f.text)}</span>` : ''}`);
+      el.style.left = (f.x ?? 360) + 'px'; el.style.top = (f.y ?? 420) + 'px';
+      root.appendChild(el);
+      U((t) => {
+        const lt = t - f.at, end = f.until ?? Infinity;
+        el.style.display = lt < 0 || t > end ? 'none' : '';
+        if (lt < 0) return;
+        const p = clamp(lt / 0.35);
+        el.style.transform = `translate(-50%,-50%) scale(${(0.3 + 0.7 * E.back(p)).toFixed(3)}) rotate(${((f.rotate ?? -6) + Math.sin(lt * 5) * 3 * (1 - clamp(lt / 1.2))).toFixed(2)}deg)`;
+      });
+    },
+    // name / topic lower third that slides in and out
+    lowerthird(f, { U, root }) {
+      const el = h('div', 'lthird', `<b>${rich(f.title)}</b>${f.sub ? `<small>${esc(f.sub)}</small>` : ''}`);
+      if (f.y) el.style.top = f.y + 'px';
+      root.appendChild(el);
+      U((t) => {
+        const a = clamp((t - f.at) / 0.4), b = f.until ? clamp((t - f.until) / 0.3) : 0;
+        el.style.opacity = (E.out(a) * (1 - b)).toFixed(3);
+        el.style.transform = `translateX(${((1 - E.out(a)) * -60 + b * -40).toFixed(1)}px)`;
+      });
+    },
+    // progress pills: "ભૂલ 1 / 2 / 3"
+    tracker(f, { U, root }) {
+      const el = h('div', 'tracker');
+      const pills = Array.from({ length: f.total || 3 }, (_, i) => { const p = h('span', '', `${esc(f.label || '')} ${i + 1}`); el.appendChild(p); return p; });
+      root.appendChild(el);
+      U((t) => { pills.forEach((p, i) => { p.classList.toggle('on', i + 1 < f.current || (i + 1 === f.current && t >= f.at)); p.classList.toggle('cur', i + 1 === f.current && t >= f.at); }); el.style.opacity = clamp((t - (f.showAt ?? 0)) * 4); });
+    },
     confetti(f, { U, root }) {
       const layer = h('div', 'fx confetti');
       const colors = ['#e1251b', '#141414', '#f4dc4b', '#ffffff', '#e1251b'];
@@ -585,8 +714,76 @@
     },
   };
 
+
+  /*
+   * Talking presenter avatar (original character, pure SVG).
+   * Mouth follows the caption words, eyes blink, head bobs, and the gesture changes every ~2s
+   * (or per scene via scene.avatar.pose). With a real voiceover the words carry real timings,
+   * so the lips sync to the speech.
+   */
+  function makeAvatar(cfg) {
+    const c = { skin: '#e0a47c', skin2: '#c98a62', hair: '#1d1a1a', shirt: '#141414', accent: '#e1251b', beard: true, glasses: true, brand: 'PG360', side: 'right', ...cfg };
+    const el = h('div', 'avatar ' + c.side);
+    el.innerHTML = `<svg viewBox="0 0 260 320" width="260" height="320">
+      <defs><linearGradient id="avs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c.shirt}"/><stop offset="1" stop-color="#000"/></linearGradient></defs>
+      <g class="av-body"><path d="M28 320 C34 250 70 226 130 222 C190 226 226 250 232 320Z" fill="url(#avs)"/>
+        <path d="M104 224 L130 262 L156 224" fill="none" stroke="${c.accent}" stroke-width="5" stroke-linecap="round"/>
+        <text x="130" y="300" text-anchor="middle" font-family="Anton,Impact,sans-serif" font-size="22" fill="${c.accent}">${esc(c.brand)}</text></g>
+      <rect x="114" y="190" width="32" height="40" rx="10" fill="${c.skin2}"/>
+      <g class="av-head">
+        <ellipse cx="72" cy="128" rx="11" ry="16" fill="${c.skin2}"/><ellipse cx="188" cy="128" rx="11" ry="16" fill="${c.skin2}"/>
+        <ellipse cx="130" cy="122" rx="58" ry="70" fill="${c.skin}"/>
+        <path d="M70 108 C64 50 104 38 132 40 C176 40 198 66 190 112 C180 84 160 72 132 74 C104 74 82 84 70 108Z" fill="${c.hair}"/>
+        ${c.beard ? `<path d="M74 132 C76 186 104 204 130 204 C156 204 184 186 186 132 C178 162 160 172 130 172 C100 172 82 162 74 132Z" fill="${c.hair}" opacity=".92"/>` : ''}
+        <path class="br l" d="M92 98 Q106 90 120 97" stroke="${c.hair}" stroke-width="6" fill="none" stroke-linecap="round"/>
+        <path class="br r" d="M140 97 Q154 90 168 98" stroke="${c.hair}" stroke-width="6" fill="none" stroke-linecap="round"/>
+        <g class="eye l"><ellipse cx="106" cy="116" rx="9" ry="10" fill="#fff"/><circle class="pu" cx="107" cy="117" r="5" fill="#1b1310"/><rect class="lid" x="95" y="104" width="22" height="0" fill="${c.skin}"/></g>
+        <g class="eye r"><ellipse cx="154" cy="116" rx="9" ry="10" fill="#fff"/><circle class="pu" cx="155" cy="117" r="5" fill="#1b1310"/><rect class="lid" x="143" y="104" width="22" height="0" fill="${c.skin}"/></g>
+        ${c.glasses ? `<g fill="none" stroke="#111" stroke-width="3.2"><circle cx="106" cy="117" r="17"/><circle cx="154" cy="117" r="17"/><path d="M123 116 Q130 111 137 116"/></g>` : ''}
+        <path d="M130 124 Q124 142 130 146 Q136 146 138 142" fill="none" stroke="${c.skin2}" stroke-width="3" stroke-linecap="round"/>
+        <g class="mouth" transform="translate(130 163)"><ellipse class="mo" rx="14" ry="3" fill="#3a1010"/><rect class="teeth" x="-10" y="-3" width="20" height="4" rx="2" fill="#fff"/><ellipse class="tongue" cx="0" cy="4" rx="8" ry="2" fill="#d4555c"/></g>
+      </g>
+      <g class="av-arm"><path d="M210 250 C226 220 232 196 236 170" stroke="${c.shirt}" stroke-width="30" stroke-linecap="round" fill="none"/>
+        <g class="hand" transform="translate(236 160)"><circle r="17" fill="${c.skin}"/><rect class="finger" x="-5" y="-40" width="10" height="28" rx="5" fill="${c.skin}"/><rect class="thumb" x="8" y="-22" width="9" height="20" rx="4.5" fill="${c.skin}" transform="rotate(30)"/></g></g>
+    </svg>`;
+    const q = (s) => el.querySelector(s);
+    const head = q('.av-head'), arm = q('.av-arm'), mo = q('.mo'), teeth = q('.teeth'), tongue = q('.tongue'), finger = q('.finger'), thumb = q('.thumb');
+    const lids = el.querySelectorAll('.lid'), pupils = el.querySelectorAll('.pu'), brows = el.querySelectorAll('.br');
+    const POSES = { point: [-18, 1, 0], up: [-4, 1, 0], open: [24, 0, 0], thumb: [8, 0, 1], think: [40, 1, 0], wave: [-10, 0, 0] };
+    return {
+      el,
+      update(sc, lt, t) {
+        // mouth: open on each spoken word (from caption timings)
+        let open = 0;
+        for (const L of sc.lines) for (let i = 0; i < L.words.length; i++) {
+          const w = L.words[i], nx = L.words[i + 1] ? L.words[i + 1].start : L.end;
+          if (lt >= w.start && lt < nx) { const d = Math.min(0.32, nx - w.start); const u = (lt - w.start) / d; if (u < 1) open = Math.sin(u * Math.PI) * (0.55 + 0.45 * rand(i + L.start * 10)); }
+        }
+        const ry = 2.5 + open * 11;
+        mo.setAttribute('ry', ry.toFixed(2)); mo.setAttribute('rx', (14 - open * 3).toFixed(2));
+        teeth.setAttribute('opacity', open > 0.25 ? 1 : 0); tongue.setAttribute('ry', (1 + open * 4).toFixed(2)); tongue.setAttribute('cy', (2 + open * 5).toFixed(2));
+        // blink every ~3.2s
+        const bp = (t % 3.2) / 3.2, blink = bp > 0.96 ? Math.sin(((bp - 0.96) / 0.04) * Math.PI) : 0;
+        lids.forEach((l) => l.setAttribute('height', (blink * 24).toFixed(1)));
+        pupils.forEach((p) => p.setAttribute('transform', `translate(${(Math.sin(t * 0.7) * 1.5).toFixed(2)} 0)`));
+        brows.forEach((b) => b.setAttribute('transform', `translate(0 ${(-open * 3).toFixed(2)})`));
+        // head bob while talking
+        head.setAttribute('transform', `rotate(${(Math.sin(t * 2.1) * 2.2 + open * 1.5).toFixed(2)} 130 190) translate(0 ${(-open * 1.5).toFixed(2)})`);
+        // gesture: scene pose, else cycle every 2s
+        const cycle = ['point', 'open', 'thumb', 'up', 'think', 'wave'];
+        const pose = (sc.avatar && sc.avatar.pose) || cycle[(Math.floor(lt / 2) + sc.index) % cycle.length];
+        const [ang, fing, th] = POSES[pose] || POSES.point;
+        const k = clamp(((lt % 2) / 0.25));
+        const wobble = pose === 'wave' ? Math.sin(t * 9) * 12 : Math.sin(t * 3) * 2;
+        arm.setAttribute('transform', `rotate(${((ang + wobble) * E.out(k) + (1 - E.out(k)) * 10).toFixed(2)} 210 250)`);
+        finger.setAttribute('opacity', fing); thumb.setAttribute('opacity', th ? 1 : 0.35);
+        el.style.transform = `translateY(${(Math.sin(t * 1.6) * 2).toFixed(2)}px)`;
+      },
+    };
+  }
+
   // ---------- player ----------
-  let TL, built = [], halftone, current = -1, world = null, cineFx, dip;
+  let TL, built = [], halftone, current = -1, world = null, cineFx, dip, avatar = null;
 
   function apply(a, lt) {
     const p = (lt - a.at) / a.dur;
@@ -608,11 +805,18 @@
     const b = built[idx];
     const lt = t - b.sc.start;
     // gentle camera drift keeps static scenes alive
-    b.root.style.transform = b.sc.world ? '' : `scale(${1 + Math.min(lt, 6) * 0.004})`;
+    if (TL.energy && !b.sc.world) {
+      // energetic slideshow: zoom-out settle on every cut + a punch-in on every caption line
+      let z = 1 + 0.09 * (1 - E.out(clamp(lt / 0.45)));
+      b.sc.lines.forEach((L, i) => { if (i && lt >= L.start) z += 0.035 * Math.max(0, 1 - (lt - L.start) / 0.3); });
+      z += Math.min(lt, 6) * 0.004;
+      b.root.style.transform = `scale(${z.toFixed(4)})`;
+    } else b.root.style.transform = b.sc.world ? '' : `scale(${1 + Math.min(lt, 6) * 0.004})`;
     b.anims.forEach((a) => apply(a, lt));
     b.updaters.forEach((fn) => fn(lt));
 
     if (world) world.render(idx, lt, t);
+    if (avatar) avatar.update(b.sc, lt, t);
     cineFx.style.display = b.sc.world ? 'block' : 'none';
     if (b.sc.world) { // film grain moves every frame (deterministic)
       cineFx.style.setProperty('--gx', `${Math.round(rand(Math.floor(t * 24)) * 40 - 20)}px`);
@@ -669,6 +873,10 @@
     }
     built = TL.scenes.map(makeScene);
     built.forEach((b) => stage.appendChild(b.root));
+    avatar = TL.avatar ? makeAvatar(TL.avatar) : null;
+    if (avatar) stage.appendChild(avatar.el);
+    stage.classList.toggle('has-avatar', !!avatar);
+    if (TL.transparent) { stage.classList.add('transparent'); document.documentElement.classList.add('transparent'); }
     cineFx = h('div', 'cine-fx');
     stage.appendChild(cineFx);
     dip = h('div', 'dip');

@@ -21,6 +21,18 @@ When the user gives a script (any language, Gujarati included), act as creative 
    writes the storyboard, then renders. Read `out/<slug>/contact.jpg` and judge every frame like an editor before handing it over.
 5. Report the direction, the storyboard and the MP4. Mention anything you assumed (facts, brand claims).
 
+## Editing the user's own talking-head video
+1. Copy the video to `media/`. Find its caption segments: transcribe, or (if it has burned-in captions) read them
+   frame by frame and detect where the caption band changes. Write `reels/edit-<slug>.json` (`"mode": "edit"`).
+2. Per segment, decide like an editor: zoom level (alternate wide/tight on every segment), and whether it gets B-roll
+   (a 3D `broll` world that shows the *meaning* of the line), a 2D `visual` on a `cover`, a `sticker`, a `lowerthird` or a
+   `mark` for the tracker. Change something about every 2 seconds, and never cover the face for more than 2 segments in a row.
+3. `npm run edit -- <spec> --stills`, then look at `out/<slug>/stills.jpg` and fix any placement. Then render without `--stills`.
+
+## Tutorial reels with the AI avatar
+Use `"avatar"`, `"energy": true` and the `adsmanager` / `button` / `iconx` visuals. Every step gets its own screen with the
+cursor clicking the exact control the caption names. Keep facts accurate. Mark illustrative numbers as examples.
+
 The 2D workflow below (handwritten specs with `visual` blocks) still works, and both styles can be mixed in one reel.
 
 You are the editor. The user types one line; you write the script, voice it, animate it,

@@ -271,7 +271,7 @@ const ENVS = {
       focus: new THREE.Vector3(0, 3, -3), R: 22, az: 0, el: 0.32, moves: ['orbit-right', 'crane-up', 'dolly-out', 'pan-left'],
       update(t) {
         let k = 0;
-        curves.forEach((c, ci) => { for (let j = 0; j < per; j++) { const u = (j / per + t * 0.22 + ci * 0.07) % 1; o.position.copy(c.getPointAt(u)); o.scale.setScalar(0.6 + u * 0.8); o.updateMatrix(); dots.setMatrixAt(k++, o.matrix); } });
+        curves.forEach((c, ci) => { for (let j = 0; j < per; j++) { let u = (j / per + t * 0.22 + ci * 0.07) % 1; if (props.reverse) u = 1 - u; /* reverse = money leaking out */ o.position.copy(c.getPointAt(u)); o.scale.setScalar(0.6 + u * 0.8); o.updateMatrix(); dots.setMatrixAt(k++, o.matrix); } });
         dots.instanceMatrix.needsUpdate = true;
         lock.material.opacity = 0.6 + 0.3 * Math.sin(t * 4);
       },
@@ -532,6 +532,46 @@ const ENVS = {
         globe.rotation.y = t * 0.12;
         arcs.forEach((a) => { a.pulse.position.copy(a.curve.getPoint((a.ph + t * 0.35) % 1)); });
         phones.forEach((p) => { p.g.position.y = -0.8 + phones.indexOf(p) * 1.3 + Math.sin(t + p.ph) * 0.25; p.g.rotation.set(Math.sin(t * 0.7 + p.ph) * 0.08, -p.a * 0.5 + Math.sin(t * 0.5) * 0.1, 0); });
+      },
+    };
+  },
+
+
+  /* Control & visibility: a radar scope sweeping, blips lighting up, a plane flying the route. */
+  radar({ scene, pal, rng }) {
+    const base = new THREE.Mesh(new THREE.CylinderGeometry(7.6, 7.9, 0.5, 96), phys('#0b1a17', { metal: 0.7, rough: 0.35 }));
+    base.position.y = -0.25; base.receiveShadow = true; scene.add(base);
+    const scopeCol = pal.accent;
+    const disc = new THREE.Mesh(new THREE.CircleGeometry(7, 96), new THREE.MeshBasicMaterial({ color: C('#04140f') }));
+    disc.rotation.x = -Math.PI / 2; disc.position.y = 0.01; scene.add(disc);
+    for (let r = 1.75; r <= 7; r += 1.75) { const ring = new THREE.Mesh(new THREE.RingGeometry(r - 0.025, r + 0.025, 128), glowMat(scopeCol, 0.55)); ring.rotation.x = -Math.PI / 2; ring.position.y = 0.02; scene.add(ring); }
+    for (let k = 0; k < 4; k++) { const l = new THREE.Mesh(new THREE.PlaneGeometry(14, 0.04), glowMat(scopeCol, 0.35)); l.rotation.x = -Math.PI / 2; l.rotation.z = (k / 4) * Math.PI; l.position.y = 0.02; scene.add(l); }
+    const sweep = new THREE.Mesh(new THREE.CircleGeometry(7, 64, 0, 0.7), new THREE.MeshBasicMaterial({ color: C(scopeCol), transparent: true, opacity: 0.35, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide }));
+    sweep.rotation.x = -Math.PI / 2; sweep.position.y = 0.03; scene.add(sweep);
+    const blips = Array.from({ length: 9 }, () => { const a = rng() * TAU, r = 1.2 + rng() * 5.4; const g = glow(pal.accent2, 0.9, 0); g.position.set(Math.cos(a) * r, 0.15, -Math.sin(a) * r); scene.add(g); return { g, a }; });
+    const plane = new THREE.Group(); scene.add(plane);
+    const white = phys('#f2f4f7', { metal: 0.3, rough: 0.3 });
+    const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.28, 2.4, 8, 16), white); body.rotation.z = Math.PI / 2; plane.add(body);
+    const wing = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.06, 3.2), white); plane.add(wing);
+    const tail = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.05, 1.2), white); tail.position.x = -1.3; plane.add(tail);
+    const fin = new THREE.Mesh(new THREE.BoxGeometry(0.45, 0.6, 0.05), phys(pal.accent2)); fin.position.set(-1.35, 0.3, 0); plane.add(fin);
+    plane.traverse((m) => { if (m.isMesh) m.castShadow = true; });
+    const trail = points(80, (i, p) => p.set([0, -50, 0], i * 3), { size: 0.18, color: pal.accent2, opacity: 0.8 }); scene.add(trail);
+    return {
+      focus: new THREE.Vector3(0, 0.8, 0), R: 15, az: 0.3, el: 0.62, moves: ['orbit-right', 'dolly-in', 'crane-down', 'orbit-left'],
+      update(t) {
+        const ang = t * 1.6;
+        sweep.rotation.z = ang;
+        blips.forEach((b) => { let d = ((ang - b.a) % TAU + TAU) % TAU; b.g.material.opacity = Math.max(0, 1 - d / 2.2); });
+        const pa = t * 0.45, pr = 4.6;
+        plane.position.set(Math.cos(pa) * pr, 2.4 + Math.sin(t * 1.3) * 0.15, -Math.sin(pa) * pr);
+        plane.rotation.set(0.35, pa + Math.PI / 2 + Math.PI, 0);
+        plane.rotation.y = pa - Math.PI / 2 + Math.PI;
+        plane.rotation.z = 0;
+        plane.rotation.x = -0.3;
+        const ta = trail.geometry.attributes.position;
+        for (let i = 0; i < 80; i++) { const q = pa - i * 0.02; ta.array[i * 3] = Math.cos(q) * pr; ta.array[i * 3 + 1] = 2.4; ta.array[i * 3 + 2] = -Math.sin(q) * pr; }
+        ta.needsUpdate = true;
       },
     };
   },

@@ -57,3 +57,17 @@ add a concept rule in `scripts/direct.js` `RULES`, done. All geometry is procedu
 - One shadow-casting light, instanced meshes for repeated objects, small canvas textures.
 - Only the current and neighbouring scenes are kept in GPU memory.
 - On a desktop GPU set `REEL_GPU=1` for hardware WebGL. In headless/cloud (SwiftShader), expect around 1 s per 1080p frame.
+
+## Edit mode (talking-head videos): `scripts/edit.js`
+```
+media/video.mp4 ──ffmpeg: crop → scale → zoompan(z(t) per segment) → colour pop──┐
+reels/edit-*.json ─timeline (segments→scenes)─► engine page, transparent PNG frames ─┴─overlay─► H.264
+voice (cleaned) + music (sidechain-ducked by voice) + sfx plan (≤3s gaps) ──────────────────────► AAC
+```
+`soundtrack.sfxEvents()` plans effects from the timeline: whoosh into B-roll, pop on cuts and stickers, click on UI
+taps, ding on confetti, tick on caption beats (energy reels), then fills any gap longer than 3 s.
+
+## Presenter avatar
+`makeAvatar()` in `engine/reel.js` is an original SVG character. Mouth openness comes from the active caption word,
+plus blinks, a head bob and six gestures (point, up, open, thumb, think, wave) cycling every 2 s or set per scene.
+With a recorded voiceover the word times come from the TTS alignment, so the lips follow the real speech.

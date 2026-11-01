@@ -57,7 +57,56 @@
    * @param {object} reel   parsed reel JSON
    * @param {object} [voice] voice/timings.json ({lines: {[plainText]: {file, duration, words:[start]}}})
    */
+  /*
+   * Edit mode: a talking-head video is the base layer. Its caption segments (text + start/end)
+   * become scenes; each segment can carry B-roll (3D world or 2D visual), stickers, lower thirds…
+   * Captions are re-chunked into short pop phrases timed across the segment.
+   */
+  const graphemes = (w) => (typeof Intl !== 'undefined' && Intl.Segmenter ? [...new Intl.Segmenter(undefined, { granularity: 'grapheme' }).segment(w)].length : [...w].length);
+  function buildEditTimeline(reel) {
+    const segs = reel.segments;
+    const total = reel.base.duration;
+    const maxW = (reel.captions && reel.captions.maxWords) || 3;
+    const style = (reel.captions && reel.captions.style) || 'pop';
+    let markN = 0;
+    const scenes = segs.map((seg, i) => {
+      const start = i === 0 ? 0 : seg.start;
+      const end = i < segs.length - 1 ? segs[i + 1].start : total;
+      const words = parseWords(seg.text);
+      const weights = words.map((w) => graphemes(w.text) + 2);
+      const sum = weights.reduce((a, b) => a + b, 0) || 1;
+      const span = Math.max(0.3, seg.end - seg.start);
+      let acc = seg.start - start;
+      const timed = words.map((w, k) => { const st = acc; acc += (weights[k] / sum) * span; return { ...w, start: st }; });
+      const lines = [];
+      for (let k = 0; k < timed.length; k += maxW) {
+        const ws = timed.slice(k, k + maxW);
+        const next = timed[k + maxW];
+        lines.push({ start: ws[0].start, end: next ? next.start : seg.end - start, words: ws });
+      }
+      const resolveAt = (at) => (at == null ? 0.05 : typeof at === 'object' && at.sec != null ? at.sec : seg.start - start + at * span);
+      const broll = seg.broll || null;
+      const world = broll && broll.env ? resolveVisuals(broll, resolveAt)[0] : null;
+      const visual = broll && broll.type ? [broll] : seg.visual ? (Array.isArray(seg.visual) ? seg.visual : [seg.visual]) : [];
+      const fx = (seg.fx || []).map((f) => ({ ...f, at: resolveAt(f.at) , until: f.until != null ? resolveAt(f.until) : undefined }));
+      if (seg.mark) markN = seg.mark;
+      if (reel.tracker && markN) fx.push({ type: 'tracker', label: reel.tracker.label, total: reel.tracker.total, current: markN, at: seg.mark ? resolveAt(0) : -1 });
+      return {
+        index: i, start, end, duration: end - start,
+        theme: seg.cover ? seg.cover : 'overlay',
+        kicker: '', label: seg.label ? { text: seg.label, at: resolveAt(0) } : null, badge: null,
+        transition: seg.transition || (broll ? 'flash' : 'cut'),
+        lines, visuals: resolveVisuals(visual, resolveAt), fx,
+        world, textStyle: style, concept: seg.concept || '',
+        zoom: seg.zoom || 1, avatar: seg.avatar || null,
+      };
+    });
+    return { title: reel.title || 'edit', lang: reel.lang || 'en', fps: reel.fps || 30, width: 1080, height: 1920,
+      duration: total, scenes, audio: [], music: reel.music || null, transparent: true, mode: 'edit', base: reel.base, energy: false, avatar: reel.avatar || null };
+  }
+
   function buildTimeline(reel, voice) {
+    if (reel.mode === 'edit') return buildEditTimeline(reel);
     const fps = reel.fps || 30;
     const scenes = [];
     const audio = [];
@@ -113,6 +162,7 @@
         world: scene.world ? resolveVisuals(scene.world, resolveAt)[0] : null,
         textStyle: scene.text || 'top',
         concept: scene.concept || '',
+        avatar: scene.avatar || null,
         lines,
         visuals: resolveVisuals(scene.visual, resolveAt),
         fx: (scene.fx || []).map((f) => ({ ...f, at: resolveAt(f.at) })),
@@ -125,6 +175,9 @@
       lang: reel.lang || 'en',
       music: reel.music || null,
       direction: reel.direction || null,
+      energy: !!reel.energy,
+      avatar: reel.avatar || null,
+      sfx: reel.sfx || null,
       fps,
       width: 1080,
       height: 1920,
@@ -143,7 +196,7 @@
       if (v && typeof v === 'object') {
         const o = {};
         for (const [k, val] of Object.entries(v)) {
-          o[k] = /^(at|doneAt|until|hotAt|goodAt|fixedAt)$/.test(k) ? resolveAt(val) : walk(val);
+          o[k] = /^(at|doneAt|until|hotAt|goodAt|fixedAt|clickAt|tapAt|crossAt)$/.test(k) ? resolveAt(val) : walk(val);
         }
         if (!('at' in o) && 'type' in o) o.at = resolveAt(null);
         return o;

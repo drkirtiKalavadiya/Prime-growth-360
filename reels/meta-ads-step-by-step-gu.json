@@ -1,0 +1,78 @@
+{
+  "name": "meta-ads-step-by-step-gu",
+  "title": "Meta Ads કેવી રીતે ચલાવવી: Step by Step",
+  "lang": "gu",
+  "energy": true,
+  "steps": 7,
+  "music": { "bpm": 118, "key": 1.06 },
+  "avatar": { "side": "right", "skin": "#d99a72", "skin2": "#bf8160", "hair": "#191514", "shirt": "#10213d", "accent": "#1b74e4", "brand": "PG360", "beard": true, "glasses": true },
+  "direction": { "theme": "technology + business", "mood": "energetic tutorial, clear and trustworthy", "palette": "ocean / neon + Ads Manager UI", "music": { "bpm": 118 } },
+  "scenes": [
+    {
+      "kicker": "// meta ads · step by step",
+      "say": ["Meta Ads માં *પૈસા* *બગડે* છે?"],
+      "text": "impact", "minDuration": 2.6,
+      "concept": "Hook: a glowing globe of customers with ad pulses firing everywhere, money burning without a plan.",
+      "avatar": { "pose": "think" },
+      "world": { "env": "network", "palette": "ocean", "light": "neon", "camera": { "move": "dolly-in" }, "props": { "messages": ["Ad 💸", "Lead ✅", "Click 👆"] }, "fx": ["dust", "bokeh"] }
+    },
+    {
+      "kicker": "// આજે શીખો",
+      "say": ["આજે શીખો *step by step*", "*સાચી* રીત."],
+      "text": "top", "transition": "flash",
+      "concept": "Promise: a holographic ads dashboard assembles around an AI core.",
+      "avatar": { "pose": "point" },
+      "world": { "env": "grid", "palette": "neon", "light": "neon", "camera": { "move": "orbit-right" }, "props": { "words": ["META ADS", "LEADS", "SALES", "REELS", "CTR", "ROI"] }, "fx": ["dust", "bokeh"] }
+    },
+    {
+      "kicker": "// step 1", "label": "Step *1*: Create", "badge": 1, "transition": "flash",
+      "say": ["*Ads Manager* ખોલો,", "અને *Create* બટન દબાવો."],
+      "visual": { "type": "adsmanager", "step": "create", "at": 0, "clickAt": 1.15 }
+    },
+    {
+      "kicker": "// step 2", "label": "Step *2*: Objective", "badge": 2,
+      "say": ["તમારો *Objective* પસંદ કરો:", "*Leads*, Sales કે Traffic."],
+      "visual": { "type": "adsmanager", "step": "objective", "pick": "Leads", "at": 0, "clickAt": 1.2 }
+    },
+    {
+      "kicker": "// step 3", "label": "Step *3*: Budget", "badge": 3,
+      "say": ["*Budget* નક્કી કરો,", "નાના budget થી *શરૂઆત* કરો."],
+      "visual": { "type": "adsmanager", "step": "budget", "amount": "₹500", "hint": "ઉદાહરણ: ₹500/દિવસ, પરિણામ જોઈને વધારો", "at": 0, "clickAt": 0.6 }
+    },
+    {
+      "kicker": "// step 4", "label": "Step *4*: Audience", "badge": 4,
+      "say": ["*Audience* સેટ કરો:", "*શહેર*, ઉંમર અને રસ."],
+      "visual": { "type": "adsmanager", "step": "audience", "location": "Ahmedabad, Gujarat", "interests": ["Small business"], "add": "Entrepreneurship", "at": 0, "clickAt": 1.2 }
+    },
+    {
+      "kicker": "// step 5", "label": "Step *5*: Placements", "badge": 5,
+      "say": ["*Placements* માં", "*Advantage+* રાખો."],
+      "visual": { "type": "adsmanager", "step": "placements", "at": 0, "clickAt": 1.0 }
+    },
+    {
+      "kicker": "// step 6", "label": "Step *6*: Creative", "badge": 6,
+      "say": ["સારું *Creative* મૂકો:", "Video, Text અને *CTA* બટન."],
+      "visual": { "type": "adsmanager", "step": "creative", "text": "Diwali Offer 🎉 30% OFF", "cta": "Send WhatsApp message", "at": 0, "clickAt": 1.2 }
+    },
+    {
+      "kicker": "// step 7", "label": "Step *7*: Publish", "badge": 7,
+      "say": ["*Publish* કરો,", "Review પછી Ad *Live* થશે."],
+      "visual": { "type": "adsmanager", "step": "publish", "pick": "Leads", "amount": "₹500", "location": "Gujarat", "at": 0, "clickAt": 0.85 }
+    },
+    {
+      "kicker": "// bonus", "label": "*Bonus*: Results", "transition": "flash",
+      "say": ["3 દિવસ પછી *CTR* અને", "*Cost per Result* ચેક કરો."],
+      "avatar": { "pose": "thumb" },
+      "visual": { "type": "adsmanager", "step": "results", "note": "ઉદાહરણ આંકડા · તમારા પરિણામ અલગ હોઈ શકે", "at": 0, "clickAt": 3 }
+    },
+    {
+      "kicker": "// follow",
+      "say": ["આવી Tips માટે *FOLLOW* કરો", "અને *ADS* comment કરો."],
+      "text": "top", "transition": "flash", "hold": 1.4,
+      "concept": "Payoff: a rocket on a spotlit podium, ready to launch your ads.",
+      "avatar": { "pose": "wave" },
+      "world": { "env": "stage", "palette": "ocean", "light": "dramatic", "camera": { "move": "orbit-left" }, "props": { "hero": "rocket" }, "fx": ["sparks", "bokeh"] },
+      "fx": [{ "type": "confetti", "at": 1.0, "x": 270, "y": 900 }, { "type": "sticker", "emoji": "💬", "text": "ADS", "x": 120, "y": 520, "at": 1.0, "rotate": -8 }]
+    }
+  ]
+}
