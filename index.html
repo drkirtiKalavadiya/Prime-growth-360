@@ -24,20 +24,21 @@
       </div>
     </div>
     <nav class="nav">
-      <a href="#/dashboard" data-nav="dashboard"><span>🏠</span> Dashboard</a>
-      <a href="#/customers" data-nav="customers"><span>👥</span> Contacts</a>
-      <a href="#/pipeline" data-nav="pipeline"><span>📈</span> Pipeline</a>
-      <a href="#/tasks" data-nav="tasks"><span>✅</span> Follow-ups <b class="nav-count" id="nav-task-count" hidden></b></a>
-      <a href="#/invoices" data-nav="invoices"><span>🧾</span> Invoices</a>
-      <a href="#/products" data-nav="products"><span>📦</span> Products</a>
-      <a href="#/settings" data-nav="settings"><span>⚙️</span> Settings</a>
+      <a href="#dashboard" data-nav="dashboard"><span>🏠</span> Dashboard</a>
+      <a href="#contacts" data-nav="customers"><span>👥</span> Contacts</a>
+      <a href="#pipeline" data-nav="pipeline"><span>📈</span> Pipeline</a>
+      <a href="#tasks" data-nav="tasks"><span>✅</span> Follow-ups <b class="nav-count" id="nav-task-count" hidden></b></a>
+      <a href="#invoices" data-nav="invoices"><span>🧾</span> Invoices</a>
+      <a href="#products" data-nav="products"><span>📦</span> Products</a>
+      <a href="#setup" data-nav="settings"><span>⚙️</span> Settings</a>
     </nav>
-    <p class="sidebar-foot">Data is saved on this device.<br>Back it up from Settings.</p>
+    <p class="sidebar-foot" id="sync-status" role="status">Saved on this device.<br>Back it up from Settings.</p>
   </aside>
   <div class="nav-scrim no-print" data-action="toggle-nav"></div>
 
   <main id="view" class="main"></main>
   <div id="modal-root"></div>
+  <div id="confirm-root"></div>
 
   <script src="js/utils.js"></script>
   <script src="js/store.js"></script>

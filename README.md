@@ -43,7 +43,12 @@ js/utils.js         Pure helpers: money formatting, invoice/GST maths, CSV, date
 js/store.js         Data layer (localStorage), industry presets, demo data
 js/app.js           Views, forms, router and actions
 tests/              Unit tests for the business logic
+tools/              build_single_file.py packs everything into one HTML file
 ```
+
+When the app is opened as a Claude artifact, data is also saved privately to the
+viewer's Claude account so it follows them between devices. In a normal browser
+it stays in that browser's local storage.
 
 ## Development
 

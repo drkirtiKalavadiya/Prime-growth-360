@@ -21,7 +21,7 @@
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg: #12131a;
     --surface: #1b1d27;
     --surface-2: #242734;
@@ -41,6 +41,25 @@
     color-scheme: dark;
   }
 }
+:root[data-theme="dark"] {
+    --bg: #12131a;
+    --surface: #1b1d27;
+    --surface-2: #242734;
+    --border: #2f3242;
+    --text: #e8e9f0;
+    --muted: #9a9db3;
+    --primary: #818cf8;
+    --primary-soft: #262a4a;
+    --primary-text: #12131a;
+    --success: #4ade80;
+    --success-soft: #16301f;
+    --warn: #fbbf24;
+    --warn-soft: #33290f;
+    --danger: #f87171;
+    --danger-soft: #3a1c20;
+    --shadow: none;
+    color-scheme: dark;
+  }
 
 * { box-sizing: border-box; }
 html, body { margin: 0; }
@@ -118,6 +137,8 @@ p { margin: 0.25rem 0; }
 .btn-primary:hover { background: var(--primary); filter: brightness(1.08); }
 .btn-danger { color: var(--danger); border-color: var(--danger); background: transparent; }
 .btn-danger:hover { background: var(--danger-soft); }
+.btn-danger-solid { background: var(--danger); border-color: var(--danger); color: var(--surface); }
+.btn-danger-solid:hover { background: var(--danger); filter: brightness(1.08); }
 .btn-sm { padding: 4px 10px; font-size: 0.85rem; }
 .btn-icon { border: 0; background: transparent; color: var(--text); font-size: 1.1rem; cursor: pointer; padding: 4px 8px; border-radius: 8px; }
 .btn-icon:hover { background: var(--surface-2); }
@@ -287,6 +308,13 @@ body.modal-open { overflow: hidden; }
 .inv-totals { margin-left: auto; max-width: 320px; }
 .inv-notes { margin-top: 24px; border-top: 1px solid var(--border); padding-top: 12px; }
 .inv-sign { text-align: right; margin-top: 36px; }
+
+/* ---------- confirm dialog ---------- */
+.confirm-backdrop { z-index: 60; }
+.modal.confirm { z-index: 61; width: min(440px, calc(100vw - 32px)); }
+.confirm-msg { font-size: 1rem; margin-bottom: 16px; }
+.sync-synced { color: var(--success); }
+.sync-error { color: var(--warn); }
 
 /* ---------- toast ---------- */
 .toast {

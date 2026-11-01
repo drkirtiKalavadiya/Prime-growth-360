@@ -1,6 +1,9 @@
 /* Prime Growth 360 CRM — data layer.
- * All data is kept in the browser's localStorage, so the app works offline
- * with no server. Use Settings → Backup to export/import a JSON file. */
+ * Data is kept in the browser's localStorage, so the app works offline
+ * with no server. When the app is opened as a Claude artifact, it is also
+ * synced to the viewer's own private storage in their Claude account
+ * (see "cloud sync" below), so it follows them between devices.
+ * Use Settings → Backup to export/import a JSON file. */
 (function (root) {
   'use strict';
   var U = root.CRM.utils;
@@ -44,6 +47,7 @@
 
   var db = load();
   var listeners = [];
+  var syncListeners = [];
 
   function load() {
     try {
@@ -66,28 +70,138 @@
     COLLECTIONS.forEach(function (c) {
       base[c] = Array.isArray(data[c]) ? data[c] : [];
     });
+    if (data.savedAt) base.savedAt = data.savedAt;
     return base;
   }
 
-  function save() {
+  /** changed: list of collection names (or 'settings') that changed; omit for everything. */
+  function save(changed) {
+    db.savedAt = Date.now();
     try {
       root.localStorage.setItem(KEY, JSON.stringify(db));
     } catch (e) {
-      alert('Could not save data: browser storage may be full. Please export a backup.');
+      console.warn('localStorage unavailable', e);
     }
+    cloud.push(changed || ['settings'].concat(COLLECTIONS));
     listeners.forEach(function (fn) { fn(); });
   }
+
+  /* ---------- cloud sync (only inside a Claude artifact) ----------
+   * One private document per collection under data/users/<viewer id>/,
+   * plus a "meta" document holding the last save time. Writes are
+   * coalesced and never overlap for the same document. */
+  var cloud = (function () {
+    var ref = null;        // CollectionReference for this viewer, once ready
+    var status = 'local';  // 'local' | 'connecting' | 'synced' | 'saving' | 'error'
+    var dirty = {};
+    var timer = null;
+    var writing = false;
+    var lastError = '';
+
+    function setStatus(st, err) {
+      status = st;
+      lastError = err || '';
+      syncListeners.forEach(function (fn) { fn(status, lastError); });
+    }
+
+    function docFor(name) { return ref.doc('crm-' + name); }
+
+    function payloadFor(name) {
+      return name === 'settings' ? { value: db.settings } : { items: db[name] };
+    }
+
+    function flush() {
+      timer = null;
+      if (!ref || writing) return;
+      var names = Object.keys(dirty);
+      if (!names.length) return;
+      dirty = {};
+      writing = true;
+      setStatus('saving');
+      var chain = Promise.resolve();
+      var failed = '';
+      names.forEach(function (name) {
+        chain = chain.then(function () { return docFor(name).set(payloadFor(name)); })
+          .catch(function (e) { failed = (e && (e.code || e.message)) || 'error'; dirty[name] = true; });
+      });
+      chain.then(function () {
+        return failed ? null : docFor('meta').set({ savedAt: db.savedAt });
+      }).catch(function (e) { failed = (e && (e.code || e.message)) || 'error'; }).then(function () {
+        writing = false;
+        if (failed) {
+          setStatus('error', failed);
+          dirty = {};  // keep data local; retry on the next change instead of looping
+        } else if (Object.keys(dirty).length) {
+          flush();
+        } else {
+          setStatus('synced');
+        }
+      });
+    }
+
+    function push(names) {
+      if (!ref) return;
+      names.forEach(function (n) { dirty[n] = true; });
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(flush, 700);
+    }
+
+    function connect(onRemoteLoaded) {
+      if (!root.claude || typeof root.claude.use !== 'function') return;
+      setStatus('connecting');
+      var giveUp = setTimeout(function () { if (!ref) setStatus('local'); }, 12000);
+      Promise.all([root.claude.use('db'), root.claude.use('user')]).then(function (caps) {
+        var dbCap = caps[0], user = caps[1];
+        if (!dbCap || !user) { clearTimeout(giveUp); setStatus('local'); return null; }
+        return user.id().then(function (uid) {
+          if (!uid) { clearTimeout(giveUp); setStatus('local'); return null; }
+          var col = dbCap.collection('data/users/' + uid);
+          var names = ['meta', 'settings'].concat(COLLECTIONS);
+          return Promise.all(names.map(function (n) { return col.doc('crm-' + n).get(); })).then(function (snaps) {
+            clearTimeout(giveUp);
+            ref = col;
+            var meta = snaps[0].exists ? snaps[0].data() : null;
+            var remoteNewer = meta && (!db.savedAt || meta.savedAt > db.savedAt);
+            if (remoteNewer) {
+              var data = { settings: snaps[1].exists ? snaps[1].data().value : {} };
+              COLLECTIONS.forEach(function (c, i) {
+                var sn = snaps[i + 2];
+                data[c] = sn.exists ? sn.data().items : [];
+              });
+              db = normalize(data);
+              db.savedAt = meta.savedAt;
+              try { root.localStorage.setItem(KEY, JSON.stringify(db)); } catch (e) { /* ignore */ }
+              setStatus('synced');
+              if (onRemoteLoaded) onRemoteLoaded();
+            } else if (!meta && store.isEmpty() && !db.savedAt) {
+              setStatus('synced');
+            } else {
+              push(['settings'].concat(COLLECTIONS));  // this device has newer data: upload it
+            }
+          });
+        });
+      }).catch(function (e) {
+        clearTimeout(giveUp);
+        setStatus(ref ? 'error' : 'local', (e && (e.code || e.message)) || '');
+      });
+    }
+
+    return { push: push, connect: connect, status: function () { return status; }, error: function () { return lastError; } };
+  })();
 
   var store = {
     INDUSTRY_PRESETS: INDUSTRY_PRESETS,
     COLLECTIONS: COLLECTIONS,
 
     onChange: function (fn) { listeners.push(fn); },
+    onSyncStatus: function (fn) { syncListeners.push(fn); },
+    syncStatus: function () { return cloud.status(); },
+    connectCloud: function (onRemoteLoaded) { cloud.connect(onRemoteLoaded); },
 
     settings: function () { return db.settings; },
     updateSettings: function (patch) {
       Object.assign(db.settings, patch);
-      save();
+      save(['settings']);
     },
 
     list: function (coll) { return db[coll].slice(); },
@@ -100,30 +214,32 @@
         var idx = db[coll].findIndex(function (x) { return x.id === obj.id; });
         if (idx >= 0) {
           db[coll][idx] = Object.assign({}, db[coll][idx], obj, { updatedAt: now });
-          save();
+          save([coll]);
           return db[coll][idx];
         }
       }
       var rec = Object.assign({ id: U.uid(), createdAt: now }, obj, { updatedAt: now });
       if (!rec.id) rec.id = U.uid();
       db[coll].push(rec);
-      save();
+      save([coll]);
       return rec;
     },
     remove: function (coll, id) {
       db[coll] = db[coll].filter(function (x) { return x.id !== id; });
+      var changed = [coll];
       if (coll === 'customers') {
-        // Keep related records but unlink tasks/activities that only make sense with a customer.
+        // Interaction history only makes sense with its contact, so remove it too.
         db.activities = db.activities.filter(function (a) { return a.customerId !== id; });
+        changed.push('activities');
       }
-      save();
+      save(changed);
     },
     bulkInsert: function (coll, rows) {
       var now = new Date().toISOString();
       rows.forEach(function (r) {
         db[coll].push(Object.assign({ id: U.uid(), createdAt: now, updatedAt: now }, r));
       });
-      save();
+      save([coll]);
     },
 
     customerName: function (id) {

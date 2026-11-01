@@ -25,6 +25,17 @@
   }
   function invoiceTotal(inv) { return U.invoiceTotals(inv.items, inv.taxRate, inv.discount).total; }
 
+  // True when running inside a Claude artifact viewer (no print dialog, no plain downloads there).
+  var IN_ARTIFACT = !!(window.claude && typeof window.claude.use === 'function');
+
+  function invoiceWhatsAppUrl(inv) {
+    var c = S.get('customers', inv.customerId) || {};
+    var s = S.settings();
+    var msg = 'Hello ' + (c.name || '') + ',\n\nPlease find details of ' + (inv.status === 'Quotation' ? 'quotation ' : 'invoice ') + inv.number +
+      ' from ' + s.businessName + '.\nAmount: ' + money(invoiceTotal(inv)) + (inv.dueDate ? '\nDue date: ' + U.formatDate(inv.dueDate) : '') + '\n\nThank you!';
+    return 'https://wa.me/' + U.waPhone(c.phone, s.countryCode) + '?text=' + encodeURIComponent(msg);
+  }
+
   function badge(text, kind) {
     return '<span class="badge badge-' + esc(kind || String(text).toLowerCase().replace(/[^a-z]+/g, '-')) + '">' + esc(text) + '</span>';
   }
@@ -58,6 +69,16 @@
   }
 
   function download(filename, text, type) {
+    if (IN_ARTIFACT) {
+      window.claude.use('downloads').then(function (dl) {
+        if (!dl) { toast('Saving files is not available here.'); return; }
+        dl.save({ filename: filename, data: text }).then(function () { toast('Saved ' + filename); }, function (err) {
+          if (err && err.code === 'declined') return;
+          toast(err && err.code === 'rate_limited' ? 'Please finish the open save prompt first.' : 'The file could not be saved.');
+        });
+      });
+      return;
+    }
     var blob = new Blob([text], { type: type || 'text/plain' });
     var a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
@@ -86,6 +107,26 @@
   }
 
   /* ---------- modal + generic form ---------- */
+
+  /** In-page confirmation dialog. Calls onYes only if the person confirms. */
+  function askConfirm(message, yesLabel, onYes, danger) {
+    var root = document.getElementById('confirm-root');
+    root.innerHTML = '<div class="modal-backdrop confirm-backdrop" data-confirm="no"></div>' +
+      '<div class="modal confirm" role="alertdialog" aria-modal="true" aria-labelledby="confirm-msg">' +
+      '<div class="modal-body"><p id="confirm-msg" class="confirm-msg">' + esc(message) + '</p>' +
+      '<div class="form-actions"><span class="spacer"></span><button type="button" class="btn" data-confirm="no" id="confirm-no">Cancel</button>' +
+      '<button type="button" class="btn ' + (danger === false ? 'btn-primary' : 'btn-danger-solid') + '" data-confirm="yes" id="confirm-yes">' + esc(yesLabel || 'Yes') + '</button></div></div></div>';
+    function done(e) {
+      var b = e.target.closest('[data-confirm]');
+      if (!b) return;
+      e.stopPropagation();
+      root.removeEventListener('click', done);
+      root.innerHTML = '';
+      if (b.getAttribute('data-confirm') === 'yes') onYes();
+    }
+    root.addEventListener('click', done);
+    document.getElementById('confirm-yes').focus();
+  }
 
   function closeModal() { modalRoot.innerHTML = ''; document.body.classList.remove('modal-open'); }
 
@@ -161,11 +202,11 @@
     });
     if (opts.onDelete) {
       $('#form-delete').addEventListener('click', function () {
-        if (confirm('Delete this record? This cannot be undone.')) {
+        askConfirm('Delete this record? This cannot be undone.', 'Delete', function () {
           opts.onDelete();
           closeModal();
           render();
-        }
+        });
       });
     }
   }
@@ -198,7 +239,7 @@
         toast(c ? 'Contact updated' : 'Contact added');
         if (after) after(rec);
       },
-      onDelete: c ? function () { S.remove('customers', id); toast('Contact deleted'); location.hash = '#/customers'; } : null,
+      onDelete: c ? function () { S.remove('customers', id); toast('Contact deleted'); location.hash = '#contacts'; } : null,
     });
   }
 
@@ -360,7 +401,7 @@
     form.elements.taxRate.addEventListener('input', drawTotals);
     form.elements.discount.addEventListener('input', drawTotals);
     if (id) $('#inv-delete').addEventListener('click', function () {
-      if (confirm('Delete ' + inv.number + '?')) { S.remove('invoices', id); closeModal(); toast('Invoice deleted'); location.hash = '#/invoices'; render(); }
+      askConfirm('Delete ' + inv.number + '? This cannot be undone.', 'Delete', function () { S.remove('invoices', id); closeModal(); toast('Invoice deleted'); location.hash = '#invoices'; render(); });
     });
     form.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -383,7 +424,7 @@
       });
       closeModal();
       toast('Saved ' + rec.number);
-      location.hash = '#/invoices/' + rec.id;
+      location.hash = '#invoice-' + rec.id;
       render();
     });
     drawItems();
@@ -423,18 +464,18 @@
     if (S.isEmpty()) {
       html += '<div class="card onboarding"><h2>Welcome to Prime Growth 360 CRM</h2>' +
         '<p>Manage contacts, leads, follow-ups, sales pipeline and GST invoices for your business — all in your browser. Your data stays on this device.</p>' +
-        '<ol><li>Go to <a href="#/settings">Settings</a> and set your business name, industry and GST rate.</li>' +
+        '<ol><li>Go to <a href="#setup">Settings</a> and set your business name, industry and GST rate.</li>' +
         '<li>Add your customers and leads (or import them from a CSV / Excel export).</li>' +
         '<li>Track deals on the Pipeline and never miss a follow-up.</li></ol>' +
         '<div class="row-gap"><button class="btn btn-primary" data-action="new-customer">Add first contact</button><button class="btn" data-action="seed-demo">Load demo data</button></div></div>';
     }
 
     html += '<div class="kpis">' +
-      kpi('Contacts', customers.length, leads + ' active leads', '#/customers') +
-      kpi('Open pipeline', money(pipelineValue), openDeals.length + ' deals · ' + winRate + '% win rate', '#/pipeline') +
-      kpi('Revenue this month', money(revenueMonth), 'from paid invoices', '#/invoices') +
-      kpi('Outstanding', money(outstanding), overdueInv ? overdueInv + ' overdue' : 'nothing overdue', '#/invoices', overdueInv ? 'warn' : '') +
-      kpi('Follow-ups due', dueToday, openTasks.length + ' open tasks', '#/tasks', dueToday ? 'warn' : '') +
+      kpi('Contacts', customers.length, leads + ' active leads', '#contacts') +
+      kpi('Open pipeline', money(pipelineValue), openDeals.length + ' deals · ' + winRate + '% win rate', '#pipeline') +
+      kpi('Revenue this month', money(revenueMonth), 'from paid invoices', '#invoices') +
+      kpi('Outstanding', money(outstanding), overdueInv ? overdueInv + ' overdue' : 'nothing overdue', '#invoices', overdueInv ? 'warn' : '') +
+      kpi('Follow-ups due', dueToday, openTasks.length + ' open tasks', '#tasks', dueToday ? 'warn' : '') +
       '</div>';
 
     // pipeline chart
@@ -452,8 +493,8 @@
     var acts = S.list('activities').sort(function (a, b) { return String(b.date).localeCompare(String(a.date)) || String(b.createdAt).localeCompare(String(a.createdAt)); }).slice(0, 6);
 
     html += '<div class="grid-2">' +
-      '<section class="card"><div class="card-head"><h2>Sales pipeline</h2><a href="#/pipeline">Open board →</a></div>' + (deals.length ? chart : '<p class="muted">No deals yet.</p>') + '</section>' +
-      '<section class="card"><div class="card-head"><h2>Upcoming follow-ups</h2><a href="#/tasks">All tasks →</a></div>' + (upcoming.length ? taskList(upcoming) : '<p class="muted">You are all caught up.</p>') + '</section>' +
+      '<section class="card"><div class="card-head"><h2>Sales pipeline</h2><a href="#pipeline">Open board →</a></div>' + (deals.length ? chart : '<p class="muted">No deals yet.</p>') + '</section>' +
+      '<section class="card"><div class="card-head"><h2>Upcoming follow-ups</h2><a href="#tasks">All tasks →</a></div>' + (upcoming.length ? taskList(upcoming) : '<p class="muted">You are all caught up.</p>') + '</section>' +
       '</div>' +
       '<section class="card"><div class="card-head"><h2>Recent interactions</h2><button class="btn btn-sm" data-action="log-activity">+ Log</button></div>' + (acts.length ? timeline(acts, true) : '<p class="muted">Log calls, WhatsApp chats and meetings to build customer history.</p>') + '</section>';
     return html;
@@ -470,7 +511,7 @@
       return '<li class="task' + (t.done ? ' done' : '') + '"><input type="checkbox" data-action="toggle-task" data-id="' + esc(t.id) + '"' + (t.done ? ' checked' : '') + ' aria-label="Mark done">' +
         '<div class="task-main" data-action="edit-task" data-id="' + esc(t.id) + '"><span class="task-title">' + esc(t.title) + '</span>' +
         '<span class="task-meta">' + badge(t.priority || 'Medium', 'p-' + String(t.priority || 'medium').toLowerCase()) + ' ' + due +
-        (t.customerId ? ' · <a href="#/customers/' + esc(t.customerId) + '">' + esc(S.customerName(t.customerId)) + '</a>' : '') + '</span></div></li>';
+        (t.customerId ? ' · <a href="#contact-' + esc(t.customerId) + '">' + esc(S.customerName(t.customerId)) + '</a>' : '') + '</span></div></li>';
     }).join('') + '</ul>';
   }
 
@@ -478,7 +519,7 @@
   function timeline(acts, showCustomer) {
     return '<ul class="timeline">' + acts.map(function (a) {
       return '<li><span class="tl-icon">' + (ACT_ICONS[a.type] || '•') + '</span><div><div class="tl-head"><b>' + esc(a.type) + '</b>' +
-        (showCustomer ? ' with <a href="#/customers/' + esc(a.customerId) + '">' + esc(S.customerName(a.customerId)) + '</a>' : '') +
+        (showCustomer ? ' with <a href="#contact-' + esc(a.customerId) + '">' + esc(S.customerName(a.customerId)) + '</a>' : '') +
         ' <span class="muted">· ' + U.formatDate(a.date) + '</span> <button class="btn-link" data-action="delete-activity" data-id="' + esc(a.id) + '">delete</button></div><div class="tl-note">' + esc(a.note) + '</div></div></li>';
     }).join('') + '</ul>';
   }
@@ -504,7 +545,7 @@
 
     html += '<div class="card table-wrap"><table class="table"><thead><tr><th>Name</th><th>Phone</th><th class="hide-sm">Email</th><th class="hide-sm">City</th><th>Type</th><th class="hide-sm">Source</th><th></th></tr></thead><tbody>' +
       rows.map(function (c) {
-        return '<tr class="clickable" data-href="#/customers/' + esc(c.id) + '"><td><b>' + esc(c.name) + '</b>' + (c.company ? '<div class="muted small">' + esc(c.company) + '</div>' : '') + '</td>' +
+        return '<tr class="clickable" data-href="#contact-' + esc(c.id) + '"><td><b>' + esc(c.name) + '</b>' + (c.company ? '<div class="muted small">' + esc(c.company) + '</div>' : '') + '</td>' +
           '<td>' + esc(c.phone) + '</td><td class="hide-sm">' + esc(c.email) + '</td><td class="hide-sm">' + esc(c.city) + '</td><td>' + badge(c.type || 'Lead') + '</td><td class="hide-sm">' + esc(c.source) + '</td>' +
           '<td class="links">' + contactLinks(c) + '</td></tr>';
       }).join('') + '</tbody></table></div>';
@@ -513,7 +554,7 @@
 
   function viewCustomerDetail(id) {
     var c = S.get('customers', id);
-    if (!c) return emptyState('🔍', 'Contact not found', 'It may have been deleted.', '<a class="btn" href="#/customers">Back to contacts</a>');
+    if (!c) return emptyState('🔍', 'Contact not found', 'It may have been deleted.', '<a class="btn" href="#contacts">Back to contacts</a>');
     var deals = S.list('deals').filter(function (d) { return d.customerId === id; });
     var tasks = S.list('tasks').filter(function (t) { return t.customerId === id; }).sort(function (a, b) { return (a.done - b.done) || String(a.due).localeCompare(String(b.due)); });
     var invoices = S.list('invoices').filter(function (i) { return i.customerId === id; }).sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); });
@@ -521,7 +562,7 @@
     var lifetime = invoices.filter(function (i) { return i.status === 'Paid'; }).reduce(function (a, i) { return a + invoiceTotal(i); }, 0);
     var due = invoices.filter(function (i) { return i.status === 'Sent'; }).reduce(function (a, i) { return a + invoiceTotal(i); }, 0);
 
-    var html = '<a class="back" href="#/customers">← Contacts</a>' +
+    var html = '<a class="back" href="#contacts">← Contacts</a>' +
       '<div class="card profile"><div class="avatar">' + esc((c.name || '?').charAt(0).toUpperCase()) + '</div><div class="profile-main">' +
       '<h1>' + esc(c.name) + ' ' + badge(c.type || 'Lead') + '</h1>' +
       '<p class="muted">' + [c.company, c.city, c.source ? 'Source: ' + c.source : ''].filter(Boolean).map(esc).join(' · ') + '</p>' +
@@ -542,7 +583,7 @@
       '<section class="card"><div class="card-head"><h2>Deals</h2><button class="btn btn-sm" data-action="new-deal" data-id="' + esc(id) + '">+ Deal</button></div>' +
       (deals.length ? '<ul class="simple-list">' + deals.map(function (d) { return '<li data-action="edit-deal" data-id="' + esc(d.id) + '"><span>' + esc(d.title) + '</span><span>' + badge(d.stage, isWon(d.stage) ? 'won' : isLost(d.stage) ? 'lost' : 'stage') + ' <b>' + money(d.value) + '</b></span></li>'; }).join('') + '</ul>' : '<p class="muted">No deals.</p>') + '</section>' +
       '<section class="card"><div class="card-head"><h2>Invoices</h2><button class="btn btn-sm" data-action="new-invoice" data-id="' + esc(id) + '">+ Invoice</button></div>' +
-      (invoices.length ? '<ul class="simple-list">' + invoices.map(function (i) { return '<li data-href="#/invoices/' + esc(i.id) + '"><span>' + esc(i.number) + ' <span class="muted small">' + U.formatDate(i.date) + '</span></span><span>' + badge(invoiceStatus(i)) + ' <b>' + money(invoiceTotal(i)) + '</b></span></li>'; }).join('') + '</ul>' : '<p class="muted">No invoices.</p>') + '</section>' +
+      (invoices.length ? '<ul class="simple-list">' + invoices.map(function (i) { return '<li data-href="#invoice-' + esc(i.id) + '"><span>' + esc(i.number) + ' <span class="muted small">' + U.formatDate(i.date) + '</span></span><span>' + badge(invoiceStatus(i)) + ' <b>' + money(invoiceTotal(i)) + '</b></span></li>'; }).join('') + '</ul>' : '<p class="muted">No invoices.</p>') + '</section>' +
       '</div></div>';
     return html;
   }
@@ -554,7 +595,7 @@
     var cols = stages.slice();
     if (orphan.length) cols.push('Other');
     var total = deals.filter(isOpenDeal).reduce(function (a, d) { return a + (Number(d.value) || 0); }, 0);
-    var html = pageHeader('Sales pipeline', 'Drag deals or use the dropdown on each card · open value ' + money(total), '<a class="btn" href="#/settings">Edit stages</a><button class="btn btn-primary" data-action="new-deal">+ New deal</button>');
+    var html = pageHeader('Sales pipeline', 'Drag deals or use the dropdown on each card · open value ' + money(total), '<a class="btn" href="#setup">Edit stages</a><button class="btn btn-primary" data-action="new-deal">+ New deal</button>');
     if (!deals.length) html += emptyState('📈', 'No deals yet', 'Create a deal for every enquiry or opportunity and move it across stages until it is won.', '<button class="btn btn-primary" data-action="new-deal">+ New deal</button>');
     html += '<div class="board">' + cols.map(function (st) {
       var ds = st === 'Other' && orphan.length ? orphan : deals.filter(function (d) { return d.stage === st; });
@@ -612,24 +653,26 @@
     if (!rows.length) return html + '<p class="muted">No invoices with this status.</p>';
     return html + '<div class="card table-wrap"><table class="table"><thead><tr><th>Number</th><th>Customer</th><th class="hide-sm">Date</th><th class="hide-sm">Due</th><th>Status</th><th class="num">Total</th></tr></thead><tbody>' +
       rows.map(function (i) {
-        return '<tr class="clickable" data-href="#/invoices/' + esc(i.id) + '"><td><b>' + esc(i.number) + '</b></td><td>' + esc(S.customerName(i.customerId)) + '</td><td class="hide-sm">' + U.formatDate(i.date) + '</td><td class="hide-sm">' + U.formatDate(i.dueDate) + '</td><td>' + badge(invoiceStatus(i)) + '</td><td class="num"><b>' + money(invoiceTotal(i)) + '</b></td></tr>';
+        return '<tr class="clickable" data-href="#invoice-' + esc(i.id) + '"><td><b>' + esc(i.number) + '</b></td><td>' + esc(S.customerName(i.customerId)) + '</td><td class="hide-sm">' + U.formatDate(i.date) + '</td><td class="hide-sm">' + U.formatDate(i.dueDate) + '</td><td>' + badge(invoiceStatus(i)) + '</td><td class="num"><b>' + money(invoiceTotal(i)) + '</b></td></tr>';
       }).join('') + '</tbody></table></div>';
   }
 
   function viewInvoiceDetail(id) {
     var inv = S.get('invoices', id);
-    if (!inv) return emptyState('🔍', 'Invoice not found', 'It may have been deleted.', '<a class="btn" href="#/invoices">Back to invoices</a>');
+    if (!inv) return emptyState('🔍', 'Invoice not found', 'It may have been deleted.', '<a class="btn" href="#invoices">Back to invoices</a>');
     var s = S.settings();
     var c = S.get('customers', inv.customerId) || {};
     var t = U.invoiceTotals(inv.items, inv.taxRate, inv.discount);
     var title = inv.status === 'Quotation' ? 'QUOTATION' : 'TAX INVOICE';
     var half = U.round2(t.tax / 2);
-    var html = '<div class="no-print"><a class="back" href="#/invoices">← Invoices</a>' +
+    var html = '<div class="no-print"><a class="back" href="#invoices">← Invoices</a>' +
       '<div class="page-actions inv-actions">' +
       (inv.status !== 'Paid' ? '<button class="btn btn-primary" data-action="mark-paid" data-id="' + esc(id) + '">✓ Mark paid</button>' : '') +
       (inv.status === 'Draft' || inv.status === 'Quotation' ? '<button class="btn" data-action="mark-sent" data-id="' + esc(id) + '">Mark sent</button>' : '') +
-      (c.phone ? '<button class="btn" data-action="share-invoice" data-id="' + esc(id) + '">💬 Send on WhatsApp</button>' : '') +
-      '<button class="btn" data-action="print">🖨 Print / PDF</button><button class="btn" data-action="edit-invoice" data-id="' + esc(id) + '">Edit</button></div></div>' +
+      (c.phone ? '<a class="btn" target="_blank" rel="noopener" data-share-invoice="' + esc(id) + '" href="' + esc(invoiceWhatsAppUrl(inv)) + '">💬 Send on WhatsApp</a>' : '') +
+      (IN_ARTIFACT ? '' : '<button class="btn" data-action="print">🖨 Print / PDF</button>') +
+      '<button class="btn" data-action="download-invoice" data-id="' + esc(id) + '">⬇ Download invoice</button>' +
+      '<button class="btn" data-action="edit-invoice" data-id="' + esc(id) + '">Edit</button></div></div>' +
       '<article class="invoice card">' +
       '<header class="inv-head"><div><h2>' + esc(s.businessName) + '</h2><p class="small">' + esc(s.address).replace(/\n/g, '<br>') + '</p><p class="small">' + [s.phone, s.email].filter(Boolean).map(esc).join(' · ') + '</p>' + (s.gstin ? '<p class="small"><b>GSTIN:</b> ' + esc(s.gstin) + '</p>' : '') + '</div>' +
       '<div class="inv-meta"><h3>' + title + '</h3><p><b>' + esc(inv.number) + '</b></p><p>Date: ' + U.formatDate(inv.date) + '</p>' + (inv.dueDate ? '<p>Due: ' + U.formatDate(inv.dueDate) + '</p>' : '') + '<p>' + badge(invoiceStatus(inv)) + '</p></div></header>' +
@@ -693,19 +736,19 @@
   /* ---------- router ---------- */
 
   var ROUTES = [
-    { re: /^#\/customers\/(.+)$/, nav: 'customers', fn: viewCustomerDetail },
-    { re: /^#\/customers$/, nav: 'customers', fn: viewCustomers },
-    { re: /^#\/pipeline$/, nav: 'pipeline', fn: viewPipeline },
-    { re: /^#\/tasks$/, nav: 'tasks', fn: viewTasks },
-    { re: /^#\/invoices\/(.+)$/, nav: 'invoices', fn: viewInvoiceDetail },
-    { re: /^#\/invoices$/, nav: 'invoices', fn: viewInvoices },
-    { re: /^#\/products$/, nav: 'products', fn: viewProducts },
-    { re: /^#\/settings$/, nav: 'settings', fn: viewSettings },
+    { re: /^#contact-([A-Za-z0-9]+)$/, nav: 'customers', fn: viewCustomerDetail },
+    { re: /^#contacts$/, nav: 'customers', fn: viewCustomers },
+    { re: /^#pipeline$/, nav: 'pipeline', fn: viewPipeline },
+    { re: /^#tasks$/, nav: 'tasks', fn: viewTasks },
+    { re: /^#invoice-([A-Za-z0-9]+)$/, nav: 'invoices', fn: viewInvoiceDetail },
+    { re: /^#invoices$/, nav: 'invoices', fn: viewInvoices },
+    { re: /^#products$/, nav: 'products', fn: viewProducts },
+    { re: /^#setup$/, nav: 'settings', fn: viewSettings },
     { re: /^.*$/, nav: 'dashboard', fn: viewDashboard },
   ];
 
   function render() {
-    var hash = location.hash || '#/dashboard';
+    var hash = location.hash || '#dashboard';
     for (var i = 0; i < ROUTES.length; i++) {
       var m = hash.match(ROUTES[i].re);
       if (m) {
@@ -794,7 +837,7 @@
 
   var ACTIONS = {
     'close-modal': closeModal,
-    'new-customer': function () { editCustomer(null, function (rec) { location.hash = '#/customers/' + rec.id; }); },
+    'new-customer': function () { editCustomer(null, function (rec) { location.hash = '#contact-' + rec.id; }); },
     'edit-customer': function (el) { editCustomer(el.dataset.id); },
     'new-deal': function (el) { editDeal(null, el.dataset.id ? { customerId: el.dataset.id } : {}); },
     'edit-deal': function (el) { editDeal(el.dataset.id); },
@@ -809,14 +852,15 @@
     'edit-invoice': function (el) { editInvoice(el.dataset.id); },
     'mark-paid': function (el) { S.upsert('invoices', { id: el.dataset.id, status: 'Paid', paidOn: U.todayISO() }); toast('Marked as paid'); render(); },
     'mark-sent': function (el) { S.upsert('invoices', { id: el.dataset.id, status: 'Sent' }); toast('Marked as sent'); render(); },
-    'share-invoice': function (el) {
+    'download-invoice': function (el) {
       var inv = S.get('invoices', el.dataset.id);
-      var c = S.get('customers', inv.customerId) || {};
-      var s = S.settings();
-      var msg = 'Hello ' + (c.name || '') + ',\n\nPlease find details of ' + (inv.status === 'Quotation' ? 'quotation ' : 'invoice ') + inv.number +
-        ' from ' + s.businessName + '.\nAmount: ' + money(invoiceTotal(inv)) + (inv.dueDate ? '\nDue date: ' + U.formatDate(inv.dueDate) : '') + '\n\nThank you!';
-      window.open('https://wa.me/' + U.waPhone(c.phone, s.countryCode) + '?text=' + encodeURIComponent(msg), '_blank', 'noopener');
-      S.upsert('activities', { customerId: inv.customerId, type: 'WhatsApp', note: 'Shared ' + inv.number + ' (' + money(invoiceTotal(inv)) + ')', date: U.todayISO() });
+      var article = $('.invoice');
+      var css = Array.prototype.map.call(document.querySelectorAll('style'), function (st) { return st.textContent; }).join('\n');
+      var links = Array.prototype.map.call(document.querySelectorAll('link[rel=stylesheet]'), function (l) { return '<link rel="stylesheet" href="' + l.href + '">'; }).join('');
+      var html = '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' + esc(inv.number) + '</title>' + links +
+        '<style>' + css + '\nbody{background:#fff;padding:24px}.invoice{margin:0 auto}</style></head><body>' + article.outerHTML +
+        '<p class="no-print" style="text-align:center;margin-top:16px"><button onclick="print()" style="padding:8px 16px">Print / Save as PDF</button></p></body></html>';
+      download(String(inv.number).replace(/[^A-Za-z0-9_-]+/g, '-') + '.html', html, 'text/html');
     },
     print: function () { window.print(); },
     'new-product': function () { editProduct(null); },
@@ -825,7 +869,7 @@
       if (!S.list('customers').length) { toast('Add a contact first'); editCustomer(null); return; }
       logActivity(el.dataset.id);
     },
-    'delete-activity': function (el) { if (confirm('Delete this interaction?')) { S.remove('activities', el.dataset.id); render(); } },
+    'delete-activity': function (el) { askConfirm('Delete this interaction?', 'Delete', function () { S.remove('activities', el.dataset.id); render(); }); },
     'customer-type': function (el) { state.customerType = el.dataset.type; render(); },
     'task-filter': function (el) { state.taskFilter = el.dataset.filter; render(); },
     'invoice-filter': function (el) { state.invoiceFilter = el.dataset.filter; render(); },
@@ -861,21 +905,22 @@
       });
       download('invoices-' + U.todayISO() + '.csv', U.toCSV(rows, ['number', 'customer', 'date', 'dueDate', 'status', 'subtotal', 'discount', 'taxRate', 'tax', 'total']), 'text/csv');
     },
-    'export-backup': function () { download('prime-growth-360-backup-' + U.todayISO() + '.json', S.exportJSON(), 'application/json'); toast('Backup downloaded'); },
+    'export-backup': function () { download('prime-growth-360-backup-' + U.todayISO() + '.json', S.exportJSON(), 'application/json'); },
     'import-backup': function () {
       pickFile('.json,application/json', function (text) {
-        if (!confirm('Restoring will replace ALL current data with the backup. Continue?')) return;
-        try { S.importJSON(text); toast('Backup restored'); render(); } catch (err) { alert(err.message); }
+        askConfirm('Restoring will replace ALL current data with the data in this backup file. Continue?', 'Restore backup', function () {
+          try { S.importJSON(text); toast('Backup restored'); render(); } catch (err) { toast(err.message || 'This file could not be read as a backup.'); }
+        });
       });
     },
     'seed-demo': function () {
-      if (!S.isEmpty() && !confirm('Add demo records alongside your existing data?')) return;
-      S.seedDemo(); toast('Demo data loaded'); render();
+      var go = function () { S.seedDemo(); toast('Demo data loaded'); render(); };
+      if (S.isEmpty()) go(); else askConfirm('Add demo records alongside your existing data?', 'Add demo data', go, false);
     },
     'reset-data': function () {
-      if (confirm('Erase ALL contacts, deals, tasks, invoices and settings from this browser?') && confirm('Are you absolutely sure? Download a backup first if unsure.')) {
-        S.reset(); toast('All data erased'); location.hash = '#/dashboard'; render();
-      }
+      askConfirm('Erase ALL contacts, deals, tasks, invoices and settings? This cannot be undone. Download a backup first if you are unsure.', 'Erase everything', function () {
+        S.reset(); toast('All data erased'); location.hash = '#dashboard'; render();
+      });
     },
     'apply-industry': function () {
       var sel = $('#settings-form').elements.industry.value;
@@ -905,6 +950,12 @@
       ACTIONS[el.dataset.action](el, e);
       return;
     }
+    var share = e.target.closest('[data-share-invoice]');
+    if (share) {
+      var inv = S.get('invoices', share.getAttribute('data-share-invoice'));
+      if (inv) S.upsert('activities', { customerId: inv.customerId, type: 'WhatsApp', note: 'Shared ' + inv.number + ' (' + money(invoiceTotal(inv)) + ')', date: U.todayISO() });
+      return;
+    }
     if (e.target.closest('a')) { document.body.classList.remove('nav-open'); return; }
     var row = e.target.closest('[data-href]');
     if (row) location.hash = row.getAttribute('data-href');
@@ -916,5 +967,21 @@
 
   window.addEventListener('hashchange', function () { document.body.classList.remove('nav-open'); window.scrollTo(0, 0); render(); });
 
+  var SYNC_TEXT = {
+    local: 'Saved on this device.<br>Back it up from Settings.',
+    connecting: 'Connecting to your account…',
+    saving: 'Saving to your account…',
+    synced: '✓ Saved to your Claude account.<br>Open it on any device.',
+    error: 'Saved on this device only.<br>Your account copy could not be updated.',
+  };
+  function showSync(st) {
+    var el = $('#sync-status');
+    if (!el) return;
+    el.innerHTML = SYNC_TEXT[st] || SYNC_TEXT.local;
+    el.className = 'sidebar-foot sync-' + st;
+  }
+  S.onSyncStatus(showSync);
+
   render();
+  S.connectCloud(function () { toast('Loaded your saved data'); render(); });
 })();
