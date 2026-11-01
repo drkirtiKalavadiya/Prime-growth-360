@@ -91,8 +91,11 @@ async function main() {
     '-ss', String(from), '-i', audio, '-filter_complex', vf, '-map', '[v]', '-map', '2:a',
     '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-r', String(fps), '-c:a', 'aac', '-b:a', '192k', '-t', (to - from).toFixed(3), '-movflags', '+faststart', out];
   const proc = spawn('ffmpeg', ffArgs, { stdio: ['pipe', 'ignore', 'pipe'] });
+  let closed = false;
+  proc.stdin.on('error', () => { closed = true; }); // ffmpeg stops reading once -t is reached
   let err = ''; proc.stderr.on('data', (d) => { err += d; });
-  const done = new Promise((res, rej) => proc.on('close', (c) => (c === 0 ? res() : rej(new Error('ffmpeg failed:\n' + err.slice(-3000))))));
+  const done = new Promise((res, rej) => proc.on('close', (c) => { closed = true; proc.stdin.emit('drain'); return c === 0 ? res() : rej(new Error('ffmpeg failed:\n' + err.slice(-3000))); }));
+  done.catch(() => {});
 
   const { browser, page } = await openEngine({ scale: 2, glScale });
   try {
@@ -100,16 +103,20 @@ async function main() {
     if (page.errors.length) throw new Error('Engine failed: ' + page.errors.join('\n'));
     const t0 = Date.now();
     for (let i = 0; i < frames; i++) {
+      if (closed) break;
       const t = from + i / fps;
       await page.evaluate((x) => window.Reel.seek(x), t);
       const buf = await page.screenshot({ type: 'png', omitBackground: true });
+      if (closed) break;
       if (!proc.stdin.write(buf)) await new Promise((r) => proc.stdin.once('drain', r));
       if (i % fps === 0) process.stdout.write(`\r  frame ${i + 1}/${frames} (${Math.round((i / frames) * 100)}%) eta ${Math.round(((Date.now() - t0) / (i + 1)) * (frames - i) / 1000)}s   `);
     }
     process.stdout.write('\n');
   } finally { proc.stdin.end(); await browser.close(); }
   await done;
-  console.log(`Done → ${path.relative(process.cwd(), out)}`);
+  const got = Number(spawnSync('ffprobe', ['-v', 'error', '-select_streams', 'v', '-count_packets', '-show_entries', 'stream=nb_read_packets', '-of', 'csv=p=0', out], { encoding: 'utf8' }).stdout);
+  if (got < frames - 2) throw new Error(`Video stream is short: ${got}/${frames} frames. ffmpeg said:\n${err.slice(-2000)}`);
+  console.log(`Done → ${path.relative(process.cwd(), out)} (${got} frames)`);
 }
 
 /* Quick look: one composite frame per segment (base + zoom + overlay), tiled into a contact sheet. */

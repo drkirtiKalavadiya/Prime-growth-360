@@ -58,6 +58,7 @@ async function main() {
 
   const ff = ffmpegArgs({ fps, out, audioTrack, from, duration: to - from });
   const proc = spawn('ffmpeg', ff, { stdio: ['pipe', 'ignore', 'pipe'] });
+  proc.stdin.on('error', () => {}); // ffmpeg may stop reading at -t; the result is still complete
   let ffErr = '';
   proc.stderr.on('data', (d) => { ffErr += d; if (ffErr.length > 20000) ffErr = ffErr.slice(-10000); });
   const done = new Promise((res, rej) => proc.on('close', (code) => (code === 0 ? res() : rej(new Error('ffmpeg failed:\n' + ffErr.slice(-3000))))));
