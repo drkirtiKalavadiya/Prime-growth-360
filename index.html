@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Prime Growth 360 · Habit Tracker</title>
+  <meta name="description" content="Premium habit tracker: track your whole day, earn reward points, level up and play circle games." />
+  <meta name="theme-color" content="#0d0f1a" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header class="topbar">
+      <div class="brand">
+        <img src="icon.svg" alt="" class="brand-logo" />
+        <div>
+          <div class="brand-name">Prime Growth <span>360</span></div>
+          <div class="brand-sub" id="greeting">Welcome</div>
+        </div>
+      </div>
+      <div class="top-actions">
+        <div class="points-chip" title="Reward points balance">
+          <span class="coin">★</span><span id="pointsBalance">0</span>
+        </div>
+        <button class="icon-btn" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">◐</button>
+      </div>
+    </header>
+
+    <main>
+      <!-- TODAY -->
+      <section class="view active" id="view-today" aria-label="Today">
+        <div class="date-nav">
+          <button class="icon-btn" id="prevDay" aria-label="Previous day">‹</button>
+          <div class="date-label" id="dateLabel">Today</div>
+          <button class="icon-btn" id="nextDay" aria-label="Next day">›</button>
+        </div>
+
+        <div class="hero card">
+          <div class="ring-wrap" id="dayRing"></div>
+          <div class="hero-info">
+            <div class="level-row">
+              <span class="level-badge" id="levelBadge">Lv 1</span>
+              <span class="level-title" id="levelTitle">Beginner</span>
+            </div>
+            <div class="xp-bar"><div class="xp-fill" id="xpFill"></div></div>
+            <div class="xp-text" id="xpText">0 / 100 XP</div>
+            <div class="hero-stats">
+              <div><b id="statStreak">0</b><span>Day streak 🔥</span></div>
+              <div><b id="statToday">0</b><span>Points today</span></div>
+              <div><b id="statDone">0/0</b><span>Habits done</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Whole-day wellness -->
+        <div class="wellness">
+          <div class="card mini">
+            <div class="mini-head">💧 Water <span id="waterText">0/8</span></div>
+            <div class="glasses" id="waterGlasses"></div>
+          </div>
+          <div class="card mini">
+            <div class="mini-head">😴 Sleep <span id="sleepText">0 h</span></div>
+            <input type="range" min="0" max="12" step="0.5" value="0" id="sleepRange" aria-label="Sleep hours" />
+          </div>
+          <div class="card mini">
+            <div class="mini-head">🙂 Mood</div>
+            <div class="moods" id="moods"></div>
+          </div>
+          <div class="card mini">
+            <div class="mini-head">👣 Steps <span id="stepsText">0</span></div>
+            <input type="number" min="0" step="500" placeholder="e.g. 8000" id="stepsInput" aria-label="Steps" />
+          </div>
+        </div>
+
+        <!-- Habit timeline by time of day -->
+        <div id="timeline"></div>
+
+        <div class="card">
+          <div class="mini-head">📝 Day journal</div>
+          <textarea id="dayNote" rows="3" placeholder="How was your day? Wins, lessons, gratitude…"></textarea>
+        </div>
+      </section>
+
+      <!-- HABITS -->
+      <section class="view" id="view-habits" aria-label="Habits">
+        <div class="section-head">
+          <h2>My Habits</h2>
+          <button class="btn primary" id="addHabitBtn">＋ New habit</button>
+        </div>
+        <div class="template-row" id="templates"></div>
+        <div id="habitList" class="habit-manage"></div>
+      </section>
+
+      <!-- GAMES -->
+      <section class="view" id="view-games" aria-label="Games">
+        <div class="section-head"><h2>Circle Games</h2></div>
+
+        <div class="card game-card">
+          <h3>🎡 Lucky Spin Wheel</h3>
+          <p class="muted">One free spin every day. Extra spins cost <b>15 ★</b>.</p>
+          <div class="wheel-wrap">
+            <div class="wheel-pointer">▼</div>
+            <canvas id="wheel" width="320" height="320"></canvas>
+            <button class="wheel-center" id="spinBtn">SPIN</button>
+          </div>
+          <div class="game-msg" id="spinMsg"></div>
+        </div>
+
+        <div class="card game-card">
+          <h3>⭕ Ring Rush</h3>
+          <p class="muted">Tap the glowing circles before they shrink away. 30 seconds. Gold circles = 3×. First 3 games each day earn points (1 ★ per 4 score).</p>
+          <div class="arena" id="arena">
+            <div class="arena-overlay" id="arenaOverlay">
+              <button class="btn primary" id="startRush">▶ Start Ring Rush</button>
+              <div class="muted small" id="rushInfo"></div>
+            </div>
+          </div>
+          <div class="rush-hud">
+            <span>Score: <b id="rushScore">0</b></span>
+            <span>Time: <b id="rushTime">30</b>s</span>
+            <span>Best: <b id="rushBest">0</b></span>
+          </div>
+        </div>
+
+        <div class="card game-card">
+          <h3>🎯 Perfect Circle Timer</h3>
+          <p class="muted">A dot races around the ring. Tap <b>STOP</b> when it hits the gold zone. Hit = +3 ★ (up to 5 hits a day).</p>
+          <div class="timer-game">
+            <svg viewBox="0 0 200 200" id="timerSvg" class="timer-svg">
+              <circle cx="100" cy="100" r="80" class="timer-track" />
+              <path id="timerZone" class="timer-zone" />
+              <circle id="timerDot" cx="100" cy="20" r="9" class="timer-dot" />
+            </svg>
+            <button class="btn primary" id="timerBtn">START</button>
+          </div>
+          <div class="game-msg" id="timerMsg"></div>
+        </div>
+      </section>
+
+      <!-- REWARDS -->
+      <section class="view" id="view-rewards" aria-label="Rewards">
+        <div class="section-head">
+          <h2>Reward Store</h2>
+          <button class="btn primary" id="addRewardBtn">＋ Add reward</button>
+        </div>
+        <p class="muted">Spend the points you earn on treats you choose for yourself.</p>
+        <div id="rewardList" class="reward-grid"></div>
+
+        <div class="section-head"><h2>Badges</h2></div>
+        <div id="badgeList" class="badge-grid"></div>
+
+        <div class="section-head"><h2>Points history</h2></div>
+        <div id="historyList" class="history card"></div>
+      </section>
+
+      <!-- STATS -->
+      <section class="view" id="view-stats" aria-label="Stats">
+        <div class="section-head"><h2>Progress</h2></div>
+        <div class="stat-tiles" id="statTiles"></div>
+        <div class="card">
+          <div class="mini-head">Last 7 days · completion</div>
+          <div class="bars" id="weekBars"></div>
+        </div>
+        <div class="card">
+          <div class="mini-head">Last 12 weeks</div>
+          <div class="heatmap" id="heatmap"></div>
+        </div>
+        <div class="card">
+          <div class="mini-head">Habit streaks</div>
+          <div id="streakList"></div>
+        </div>
+
+        <div class="card settings">
+          <div class="mini-head">Profile &amp; data</div>
+          <label>Your name <input id="nameInput" maxlength="30" /></label>
+          <div class="btn-row">
+            <button class="btn" id="exportBtn">⬇ Export backup</button>
+            <label class="btn">⬆ Import backup<input type="file" id="importFile" accept="application/json" hidden /></label>
+            <button class="btn danger" id="resetBtn">Reset all</button>
+          </div>
+          <p class="muted small">All data stays private on this device (browser storage).</p>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Main">
+      <button data-view="today" class="active"><span>◉</span>Today</button>
+      <button data-view="habits"><span>☰</span>Habits</button>
+      <button data-view="games"><span>◎</span>Games</button>
+      <button data-view="rewards"><span>★</span>Rewards</button>
+      <button data-view="stats"><span>▤</span>Stats</button>
+    </nav>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" id="modal" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true">
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <div class="toast-stack" id="toasts" aria-live="polite"></div>
+  <canvas id="confetti"></canvas>
+
+  <script src="app.js"></script>
+</body>
+</html>
