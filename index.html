@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Prime Growth 360 CRM — simple customer, lead, follow-up and invoice management for MSMEs and small businesses.">
+  <meta name="theme-color" content="#4f46e5">
+  <title>Prime Growth 360 CRM</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%234f46e5'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>P</text></svg>">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="topbar no-print">
+    <button class="btn-icon" data-action="toggle-nav" aria-label="Menu">☰</button>
+    <span class="topbar-title">Prime Growth 360</span>
+  </header>
+
+  <aside class="sidebar no-print">
+    <div class="brand">
+      <div class="logo">P</div>
+      <div>
+        <div class="brand-title">Prime Growth 360</div>
+        <div class="brand-sub" id="brand-name">CRM</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <a href="#/dashboard" data-nav="dashboard"><span>🏠</span> Dashboard</a>
+      <a href="#/customers" data-nav="customers"><span>👥</span> Contacts</a>
+      <a href="#/pipeline" data-nav="pipeline"><span>📈</span> Pipeline</a>
+      <a href="#/tasks" data-nav="tasks"><span>✅</span> Follow-ups <b class="nav-count" id="nav-task-count" hidden></b></a>
+      <a href="#/invoices" data-nav="invoices"><span>🧾</span> Invoices</a>
+      <a href="#/products" data-nav="products"><span>📦</span> Products</a>
+      <a href="#/settings" data-nav="settings"><span>⚙️</span> Settings</a>
+    </nav>
+    <p class="sidebar-foot">Data is saved on this device.<br>Back it up from Settings.</p>
+  </aside>
+  <div class="nav-scrim no-print" data-action="toggle-nav"></div>
+
+  <main id="view" class="main"></main>
+  <div id="modal-root"></div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
