@@ -27,12 +27,16 @@ async function browserCheck() {
     return;
   }
   try {
-    const b = await pw.chromium.launch();
+    const b = await require('./lib').launchBrowser();
+    const p = await b.newPage();
+    const gl = await p.evaluate(() => !!document.createElement('canvas').getContext('webgl2'));
     ok('Chromium', b.version());
+    if (gl) ok('WebGL 2', 'available (3D worlds)'); else bad('WebGL 2', 'unavailable', 'Update Chrome/GPU drivers; 3D scenes need WebGL 2');
     await b.close();
   } catch (e) {
     bad('Chromium', 'cannot launch', 'Run `npx playwright install chromium`');
   }
+  try { require.resolve('three'); ok('three.js', require('three/package.json').version); } catch { bad('three.js', 'not installed', 'Run `npm install`'); }
 }
 
 (async () => {

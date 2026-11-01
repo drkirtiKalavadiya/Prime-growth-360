@@ -28,7 +28,8 @@
       if (opens) { emph = true; w = w.slice(1); }
       let closes = false;
       // closing star may sit before trailing punctuation: *files.* or *files*.
-      const m = w.match(/^(.*?)\*([.,!?:;]*)$/);
+      // closing star may be followed by punctuation or a suffix: *files.*  *files*.  *સફળતા*ના
+      const m = w.match(/^([^*]*)\*([^*]*)$/);
       if (m) { closes = true; w = m[1] + m[2]; }
       out.push({ text: w, emph });
       if (closes) emph = false;
@@ -109,6 +110,9 @@
         label: scene.label ? { text: scene.label, at: resolveAt(scene.labelAt ?? 0) } : null,
         badge: scene.badge ? { n: scene.badge, of: scene.badgeOf || reel.steps || 6, at: resolveAt(scene.labelAt ?? 0) } : null,
         transition: scene.transition || 'cut',
+        world: scene.world ? resolveVisuals(scene.world, resolveAt)[0] : null,
+        textStyle: scene.text || 'top',
+        concept: scene.concept || '',
         lines,
         visuals: resolveVisuals(scene.visual, resolveAt),
         fx: (scene.fx || []).map((f) => ({ ...f, at: resolveAt(f.at) })),
@@ -119,6 +123,8 @@
     return {
       title: reel.title || 'reel',
       lang: reel.lang || 'en',
+      music: reel.music || null,
+      direction: reel.direction || null,
       fps,
       width: 1080,
       height: 1920,

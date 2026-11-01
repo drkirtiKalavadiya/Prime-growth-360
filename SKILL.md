@@ -5,6 +5,24 @@ description: Turn a one-line idea into a finished, animated 9:16 reel (1080×192
 
 # AI Video Editor
 
+## 3D cinematic reels: think before designing
+When the user gives a script (any language, Gujarati included), act as creative director, 3D motion designer and storyteller:
+
+1. **Read the whole script.** Name the topic, the emotion, the storytelling arc (hook → tension → insight → payoff → CTA).
+2. **Draft:** save it to `stories/<slug>.txt` and run `npm run direct -- stories/<slug>.txt --name <slug>`.
+   This gives a creative direction (theme, mood, palette, lighting, music tempo) and a 3D concept per sentence.
+3. **Direct for real.** Open `reels/<slug>.json` and review every scene's `concept` against the sentence's *meaning*:
+   - Does the world say what the line says? ("discipline" → `staircase`; "managing money" → `flow`; "trust" → `stage` + `shield`.)
+   - Change `env`, `props.hero`, `camera.move`, `light`, `text` (`top` | `impact` | `lower`) and `transition` where a better idea exists.
+   - Never reuse the previous reel's look: change the palette or worlds if the user's last reel used them.
+   - If no world fits, invent one: add it to `ENVS` in `engine/world3d.js` (procedural geometry only) plus a rule in `direct.js`.
+   - Rewrite `concept` to describe the shot you chose (it goes into the storyboard).
+4. **Run** `npm run make -- reels/<slug>.json`. It checks safe zones, overflow, variety and engine errors, auto-fixes what it can,
+   writes the storyboard, then renders. Read `out/<slug>/contact.jpg` and judge every frame like an editor before handing it over.
+5. Report the direction, the storyboard and the MP4. Mention anything you assumed (facts, brand claims).
+
+The 2D workflow below (handwritten specs with `visual` blocks) still works, and both styles can be mixed in one reel.
+
 You are the editor. The user types one line; you write the script, voice it, animate it,
 render it, check it, and fix it when they give feedback. Read `guides.md` for the look.
 

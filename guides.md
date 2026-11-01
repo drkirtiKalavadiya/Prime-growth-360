@@ -43,3 +43,20 @@ The look is an explainer on cream paper, with editorial type and one accent colo
 
 Scene extras: `fx: [{type: "confetti"|"ring", at, x, y}]`, `hold` (seconds after the last word),
 `minDuration`, `labelAt`.
+
+## 3D scenes (`scene.world`)
+```jsonc
+"text": "top",                       // top | impact | lower  (caption placement, safe-zone aware)
+"transition": "dip",                 // cut | dip | flash | leak | halftone
+"concept": "Why this shot: what it shows and why",
+"world": {
+  "env": "staircase",                // city vault flow staircase mountains cosmos grid molecule network stage
+  "palette": "gold",                 // gold midnight dawn emerald neon cosmic crimson ocean clinical ivory
+  "light": "golden",                 // studio golden dramatic neon night cosmic soft
+  "camera": { "move": "crane-up", "az": 0.4, "el": 0.15 },
+  "props": { "hero": "trophy" },     // per-env options, see docs/ARCHITECTURE.md
+  "fx": ["dust", "bokeh"]            // dust bokeh sparks
+}
+```
+Rules: the hero never sits under the text band (the camera offsets the frame automatically). Captions stay out of
+Instagram's top 44px, bottom 190px and the right-hand action rail. Neighbouring scenes must differ in world or camera.

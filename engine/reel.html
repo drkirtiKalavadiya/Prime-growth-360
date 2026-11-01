@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Baloo+Bhai+2:wght@700;800&family=Caveat:wght@600&family=Hind+Vadodara:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;600&family=Noto+Serif+Gujarati:wght@500;600&family=Space+Grotesk:wght@400;500;600;700&display=block" rel="stylesheet">
 <link rel="stylesheet" href="reel.css">
+<script type="importmap">{ "imports": { "three": "../node_modules/three/build/three.module.js", "three/addons/": "../node_modules/three/examples/jsm/" } }</script>
 </head>
 <body>
   <div id="stage" class="stage"></div>
@@ -17,6 +18,7 @@
     <span id="clock">0.0s</span>
   </div>
   <script src="timeline.js"></script>
+  <script type="module" src="world3d.js"></script>
   <script src="reel.js"></script>
 </body>
 </html>

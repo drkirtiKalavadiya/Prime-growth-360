@@ -1,0 +1,263 @@
+{
+  "name": "paisa-ane-safalta-gu",
+  "title": "પૈસા અને સફળતાના 7 નિયમ, જે કોઈ શાળામાં શીખવતું નથી",
+  "lang": "gu",
+  "direction": {
+    "theme": "wealth",
+    "secondary": "motivation",
+    "mood": "luxurious, aspirational, cinematic",
+    "palette": "gold",
+    "seed": 0,
+    "lighting": "golden / dramatic / studio",
+    "typography": "Hind Vadodara captions, Baloo Bhai 2 impact lines, accent-coloured key words",
+    "music": {
+      "bpm": 95,
+      "key": 0.89
+    },
+    "scores": {
+      "business": 0,
+      "wealth": 6,
+      "health": 0,
+      "spiritual": 0,
+      "motivation": 5,
+      "technology": 0,
+      "communication": 0,
+      "trust": 0
+    }
+  },
+  "music": {
+    "bpm": 95,
+    "key": 0.89
+  },
+  "scenes": [
+    {
+      "kicker": "// 01 · the hook",
+      "say": [
+        "પૈસા અને *સફળતા*ના 7 નિયમ,",
+        "જે કોઈ *શાળામાં* શીખવતું નથી."
+      ],
+      "text": "top",
+      "transition": "cut",
+      "concept": "Gold coins spiral into a monumental vault door flanked by bullion. / સોનાના સિક્કા ફરતા-ફરતા એક વિશાળ તિજોરીમાં જાય છે.",
+      "minDuration": 3.4,
+      "world": {
+        "env": "vault",
+        "palette": "gold",
+        "light": "dramatic",
+        "camera": {
+          "move": "orbit-left"
+        },
+        "props": {},
+        "fx": [
+          "sparks",
+          "bokeh"
+        ]
+      }
+    },
+    {
+      "kicker": "// 02 · the climb",
+      "say": [
+        "*સફળતા* માટે *શિસ્ત* જરૂરી છે."
+      ],
+      "text": "impact",
+      "transition": "dip",
+      "concept": "A cinematic staircase rising to a glowing portal; a figure climbs it one step at a time. / પ્રકાશ તરફ જતી સીડી, જેના પર એક વ્યક્તિ એક-એક પગથિયું ચડે છે.",
+      "minDuration": 3.4,
+      "world": {
+        "env": "staircase",
+        "palette": "gold",
+        "light": "golden",
+        "camera": {
+          "move": "push-tilt"
+        },
+        "props": {},
+        "fx": [
+          "dust"
+        ]
+      }
+    },
+    {
+      "kicker": "// 03 · the flow",
+      "say": [
+        "*પૈસા* કમાવા કરતાં *પૈસા* સંભાળવા મહત્વનું છે."
+      ],
+      "text": "lower",
+      "transition": "leak",
+      "concept": "Money flows through glowing channels from many sources into one secure vault. / અલગ-અલગ સ્ત્રોતમાંથી પૈસા ચમકતી નળીઓ દ્વારા એક સુરક્ષિત તિજોરીમાં વહે છે.",
+      "minDuration": 3.4,
+      "world": {
+        "env": "flow",
+        "palette": "gold",
+        "light": "dramatic",
+        "camera": {
+          "move": "crane-up"
+        },
+        "props": {
+          "sources": [
+            "આવક",
+            "બચત",
+            "રોકાણ",
+            "બિઝનેસ"
+          ]
+        },
+        "fx": [
+          "dust",
+          "bokeh"
+        ]
+      }
+    },
+    {
+      "kicker": "// 04 · the vault",
+      "say": [
+        "દર મહિને *આવકનો* એક ભાગ",
+        "સૌથી પહેલાં તમારા માટે રાખો."
+      ],
+      "text": "top",
+      "transition": "leak",
+      "concept": "Pay yourself first: coins spiral into YOUR vault before anything else. / પહેલાં પોતાને ચૂકવો: સિક્કા સૌથી પહેલાં તમારી તિજોરીમાં.",
+      "minDuration": 3.4,
+      "world": {
+        "env": "vault",
+        "palette": "gold",
+        "light": "golden",
+        "camera": {
+          "move": "push-tilt",
+          "az": -0.75,
+          "el": 0.05
+        },
+        "props": {},
+        "fx": [
+          "sparks",
+          "bokeh"
+        ]
+      }
+    },
+    {
+      "kicker": "// 05 · the proof",
+      "say": [
+        "સાચું *રોકાણ* તમારા *પૈસાને*",
+        "વર્ષો સુધી *વધારે* છે."
+      ],
+      "text": "lower",
+      "transition": "dip",
+      "concept": "A 3D bar chart rises on a spotlit podium, a growth line arcing upward. / Spotlight નીચે 3D chart ઉપર તરફ વધે છે.",
+      "minDuration": 3.4,
+      "world": {
+        "env": "stage",
+        "palette": "gold",
+        "light": "studio",
+        "camera": {
+          "move": "dolly-in"
+        },
+        "props": {
+          "hero": "chart"
+        },
+        "fx": [
+          "sparks",
+          "bokeh"
+        ]
+      }
+    },
+    {
+      "kicker": "// 06 · the idea",
+      "say": [
+        "એક નવો *વિચાર* તમારી",
+        "સૌથી મોટી મૂડી છે."
+      ],
+      "text": "lower",
+      "transition": "flash",
+      "concept": "An idea ignites: a light bulb flares on a dark podium under one dramatic spotlight. / અંધારામાં એક bulb ઝળહળી ઊઠે છે: નવો વિચાર જ સૌથી મોટી મૂડી.",
+      "minDuration": 3.4,
+      "world": {
+        "env": "stage",
+        "palette": "gold",
+        "light": "dramatic",
+        "camera": {
+          "move": "crane-down"
+        },
+        "props": {
+          "hero": "bulb"
+        },
+        "fx": [
+          "sparks",
+          "bokeh"
+        ]
+      }
+    },
+    {
+      "kicker": "// 07 · the vision",
+      "say": [
+        "તમારા *સપનાનું* *ભવિષ્ય* આજના",
+        "નિર્ણયો પર ટકેલું છે."
+      ],
+      "text": "top",
+      "transition": "leak",
+      "concept": "A vast universe: a ringed planet glows as the camera drifts through stars. / વિશાળ બ્રહ્માંડ: તારાઓ વચ્ચે ચમકતો ગ્રહ.",
+      "minDuration": 3.4,
+      "world": {
+        "env": "cosmos",
+        "palette": "cosmic",
+        "light": "cosmic",
+        "camera": {
+          "move": "orbit-left"
+        },
+        "props": {
+          "temple": false
+        },
+        "fx": [
+          "bokeh"
+        ]
+      }
+    },
+    {
+      "kicker": "// 08 · the summit",
+      "say": [
+        "*લક્ષ્ય* મોટું રાખો,",
+        "*શિખર* તમારી રાહ જુએ છે."
+      ],
+      "text": "top",
+      "transition": "dip",
+      "concept": "A golden-hour mountain range; the camera rises toward a flag on the summit. / સોનેરી પ્રકાશમાં પર્વતમાળા; camera શિખર પરના ધ્વજ તરફ ઊંચે જાય છે.",
+      "minDuration": 3.4,
+      "world": {
+        "env": "mountains",
+        "palette": "gold",
+        "light": "golden",
+        "camera": {
+          "move": "fly-over"
+        },
+        "props": {},
+        "fx": [
+          "dust"
+        ]
+      }
+    },
+    {
+      "kicker": "// 09 · the takeaway",
+      "say": [
+        "આ નિયમો કામના લાગ્યા હોય તો",
+        "*SAVE* કરો અને મિત્રને *SHARE* કરો."
+      ],
+      "text": "top",
+      "transition": "leak",
+      "concept": "The golden key to the 7 rules turns slowly on a podium as the call to action lands. / 7 નિયમોની સોનેરી ચાવી podium પર ફરે છે.",
+      "minDuration": 3.4,
+      "world": {
+        "env": "stage",
+        "palette": "gold",
+        "light": "golden",
+        "camera": {
+          "move": "orbit-right"
+        },
+        "props": {
+          "hero": "key"
+        },
+        "fx": [
+          "sparks",
+          "bokeh"
+        ]
+      },
+      "hold": 1.4
+    }
+  ]
+}

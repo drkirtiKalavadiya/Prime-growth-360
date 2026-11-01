@@ -47,7 +47,13 @@
   };
 
   function makeScene(sc) {
-    const root = h('div', `scene ${sc.theme}`);
+    const root = h('div', `scene ${sc.world ? 'cinema text-' + sc.textStyle : sc.theme}`);
+    if (sc.world) {
+      const pal = (window.World3D && window.World3D.PALETTES[sc.world.palette]) || { accent: '#ffcf3f', dark: true };
+      root.style.setProperty('--accent', sc.world.textAccent || pal.accent);
+      if (pal.dark === false) root.classList.add('lightpal');
+      root.appendChild(h('div', 'scrim'));
+    }
     const anims = []; // {el, at, kind, dur, base}
     const updaters = []; // fn(localTime)
     const A = (el, at, kind = 'rise', dur = 0.45, base = '') => { anims.push({ el, at: at || 0, kind, dur, base }); return el; };
@@ -64,7 +70,7 @@
       L.words.forEach((w) => {
         const span = h('span', w.emph ? 'w e' : 'w', esc(w.text));
         wrap.appendChild(span);
-        A(span, w.start, 'word', 0.18);
+        A(span, w.start, sc.textStyle === 'impact' ? 'pop' : 'word', sc.textStyle === 'impact' ? 0.3 : 0.18);
       });
       cap.appendChild(wrap);
       return wrap;
@@ -580,7 +586,7 @@
   };
 
   // ---------- player ----------
-  let TL, built = [], halftone, current = -1;
+  let TL, built = [], halftone, current = -1, world = null, cineFx, dip;
 
   function apply(a, lt) {
     const p = (lt - a.at) / a.dur;
@@ -602,9 +608,30 @@
     const b = built[idx];
     const lt = t - b.sc.start;
     // gentle camera drift keeps static scenes alive
-    b.root.style.transform = `scale(${1 + Math.min(lt, 6) * 0.004})`;
+    b.root.style.transform = b.sc.world ? '' : `scale(${1 + Math.min(lt, 6) * 0.004})`;
     b.anims.forEach((a) => apply(a, lt));
     b.updaters.forEach((fn) => fn(lt));
+
+    if (world) world.render(idx, lt, t);
+    cineFx.style.display = b.sc.world ? 'block' : 'none';
+    if (b.sc.world) { // film grain moves every frame (deterministic)
+      cineFx.style.setProperty('--gx', `${Math.round(rand(Math.floor(t * 24)) * 40 - 20)}px`);
+      cineFx.style.setProperty('--gy', `${Math.round(rand(Math.floor(t * 24) + 7) * 40 - 20)}px`);
+    }
+    // dip-to-black / flash-to-white / warm light-leak between 3D shots
+    let dv = 0, dkind = null;
+    TL.scenes.forEach((s) => {
+      if (!/^(dip|flash|leak)$/.test(s.transition) || s.start === 0) return;
+      const d = t - s.start;
+      const half = s.transition === 'flash' ? 0.12 : 0.22;
+      if (d > -half && d < half * 1.4) { dv = d < 0 ? (d + half) / half : 1 - d / (half * 1.4); dkind = s.transition; }
+    });
+    dip.style.display = dv > 0.01 ? 'block' : 'none';
+    if (dv > 0.01) {
+      dip.style.background = dkind === 'flash' ? '#fff' : dkind === 'leak'
+        ? 'radial-gradient(90% 70% at 20% 30%, rgba(255,190,110,.95), rgba(255,90,40,.6) 45%, rgba(0,0,0,0) 75%)' : '#000';
+      dip.style.opacity = E.inOut(clamp(dv)).toFixed(3);
+    }
 
     // halftone wipe across boundaries into scenes that ask for it
     let ht = 0;
@@ -627,8 +654,25 @@
     const lang = TL.lang || 'en';
     document.documentElement.lang = lang;
     stage.classList.toggle('indic', /^(gu|hi|bn|ta|te|mr|kn|ml|pa|or)\b/i.test(lang));
+    world = null;
+    if (TL.scenes.some((s) => s.world)) {
+      if (!window.World3D) {
+        await new Promise((res, rej) => {
+          const to = setTimeout(() => rej(new Error('3D engine (world3d.js / three) failed to load')), 20000);
+          window.addEventListener('world3d-ready', () => { clearTimeout(to); res(); }, { once: true });
+        });
+      }
+      const canvas = document.createElement('canvas');
+      canvas.id = 'world';
+      stage.appendChild(canvas);
+      world = window.World3D.create(canvas, TL, { scale: window.__GL_SCALE__ || 1.5 });
+    }
     built = TL.scenes.map(makeScene);
     built.forEach((b) => stage.appendChild(b.root));
+    cineFx = h('div', 'cine-fx');
+    stage.appendChild(cineFx);
+    dip = h('div', 'dip');
+    stage.appendChild(dip);
     halftone = h('div', 'halftone');
     halftone.style.backgroundImage = 'radial-gradient(circle, #141414 0 45%, transparent 47%)';
     stage.appendChild(halftone);
@@ -667,6 +711,15 @@
       if (r.left < stage.left - tol || r.right > stage.right + tol || r.bottom > stage.bottom + tol || r.top < stage.top - tol) {
         issues.push(`${el.className.split(' ')[0]} spills off-stage (${Math.round(r.left - stage.left)},${Math.round(r.top - stage.top)} ${Math.round(r.width)}×${Math.round(r.height)})`);
       }
+    });
+    // Instagram Reels safe zone (540×960 units): top 44px, bottom 190px, right-hand action rail low down
+    b.root.querySelectorAll('.caption .line, .label .txt').forEach((el) => {
+      if (el.offsetParent === null) return;
+      const r = el.getBoundingClientRect(), y0 = r.top - stage.top, y1 = r.bottom - stage.top, x1 = r.right - stage.left;
+      if (!r.width) return;
+      if (y0 < 44) issues.push(`text enters the top UI band (y=${Math.round(y0)})`);
+      if (y1 > 770) issues.push(`text enters the bottom UI band (y=${Math.round(y1)})`);
+      if (y1 > 560 && x1 > 476) issues.push('text runs under the like/comment rail');
     });
     const capBox = b.root.querySelector('.caption').getBoundingClientRect();
     const labBox = b.root.querySelector('.label');

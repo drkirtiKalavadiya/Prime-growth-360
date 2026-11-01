@@ -11,6 +11,7 @@
  *     --no-sfx          no pop/whoosh effects     (spec: "sfx": false)
  *     --silent          no audio at all
  *     --preview         only write out/<name>/preview.html (scrubbable, no video)
+ *     --gl-scale 1.5    3D render resolution (× 540×960). 2 = full 1080p 3D, 1 = fast drafts
  *
  * Each frame is page.seek(t) + screenshot, piped straight into ffmpeg.
  */
@@ -19,6 +20,15 @@ const path = require('path');
 const { spawn } = require('child_process');
 const { parseArgs, timelineFor, openEngine, fmt, ROOT } = require('./lib');
 const { buildSoundtrack } = require('./soundtrack');
+/* three.js embedded as data: modules so preview.html works offline, from any folder, with no CDN. */
+function threeImports() {
+  const dataUrl = (f) => 'data:text/javascript;base64,' + fs.readFileSync(f).toString('base64');
+  const three = path.join(ROOT, 'node_modules', 'three');
+  return {
+    three: dataUrl(path.join(three, 'build', 'three.module.min.js')),
+    'three/addons/environments/RoomEnvironment.js': dataUrl(path.join(three, 'examples', 'jsm', 'environments', 'RoomEnvironment.js')),
+  };
+}
 
 async function main() {
   const args = parseArgs(process.argv.slice(2));
@@ -52,9 +62,10 @@ async function main() {
   proc.stderr.on('data', (d) => { ffErr += d; if (ffErr.length > 20000) ffErr = ffErr.slice(-10000); });
   const done = new Promise((res, rej) => proc.on('close', (code) => (code === 0 ? res() : rej(new Error('ffmpeg failed:\n' + ffErr.slice(-3000))))));
 
-  const { browser, page } = await openEngine({ scale });
+  const { browser, page } = await openEngine({ scale, glScale: Number(args['gl-scale'] || (scale >= 2 ? 1.5 : 1)) });
   try {
     await page.evaluate((t) => window.Reel.init(t), tl);
+    if (page.errors.length) throw new Error('Engine failed to start:\n' + page.errors.join('\n'));
     const started = Date.now();
     for (let i = 0; i < frames; i++) {
       const t = from + i / fps;
@@ -120,6 +131,8 @@ function writePreview(outDir, tl, audioTrack) {
   html = html
     .replace('<link rel="stylesheet" href="reel.css">', () => `<style>${css}</style>`)
     .replace('<script src="timeline.js"></script>', () => `<script>${safe(tlJs)}</script>`)
+    .replace(/<script type="importmap">[\s\S]*?<\/script>/, () => `<script type="importmap">${JSON.stringify({ imports: threeImports() })}</script>`)
+    .replace('<script type="module" src="world3d.js"></script>', () => `<script type="module">${safe(fs.readFileSync(path.join(eng, 'world3d.js'), 'utf8'))}</script>`)
     .replace('<script src="reel.js"></script>', () => `<script>window.__TIMELINE__=${safe(JSON.stringify(tl))};window.__AUDIO__=${JSON.stringify(audioRef)};</script><script>${safe(js)}</script>`);
   fs.writeFileSync(path.join(outDir, 'preview.html'), html);
 }

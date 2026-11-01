@@ -16,7 +16,7 @@ const emph = (s) => esc(s).replace(/\*(.+?)\*/g, '<mark>$1</mark>');
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   const { reel, outDir, tl } = timelineFor(args._[0], { noVoice: args['no-voice'] });
-  const { browser, page } = await openEngine({ scale: 1 });
+  const { browser, page } = await openEngine({ scale: 1, glScale: 1 });
   const shots = [];
   try {
     await page.evaluate((t) => window.Reel.init(t), tl);
@@ -52,8 +52,9 @@ async function main() {
       kicker: src.kicker || '',
       label: src.label || '',
       say: src.say || [],
-      visual: s.visuals.map(describe).join(' + '),
-      transition: s.transition === 'halftone' ? 'Halftone wipe + whoosh' : i ? 'Cut + pop' : 'Open',
+      visual: [s.world && `3D ${s.world.env}${s.world.props && s.world.props.hero ? ' (' + s.world.props.hero + ')' : ''} · ${s.world.palette} · ${s.world.light || 'studio'} light · camera ${(s.world.camera || {}).move || 'auto'} · text ${s.textStyle}`, ...s.visuals.map(describe)].filter(Boolean).join(' + '),
+      concept: s.concept || '',
+      transition: { halftone: 'Halftone wipe + whoosh', dip: 'Dip to black + whoosh', flash: 'White flash + whoosh', leak: 'Warm light-leak + whoosh' }[s.transition] || (i ? 'Cut + pop' : 'Open'),
       img: shots[i],
     };
   });
@@ -73,18 +74,19 @@ main{max-width:1100px;margin:0 auto}h1{font-size:28px;margin:0 0 4px}p.sub{color
 mark{background:none;color:var(--red)}dl{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin:8px 0 0;font-size:13px}dt{color:var(--dim)}dd{margin:0}
 @media (max-width:560px){.scene{grid-template-columns:110px 1fr;gap:12px}.scene img{width:110px}.say{font-size:15px}}
 </style></head><body><main>
-<h1>${esc(tl.title)}</h1><p class="sub">Storyboard · ${tl.scenes.length} scenes · ${fmt(tl.duration)} · 1080×1920 · ${tl.audio.length ? 'voiceover' : 'no voice: captions + music + sfx'}</p>
+<h1>${esc(tl.title)}</h1>${tl.direction ? `<p class="sub"><b>Creative direction:</b> ${esc(tl.direction.theme)}${tl.direction.secondary ? ' + ' + esc(tl.direction.secondary) : ''} · ${esc(tl.direction.mood)} · palette ${esc(tl.direction.palette)} · ${tl.direction.music ? tl.direction.music.bpm + ' bpm' : ''}</p>` : ''}<p class="sub">Storyboard · ${tl.scenes.length} scenes · ${fmt(tl.duration)} · 1080×1920 · ${tl.audio.length ? 'voiceover' : 'no voice: captions + music + sfx'}</p>
 ${rows.map((r) => `<section class="scene"><img src="data:image/jpeg;base64,${r.img}" alt="Scene ${r.n}"><div>
 <span class="n">SCENE ${r.n}</span><span class="t">${r.time} · ${esc(r.kicker)}</span>
 <div class="say">${r.say.map((l) => `<div>${emph(l)}</div>`).join('')}</div>
-<dl>${r.label ? `<dt>Label</dt><dd>${emph(r.label)}</dd>` : ''}<dt>Visual</dt><dd>${esc(r.visual)}</dd><dt>Transition</dt><dd>${esc(r.transition)}</dd></dl>
+<dl>${r.concept ? `<dt>Concept</dt><dd>${esc(r.concept)}</dd>` : ''}${r.label ? `<dt>Label</dt><dd>${emph(r.label)}</dd>` : ''}<dt>Visual</dt><dd>${esc(r.visual)}</dd><dt>Transition</dt><dd>${esc(r.transition)}</dd></dl>
 </div></section>`).join('\n')}
 </main></body></html>`;
   fs.writeFileSync(path.join(outDir, 'storyboard.html'), html);
 
   const md = [`# ${tl.title}: storyboard`, '', `${tl.scenes.length} scenes · ${fmt(tl.duration)} · 1080×1920`, '',
-    '| # | Time | On-screen script | Visual | Transition |', '|---|---|---|---|---|',
-    ...rows.map((r) => `| ${r.n} | ${r.time} | ${r.say.join('<br>')}${r.label ? `<br>**${r.label}**` : ''} | ${r.visual} | ${r.transition} |`)].join('\n');
+    ...(tl.direction ? [`**Direction:** ${tl.direction.theme} · ${tl.direction.mood} · palette ${tl.direction.palette}`, ''] : []),
+    '| # | Time | On-screen script | Concept | Visual | Transition |', '|---|---|---|---|---|---|',
+    ...rows.map((r) => `| ${r.n} | ${r.time} | ${r.say.join('<br>')}${r.label ? `<br>**${r.label}**` : ''} | ${r.concept} | ${r.visual} | ${r.transition} |`)].join('\n');
   fs.writeFileSync(path.join(outDir, 'storyboard.md'), md + '\n');
   console.log(`Storyboard: ${path.relative(process.cwd(), path.join(outDir, 'storyboard.html'))} + storyboard.md`);
 }

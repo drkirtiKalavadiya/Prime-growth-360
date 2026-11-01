@@ -12,6 +12,20 @@ Type one line, get an animated 9:16 reel. This is the "6 steps" workflow from th
 | 5. One line | *"make a reel about why airplane food tastes so bland"* → Claude writes `reels/<slug>.json`. |
 | 6. Feedback | *"the salt bit should hit harder"* → Claude edits the spec and re-renders. |
 
+## 3D creative reels: one script → one cinematic reel
+```bash
+npm run make -- stories/paisa-ane-safalta-gu.txt     # direct → check → auto-fix → storyboard → render
+```
+Under the hood:
+- `scripts/direct.js` reads the script, decides a creative direction (theme, mood, palette, lighting, music tempo) and maps
+  every sentence to a 3D world: city, vault, money flow, staircase, mountains, cosmos, tech grid, molecules, network, or a
+  hero on a stage (trophy, gift, chart, rocket, shield, lock, bulb, key).
+- Each scene gets its own camera move, lighting and text position. A seed from the script text means a new script gives a new look.
+- Three.js renders the worlds behind the existing caption layer, with Gujarati typography, Instagram safe zones,
+  a contrast scrim and cinematic transitions.
+
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Sample: `stories/paisa-ane-safalta-gu.txt` → `reels/paisa-ane-safalta-gu.json`.
+
 ## Quick start
 ```bash
 npm install && npx playwright install chromium   # plus ffmpeg on your PATH

@@ -17,27 +17,40 @@ async function main() {
   const args = parseArgs(process.argv.slice(2));
   const { outDir, tl } = timelineFor(args._[0], { noVoice: args['no-voice'] });
   const problems = [];
-  const warn = (t, msg) => problems.push(`${fmt(t).padStart(6)}  ${msg}`);
+  const issues = []; // structured, for automatic fixing (scripts/make.js)
+  const warn = (t, msg, scene = null, kind = 'other') => { problems.push(`${fmt(t).padStart(6)}  ${msg}`); issues.push({ t, msg, scene, kind }); };
 
   if (tl.duration > 90) warn(tl.duration, `reel is ${tl.duration.toFixed(0)}s — Reels over 90s lose reach`);
   if (tl.duration < 7) warn(0, 'reel is under 7s');
 
-  const { browser, page } = await openEngine({ scale: 1 });
+  const { browser, page } = await openEngine({ scale: 1, glScale: 1 });
   const sheetDir = path.join(outDir, 'contact');
   fs.rmSync(sheetDir, { recursive: true, force: true });
   fs.mkdirSync(sheetDir, { recursive: true });
   try {
     await page.evaluate((t) => window.Reel.init(t), tl);
+    if (page.errors.length) page.errors.forEach((e) => warn(0, `engine error: ${e}`));
+
+    // 0) creative variety: no repeated composition back to back, enough different worlds
+    const worlds = tl.scenes.filter((s) => s.world);
+    tl.scenes.forEach((s, i) => {
+      const p = tl.scenes[i - 1];
+      if (!s.world || !p || !p.world) return;
+      if (s.world.env === p.world.env && (s.world.camera || {}).move === (p.world.camera || {}).move) warn(s.start, `scene ${i + 1} repeats scene ${i}'s world AND camera move — change one`, i, 'repeat');
+      if (s.world.env === p.world.env && s.textStyle === p.textStyle && JSON.stringify(s.world.props) === JSON.stringify(p.world.props)) warn(s.start, `scene ${i + 1} looks like scene ${i} — vary text position or props`, i, 'lookalike');
+    });
+    const envs = new Set(worlds.map((s) => s.world.env + (s.world.props && s.world.props.hero ? ':' + s.world.props.hero : '')));
+    if (worlds.length >= 6 && envs.size < 3) warn(0, `only ${envs.size} distinct 3D worlds across ${worlds.length} scenes`);
 
     // 1) layout audit at the end of every caption line
     let shot = 0;
     for (const s of tl.scenes) {
-      if (!s.visuals.length && !s.label) warn(s.start, `scene ${s.index + 1} has no visual — just text on paper`);
+      if (!s.visuals.length && !s.label && !s.world) warn(s.start, `scene ${s.index + 1} has no visual — just text on paper`);
       const beats = s.lines.length ? s.lines.map((L) => s.start + L.end - 0.02) : [s.start + s.duration / 2];
       for (const t of beats) {
         await page.evaluate((x) => window.Reel.seek(x), t);
-        const issues = await page.evaluate(() => window.Reel.audit());
-        issues.forEach((i) => warn(t, `scene ${s.index + 1}: ${i}`));
+        const found = await page.evaluate(() => window.Reel.audit());
+        found.forEach((i) => warn(t, `scene ${s.index + 1}: ${i}`, s.index, /UI band|rail|spills/.test(i) ? 'layout' : /caption wraps/.test(i) ? 'long' : 'other'));
         await page.screenshot({ path: path.join(sheetDir, `${String(shot++).padStart(3, '0')}.jpg`), type: 'jpeg', quality: 70 });
       }
       if (s.duration > 9) warn(s.start, `scene ${s.index + 1} runs ${s.duration.toFixed(1)}s — consider splitting it`);
@@ -70,6 +83,7 @@ async function main() {
     await browser.close();
   }
 
+  fs.writeFileSync(path.join(outDir, 'check.json'), JSON.stringify({ duration: tl.duration, issues }, null, 2));
   console.log(`\nMotion check — "${tl.title}" · ${tl.scenes.length} scenes · ${fmt(tl.duration)}`);
   if (!problems.length) console.log('  ✓ no layout overflow, no dead air, captions fit\n');
   else { problems.forEach((p) => console.log('  ! ' + p)); console.log(''); }

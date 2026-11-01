@@ -11,17 +11,19 @@ const path = require('path');
 const fs = require('fs');
 const { spawnSync } = require('child_process');
 
-const BEAT = 0.6; // 100 bpm
 
 function ff(args, what) {
   const r = spawnSync('ffmpeg', ['-y', '-loglevel', 'error', ...args], { encoding: 'utf8' });
   if (r.status !== 0) throw new Error(`${what} failed:\n${r.stderr}`);
 }
 
-function musicBed(file, duration) {
+function musicBed(file, duration, music = {}) {
+  // tempo + key come from the creative direction, so each reel gets its own groove
+  const BEAT = 60 / (music.bpm || 100);
+  const K = music.key || 1;
   const bar = BEAT * 8;
   const c = `floor(mod(t/${bar},4))`;
-  const root = `if(eq(${c},0),220,if(eq(${c},1),174.61,if(eq(${c},2),261.63,196)))`;
+  const root = `${K}*if(eq(${c},0),220,if(eq(${c},1),174.61,if(eq(${c},2),261.63,196)))`;
   const third = `if(eq(${c},0),1.189,1.26)`;
   const kick = `0.55*sin(2*PI*(48+90*exp(-28*mod(t,${BEAT})))*mod(t,${BEAT}))*exp(-7*mod(t,${BEAT}))`;
   const pad = `0.045*(sin(2*PI*${root}*t)+sin(2*PI*${root}*${third}*t)+sin(2*PI*${root}*1.5*t)+0.5*sin(2*PI*${root}*0.5*t))*(0.75+0.25*sin(2*PI*0.25*t))`;
@@ -69,14 +71,14 @@ function buildSoundtrack(tl, outDir, { voiceTrack = null, music = true, sfx = tr
   if (voiceTrack) add(voiceTrack, 'volume=1.0');
   if (music) {
     const bed = path.join(dir, 'music.wav');
-    musicBed(bed, tl.duration);
+    musicBed(bed, tl.duration, tl.music || {});
     add(bed, `volume=${voiceTrack ? 0.18 : 0.55}`);
   }
   if (sfx) {
     const { pop, whoosh } = sfxClips(dir);
     tl.scenes.forEach((s, i) => {
       if (i === 0) return;
-      if (s.transition === 'halftone') {
+      if (s.transition !== 'cut') {
         const ms = Math.max(0, Math.round((s.start - 0.3) * 1000));
         add(whoosh, `adelay=${ms}|${ms},volume=${voiceTrack ? 0.25 : 0.4}`);
       } else {

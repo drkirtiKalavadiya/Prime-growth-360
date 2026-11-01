@@ -11,12 +11,15 @@
     "draft": "node scripts/render.js --scale 1 --fps 24",
     "check": "node scripts/check.js",
     "demo": "node scripts/check.js reels/claude-code-6-steps.json && node scripts/render.js reels/claude-code-6-steps.json",
-    "storyboard": "node scripts/storyboard.js"
+    "storyboard": "node scripts/storyboard.js",
+    "direct": "node scripts/direct.js",
+    "make": "node scripts/make.js"
   },
   "engines": {
     "node": ">=18"
   },
   "dependencies": {
-    "playwright": "^1.47.0"
+    "playwright": "^1.47.0",
+    "three": "^0.170.0"
   }
 }

@@ -47,18 +47,45 @@ function timelineFor(file, opts = {}) {
   return { reel, name, outDir, tl, voice };
 }
 
-async function openEngine({ scale = 2 } = {}) {
+const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.woff2': 'font/woff2' };
+const GL_ARGS = ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--enable-webgl'];
+
+/* Launch Chromium. Falls back to a system Chromium when the npm Playwright's own browser isn't downloaded. */
+async function launchBrowser() {
   let chromium;
   try {
     ({ chromium } = require('playwright'));
   } catch {
     throw new Error('Playwright is missing. Run `npm install` then `npx playwright install chromium`.');
   }
-  const browser = await chromium.launch();
+  const gpu = process.env.REEL_GPU === '1' ? [] : GL_ARGS; // REEL_GPU=1 → use the real GPU (much faster on a desktop)
+  try {
+    return await chromium.launch({ args: gpu });
+  } catch (e) {
+    const candidates = [process.env.CHROMIUM_PATH, '/opt/pw-browsers/chromium', '/usr/bin/chromium', '/usr/bin/chromium-browser', '/usr/bin/google-chrome'].filter(Boolean);
+    for (const p of candidates) if (fs.existsSync(p)) return chromium.launch({ executablePath: p, args: gpu });
+    throw new Error(e.message.split('\n')[0] + '\n→ run `npx playwright install chromium` (or set CHROMIUM_PATH)');
+  }
+}
+
+/*
+ * Open the engine page. Files are served from a virtual http origin (not file://) so ES modules
+ * and the three.js import map work exactly as they would on a web server.
+ */
+async function openEngine({ scale = 2, glScale = 1.5 } = {}) {
+  const browser = await launchBrowser();
   const page = await browser.newPage({ viewport: { width: 540, height: 960 }, deviceScaleFactor: scale });
-  await page.addInitScript(() => { window.__RENDER__ = true; });
-  page.on('pageerror', (e) => console.error('[page error]', e.message));
-  await page.goto('file://' + ENGINE);
+  await page.addInitScript((g) => { window.__RENDER__ = true; window.__GL_SCALE__ = g; }, glScale);
+  await page.route('http://reel.local/**', (route) => {
+    const rel = decodeURIComponent(new URL(route.request().url()).pathname);
+    const file = path.join(ROOT, rel);
+    if (!file.startsWith(ROOT) || !fs.existsSync(file)) return route.fulfill({ status: 404, body: 'not found' });
+    route.fulfill({ path: file, contentType: MIME[path.extname(file)] || 'application/octet-stream' });
+  });
+  const errors = [];
+  page.on('pageerror', (e) => { errors.push(e.message); console.error('[page error]', e.message); });
+  page.errors = errors;
+  await page.goto('http://reel.local/engine/reel.html');
   return { browser, page };
 }
 
@@ -67,4 +94,4 @@ function fmt(sec) {
   return `${m}:${(sec % 60).toFixed(1).padStart(4, '0')}`;
 }
 
-module.exports = { ROOT, ENGINE, parseArgs, loadReel, timelineFor, openEngine, fmt };
+module.exports = { ROOT, ENGINE, parseArgs, loadReel, timelineFor, openEngine, launchBrowser, fmt };
