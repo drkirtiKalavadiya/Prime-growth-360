@@ -380,7 +380,7 @@ body.render .stage { margin: 0; }
 html.transparent, html.transparent body, .stage.transparent { background: transparent !important; }
 /* keep one transparent pixel row on every overlay frame: fully opaque frames would be encoded as RGB PNGs,
    and a mid-stream switch between RGB and RGBA stops ffmpeg's overlay input */
-.stage.transparent > .scene, .stage.transparent > #world { clip-path: inset(0 0 1px 0); }
+.stage.transparent { clip-path: inset(0 0 1px 0); }
 .scene.overlay { background: transparent; }
 .scene.overlay::before { display: none; }
 /* pop captions: 2–4 words, big, stroked, the spoken word lights up */
