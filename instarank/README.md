@@ -13,6 +13,14 @@ Part of **Prime Growth 360**. InstaRank helps creators, brands and agencies **ge
 | **Caption Audit** | Scores any caption from 0 to 100 against 10 weighted Instagram SEO/AEO checks and lists the exact fixes. |
 | **SaaS layer** | Accounts (scrypt-hashed passwords, HttpOnly sessions), Free/Pro/Agency plans with monthly quotas, Stripe Payment Links, saved library, encrypted Instagram tokens, rate limiting, CSRF protection and security headers. |
 
+## Use it just for yourself (free: no login, no payments, no API keys)
+
+**Option A: single file, no install.** Open `standalone/instarank.html` in any browser. It runs keyword research, the caption studio, the caption audit and a Reel analyzer (paste likes, comments and age of Reels you see on Instagram) entirely in your browser. To get live Instagram data, you can optionally paste your own free Graph API token there; it stays in your browser. Rebuild after editing `src/` with `node tools/build-standalone.mjs`.
+
+**Option B: full app on your computer.** Set `PERSONAL_MODE=true` in `.env` (the default in `.env.example`), then run `npm install && npm start` and open http://localhost:3000. There is no login and there are no plans or payments, and usage is unlimited. Keep this server private, because anyone who can reach it uses it as you.
+
+Costs: the Instagram Graph API is free, and AI captions are optional (leave `ANTHROPIC_API_KEY` empty and nothing is ever charged).
+
 ## Quick start
 
 ```bash

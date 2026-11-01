@@ -14,6 +14,12 @@ export const PLANS = {
   },
 };
 
+// Used in PERSONAL_MODE: effectively unlimited.
+export const PERSONAL_PLAN = {
+  id: 'personal', name: 'Personal (unlimited)', priceUsd: 0,
+  limits: { keywordSearches: 1e9, liveAnalyses: 1e9, captions: 1e9, aiCaptions: 1e9, liveTracks: 10, competitorScans: 1e9, saved: 1e9 },
+};
+
 export const METRIC_LABELS = {
   keywordSearches: 'Keyword searches',
   liveAnalyses: 'Live hashtag analyses',
@@ -24,7 +30,7 @@ export const METRIC_LABELS = {
 
 export const monthKey = (d = new Date()) => `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
 
-export function planOf(user) { return PLANS[user?.plan] || PLANS.free; }
+export function planOf(user) { return user?.plan === 'personal' ? PERSONAL_PLAN : PLANS[user?.plan] || PLANS.free; }
 
 export class QuotaError extends Error {
   constructor(metric, limit) {

@@ -66,7 +66,8 @@ $('#menuBtn').addEventListener('click', () => $('#sidebar').classList.toggle('op
 async function refreshMe() {
   state.me = await api('/api/me');
   const { user, plan, live } = state.me;
-  $('#whoami').textContent = user.email;
+  $('#whoami').textContent = user.personal ? 'Personal mode' : user.email;
+  $('#logoutBtn').classList.toggle('hidden', !!user.personal);
   $('#planBadge').textContent = plan.name;
   $('#modeBadge').className = `badge ${live ? 'live' : 'demo'}`;
   $('#modeBadge').textContent = live ? `● Live: @${user.instagram.username}` : '● Demo data';
@@ -115,8 +116,8 @@ async function viewDashboard(v) {
       </div>
       <div class="grid g2">
         <div class="card"><h3>This month's usage <span class="badge plan">${esc(plan.name)}</span></h3>
-          ${usage.map((u) => `<div class="bar-row"><span>${esc(u.label)}</span><div class="bar"><span style="width:${Math.min(100, (u.used / u.limit) * 100)}%"></span></div><span class="num small">${u.used}/${fmt(u.limit)}</span></div>`).join('')}
-          <a href="#settings" class="btn small">Upgrade plan</a></div>
+          ${usage.map((u) => `<div class="bar-row"><span>${esc(u.label)}</span><div class="bar"><span style="width:${Math.min(100, (u.used / u.limit) * 100)}%"></span></div><span class="num small">${u.used}/${u.limit >= 1e9 ? "∞" : fmt(u.limit)}</span></div>`).join('')}
+          ${user.personal ? '' : '<a href="#settings" class="btn small">Upgrade plan</a>'}</div>
         <div class="card"><h3>Recently saved</h3>
           ${saved.items.length ? `<ul class="checklist">${saved.items.slice(0, 8).map((s) => `<li><span class="badge">${esc(s.kind)}</span> ${esc(s.value.slice(0, 80))}</li>`).join('')}</ul>` : '<p class="empty">Nothing saved yet. Star keywords and captions to build your library.</p>'}</div>
       </div>
@@ -479,9 +480,10 @@ async function viewSettings(v) {
           </ol><p class="muted small">Your token is encrypted (AES-256-GCM) before it is stored. Instagram allows 30 unique hashtag lookups per 7 days per account; InstaRank caches results to save that budget.</p></details>`}
         </div>
         <div class="card"><h3>Profile</h3>
-          <form id="profileForm"><label>Name<input name="name" maxlength="80" value="${esc(user.name)}"></label><label>Email<input value="${esc(user.email)}" disabled></label>
+          <form id="profileForm" class="${user.personal ? 'hidden' : ''}"><label>Name<input name="name" maxlength="80" value="${esc(user.name)}"></label><label>Email<input value="${esc(user.email)}" disabled></label>
           <button class="btn">Save</button></form></div>
       </div>
+      ${plans.personal ? '<div class="card"><h3>Personal mode</h3><p class="muted">Unlimited use for you only. No plans, no payments.</p></div>' : ''}
       <div class="grid g3">${plans.plans.map((p) => `
         <div class="card plan-card ${p.id === plan.id ? 'current' : ''}">
           <h3>${esc(p.name)}</h3><div class="price">$${p.priceUsd}<small>/month</small></div>

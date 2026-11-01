@@ -48,7 +48,11 @@ export function createApp({ config, store = new Store(config.dataFile), fetchImp
 
   const sessionCookie = (token, maxAge) => `ir_session=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${maxAge}${config.cookieSecure ? '; Secure' : ''}`;
 
+  const ownerUser = () => store.userByEmail('owner@personal.local')
+    || store.addUser({ id: store.id(), email: 'owner@personal.local', name: 'Owner', password: '!', plan: 'personal', createdAt: new Date().toISOString() });
+
   const currentUser = (req) => {
+    if (config.personalMode) return ownerUser();
     const token = parseCookies(req).ir_session;
     if (!token) return null;
     const s = store.sessionByHash(sha256(token));
@@ -59,6 +63,7 @@ export function createApp({ config, store = new Store(config.dataFile), fetchImp
     id: u.id, email: u.email, name: u.name, plan: u.plan, createdAt: u.createdAt,
     instagram: u.instagram ? { connected: true, username: u.instagram.username, igUserId: u.instagram.igUserId, connectedAt: u.instagram.connectedAt } : { connected: false },
     isAdmin: config.adminEmails.includes(u.email),
+    personal: !!config.personalMode,
   });
 
   const startSession = (res, user) => {
@@ -74,10 +79,11 @@ export function createApp({ config, store = new Store(config.dataFile), fetchImp
   const route = (method, pattern, handler, opts = {}) => routes.push({ method, pattern, handler, auth: opts.auth !== false });
 
   route('GET', '/api/health', async () => ({ ok: true, time: new Date().toISOString(), ai: aiAvailable(config) }), { auth: false });
-  route('GET', '/api/plans', async () => ({ plans: Object.values(PLANS), billing: { pro: !!config.stripeLinks.pro, agency: !!config.stripeLinks.agency, devSelfUpgrade: config.devSelfUpgrade } }), { auth: false });
+  route('GET', '/api/plans', async () => ({ personal: !!config.personalMode, plans: config.personalMode ? [] : Object.values(PLANS), billing: { pro: !!config.stripeLinks.pro, agency: !!config.stripeLinks.agency, devSelfUpgrade: config.devSelfUpgrade } }), { auth: false });
 
   // ----- auth -----
   route('POST', '/api/auth/signup', async ({ req, res, body }) => {
+    if (config.personalMode) throw new HttpError(400, 'Personal mode: no sign-up needed.');
     if (!authLimiter.check(`signup:${ip(req)}`).ok) throw new HttpError(429, 'Too many attempts. Try again later.');
     const email = str(body.email, 254).toLowerCase(); const password = typeof body.password === 'string' ? body.password : ''; const name = str(body.name, 80);
     if (!isEmail(email)) throw new HttpError(400, 'Enter a valid email address');
@@ -262,6 +268,7 @@ export function createApp({ config, store = new Store(config.dataFile), fetchImp
 
   // ----- billing -----
   route('POST', '/api/billing/upgrade', async ({ user, body }) => {
+    if (config.personalMode) throw new HttpError(400, 'Personal mode has no plans or payments.');
     const plan = str(body.plan, 20);
     if (!PLANS[plan]) throw new HttpError(400, 'Unknown plan');
     if (plan !== 'free' && config.stripeLinks[plan]) {

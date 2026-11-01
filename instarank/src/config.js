@@ -44,5 +44,7 @@ export const config = {
   claudeModel: env.CLAUDE_MODEL || 'claude-opus-5-5',
   stripeLinks: { pro: env.STRIPE_LINK_PRO || '', agency: env.STRIPE_LINK_AGENCY || '' },
   devSelfUpgrade: bool(env.DEV_ALLOW_SELF_UPGRADE, env.NODE_ENV !== 'production'),
+  // Personal mode: single owner, no login, no plans, no billing, unlimited usage.
+  personalMode: bool(env.PERSONAL_MODE, false),
   adminEmails: (env.ADMIN_EMAILS || '').split(',').map((s) => s.trim().toLowerCase()).filter(Boolean),
 };

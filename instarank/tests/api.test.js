@@ -176,3 +176,20 @@ test('static files are served with security headers and no path traversal', asyn
     assert.notEqual(t.status, 200);
   });
 });
+
+test('personal mode: no login, no plans, unlimited usage', async () => {
+  const store = new Store(null);
+  const { server } = createApp({ config: { ...config, personalMode: true }, store });
+  await new Promise((r) => server.listen(0, r));
+  const base = `http://127.0.0.1:${server.address().port}`;
+  try {
+    const me = await (await fetch(`${base}/api/me`)).json();
+    assert.equal(me.user.personal, true);
+    assert.equal(me.plan.id, 'personal');
+    for (let i = 0; i < 5; i++) assert.equal((await fetch(`${base}/api/competitors?username=b${i}`)).status, 200);
+    const plans = await (await fetch(`${base}/api/plans`)).json();
+    assert.deepEqual(plans.plans, []);
+    const up = await fetch(`${base}/api/billing/upgrade`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'InstaRank' }, body: '{"plan":"pro"}' });
+    assert.equal(up.status, 400);
+  } finally { server.closeAllConnections?.(); await new Promise((r) => server.close(r)); }
+});
