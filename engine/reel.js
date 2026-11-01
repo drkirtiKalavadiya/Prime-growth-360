@@ -24,6 +24,10 @@
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   /** "GET *CLAUDE CODE*" -> GET <em>CLAUDE CODE</em> */
   const rich = (s) => esc(s).replace(/\*(.+?)\*/g, '<em>$1</em>');
+  const seg = typeof Intl !== 'undefined' && Intl.Segmenter ? new Intl.Segmenter(undefined, { granularity: 'grapheme' }) : null;
+  const chars = (s) => (seg ? [...seg.segment(s)].map((x) => x.segment) : [...s]);
+  /** first n user-visible characters — keeps Gujarati conjuncts and matras together */
+  const typedSlice = (s, n) => chars(s).slice(0, n).join('');
   // deterministic pseudo-random
   const rand = (seed) => { let x = Math.sin(seed * 9301 + 49297) * 233280; return x - Math.floor(x); };
 
@@ -124,11 +128,11 @@
         el.appendChild(A(s, (v.at || 0) + 0.5, 'pop', 0.5, 'rotate(-5deg)'));
       }
       if (v.stamp) {
-        const st = h('div', 'stamp', `<div class="no">Nº ${esc(v.stamp.no || '001')}</div><div class="top">${esc(v.stamp.top)}</div><div class="big">${esc(v.stamp.big)}</div><div class="rule"></div><div class="pin" style="left:30%"></div>`);
+        const st = h('div', 'stamp' + (chars(v.stamp.big).length > 4 ? ' long' : ''), `<div class="no">Nº ${esc(v.stamp.no || '001')}</div><div class="top">${esc(v.stamp.top)}</div><div class="big">${esc(v.stamp.big)}</div><div class="rule"></div><div class="pin" style="left:30%"></div>`);
         el.appendChild(A(st, v.stamp.at, 'stamp', 0.4, 'rotate(-3deg)'));
       }
       // slow push-in on the whole board
-      U((t) => { el.style.transform = `scale(${1 + Math.min(t, 6) * 0.006})`; });
+      U((t) => { el.style.transform = `scale(${1 + Math.min(t, 6) * 0.004})`; });
       return el;
     },
 
@@ -212,8 +216,9 @@
       const typeAt = (v.at || 0) + 0.6;
       A(nf, typeAt - 0.3, 'pop', 0.4);
       U((t) => {
-        const n = clamp(Math.floor((t - typeAt) * 16), 0, v.folder.length);
-        name.textContent = v.folder.slice(0, n) + (n < v.folder.length && Math.floor(t * 3) % 2 ? '|' : '');
+        const total = chars(v.folder).length;
+        const n = clamp(Math.floor((t - typeAt) * 16), 0, total);
+        name.textContent = typedSlice(v.folder, n) + (n < total && Math.floor(t * 3) % 2 ? '|' : '');
       });
       if (v.hint) {
         const hint = h('div', 'tag', esc(v.hint));
@@ -314,8 +319,9 @@
         if (!v.prompt || t < v.prompt.at) { typed.style.color = 'var(--win-dim)'; typed.style.fontSize = '10.5px'; typed.textContent = ph; return; }
         typed.style.color = ''; typed.style.fontSize = '';
         const cps = v.prompt.cps || 18;
-        const n = clamp(Math.floor((t - v.prompt.at) * cps), 0, v.prompt.text.length);
-        typed.innerHTML = esc(v.prompt.text.slice(0, n)) + (Math.floor(t * 3) % 2 || n < v.prompt.text.length ? '<span class="caret"></span>' : '');
+        const total = chars(v.prompt.text).length;
+        const n = clamp(Math.floor((t - v.prompt.at) * cps), 0, total);
+        typed.innerHTML = esc(typedSlice(v.prompt.text, n)) + (Math.floor(t * 3) % 2 || n < total ? '<span class="caret"></span>' : '');
       });
       el.appendChild(h('div', 'foot', `<span>Auto</span><span>${esc(v.model || 'Opus 5.5 · Medium')}</span>`));
       A(el, v.at, v.enter || 'rise', 0.5, v.tilt ? `rotate(${v.tilt}deg)` : '');
@@ -376,7 +382,7 @@
           ic.style.transform = active && !done ? `rotate(${t * 540}deg)` : '';
         });
         // scene art cycles through a few looks once "Animate scenes" starts
-        const animStep = steps.findIndex((s) => /anim/i.test(s.text));
+        const animStep = steps.findIndex((s) => s.role === 'anim' || /anim/i.test(s.text));
         const live = animStep < 0 || t >= steps[animStep].at;
         const k = Math.floor(t * 1.4) % 3;
         art.style.background = !live ? '#eef0f3' : [
@@ -386,10 +392,10 @@
         ][k];
         art.style.transform = live ? `scale(${1 + ((t * 0.7) % 1) * 0.06})` : '';
         // waveform + synced caption chip
-        const voiced = steps.findIndex((s) => /voice/i.test(s.text));
+        const voiced = steps.findIndex((s) => s.role === 'voice' || /voice/i.test(s.text));
         const amp = voiced < 0 || t >= steps[voiced].at ? 1 : 0.15;
         bars.forEach((b, i) => { b.style.height = (4 + amp * 30 * Math.abs(Math.sin(t * 7 + i * 0.9) * Math.sin(t * 3.1 + i * 0.37))).toFixed(1) + 'px'; });
-        const capStep = steps.findIndex((s) => /caption/i.test(s.text));
+        const capStep = steps.findIndex((s) => s.role === 'caption' || /caption/i.test(s.text));
         const showCap = words.length && (capStep < 0 || t >= steps[capStep].at);
         capEl.style.display = showCap ? '' : 'none';
         if (showCap) capEl.firstChild.textContent = words[Math.floor(t * 2.5) % words.length];
@@ -533,12 +539,22 @@
     TL = timeline;
     const stage = document.getElementById('stage');
     stage.innerHTML = '';
+    const lang = TL.lang || 'en';
+    document.documentElement.lang = lang;
+    stage.classList.toggle('indic', /^(gu|hi|bn|ta|te|mr|kn|ml|pa|or)\b/i.test(lang));
     built = TL.scenes.map(makeScene);
     built.forEach((b) => stage.appendChild(b.root));
     halftone = h('div', 'halftone');
     halftone.style.backgroundImage = 'radial-gradient(circle, #141414 0 45%, transparent 47%)';
     stage.appendChild(halftone);
     current = -1;
+    if (document.fonts && document.fonts.load) {
+      // hidden scenes don't trigger webfont loads, so load every face (incl. Gujarati subsets) up front
+      const sample = 'Aa ગુજરાતી';
+      const faces = ['500 28px "Space Grotesk"', '700 28px "Space Grotesk"', 'italic 400 31px "Instrument Serif"', '40px Anton', '9px "JetBrains Mono"', '600 15px Caveat',
+        '500 28px "Hind Vadodara"', '700 28px "Hind Vadodara"', '600 28px "Noto Serif Gujarati"', '800 36px "Baloo Bhai 2"'];
+      await Promise.race([Promise.all(faces.map((f) => document.fonts.load(f, sample).catch(() => null))), new Promise((r) => setTimeout(r, 6000))]);
+    }
     if (document.fonts && document.fonts.ready) {
       await Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 4000))]);
     }

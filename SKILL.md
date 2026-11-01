@@ -24,6 +24,12 @@ silent with estimated caption timing. Ask once if they want voice, then help the
   (1.5 = halfway through the 2nd line). Use `{ "sec": n }` for seconds.
 
 ## 2. Voice → `npm run voice -- reels/<slug>.json`
+Language: if the user asks for Gujarati (or writes to you in Gujarati), write the `say` lines in natural
+spoken Gujarati, keeping tech words like Claude Code, folder and setup in English. Set `"lang": "gu"` and
+`"voice": {"provider": "google", "language": "gu-IN", "name": "gu-IN-Wavenet-B"}` (or ElevenLabs
+`eleven_v3`). Start from `reels/claude-code-6-steps-gu.json`. For a `phone` visual, mark the steps with
+`"role": "voice" | "anim" | "caption"` so they still drive the animation when the text isn't English.
+
 Records each line with ElevenLabs and stores word timestamps. Lines are cached, so
 editing one line only re-records that line. Skip this step if there's no key.
 

@@ -18,6 +18,7 @@ The look is an explainer on cream paper, with editorial type and one accent colo
 | emphasis | Instrument Serif *italic*, red. Write it as `*word*` |
 | display label | Anton, uppercase. Write `*WORD*` for the red part |
 | kicker / code | JetBrains Mono |
+| Gujarati | Hind Vadodara (caption), Noto Serif Gujarati (emphasis, upright, never fake-italic), Baloo Bhai 2 (labels). Set `"lang": "gu"` |
 
 ## Motion
 - Everything enters (`rise`, `pop`, `drop`, `stamp`, `slide`). Nothing just appears.

@@ -41,11 +41,12 @@
 
   function estimateWordStarts(words) {
     let t = 0;
+    const indic = words.some((w) => /[\u0900-\u0DFF]/.test(w.text));
     const starts = [];
     for (const w of words) {
       starts.push(t);
       const last = w.text.slice(-1);
-      t += WORD_SEC + Math.min(0.12, w.text.length * 0.012) + (PAUSE[last] || 0);
+      t += (indic ? WORD_SEC * 1.25 : WORD_SEC) + Math.min(0.12, w.text.length * 0.012) + (PAUSE[last] || PAUSE[last === '।' ? '.' : ''] || 0);
     }
     return { starts, duration: t };
   }
@@ -114,6 +115,7 @@
 
     return {
       title: reel.title || 'reel',
+      lang: reel.lang || 'en',
       fps,
       width: 1080,
       height: 1920,

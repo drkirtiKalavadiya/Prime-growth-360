@@ -13,14 +13,16 @@
   --blue: #5aa7ec;
   --cork-1: #7a5a36;
   --cork-2: #2b1d10;
-  --f-head: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
-  --f-serif: 'Instrument Serif', Georgia, serif;
-  --f-display: 'Anton', 'Impact', 'Arial Narrow', sans-serif;
+  /* Latin fonts first; Gujarati glyphs fall through to the Gujarati family in each stack */
+  --f-head: 'Space Grotesk', 'Hind Vadodara', 'Noto Sans Gujarati', 'Helvetica Neue', Arial, sans-serif;
+  --f-serif: 'Instrument Serif', 'Noto Serif Gujarati', Georgia, serif;
+  --f-display: 'Anton', 'Baloo Bhai 2', 'Impact', 'Arial Narrow', sans-serif;
   --f-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
   --f-hand: 'Caveat', 'Comic Sans MS', cursive;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
+.stage { font-synthesis: none; } /* never fake-italicise Gujarati */
 html, body { background: #0d0d0d; }
 body { min-height: 100vh; display: grid; place-items: center; font-family: var(--f-head); }
 
@@ -98,6 +100,14 @@ body.render .stage { margin: 0; }
 .visuals.top { justify-content: flex-start; padding-top: 10px; }
 .v { position: relative; }
 
+/* ---------- Gujarati (and other Indic scripts): taller line boxes for matras ---------- */
+.stage.indic .caption { line-height: 1.38; font-size: 26px; }
+.stage.indic .caption .w.e { font-size: 27px; line-height: 1.2; font-weight: 600; }
+.stage.indic .label .txt { font-size: 36px; line-height: 1.25; }
+.stage.indic .steps .title { line-height: 1.2; }
+.stage.indic .label { top: 190px; }
+.stage.indic .visuals { top: 252px; }
+
 /* ---------- shared bits ---------- */
 .shadow { box-shadow: 0 1px 0 rgba(0,0,0,.04), 0 10px 28px rgba(0,0,0,.14), 5px 5px 0 rgba(0,0,0,.08); }
 .tag {
@@ -106,7 +116,7 @@ body.render .stage { margin: 0; }
 }
 
 /* ---------- board (corkboard hook) ---------- */
-.board { width: 480px; height: 600px; }
+.board { width: 470px; height: 600px; }
 .polaroid {
   position: absolute; width: 112px; padding: 7px 7px 22px; background: #f6f3ec; border-radius: 2px;
   box-shadow: 0 8px 18px rgba(0,0,0,.45);
@@ -124,6 +134,7 @@ body.render .stage { margin: 0; }
 }
 .stamp .top { font: 400 30px/1 var(--f-display); letter-spacing: 0.01em; }
 .stamp .big { font: 400 92px/0.95 var(--f-display); color: var(--red); letter-spacing: 0.01em; }
+.stamp.long .big { font-size: 64px; line-height: 1.15; white-space: nowrap; }
 .stamp .no { position: absolute; right: 14px; top: 10px; font: 400 8px/1 var(--f-mono); color: #777; }
 .stamp .rule { height: 2px; background: var(--ink); margin: 8px 30px 0; opacity: .8; }
 

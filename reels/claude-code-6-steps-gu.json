@@ -1,0 +1,569 @@
+{
+  "name": "claude-code-6-steps-gu",
+  "title": "Claude Code થી AI reels — 6 સ્ટેપ્સ",
+  "fps": 30,
+  "steps": 6,
+  "scenes": [
+    {
+      "kicker": "// 01 · શરૂઆત",
+      "theme": "dark",
+      "say": [
+        "અત્યારે બધા Claude Code થી AI-animated reels બનાવે છે,",
+        "પણ *કેવી રીતે* એ કોઈ બતાવતું નથી."
+      ],
+      "visual": {
+        "type": "board",
+        "cards": [
+          "AirTag",
+          "મારી skill",
+          "Google Maps",
+          "Internet",
+          "ChatLLM",
+          "Touchscreen"
+        ],
+        "note": "AI?",
+        "stamp": {
+          "top": "કોઈ બતાવતું નથી",
+          "big": "કેવી રીતે?",
+          "no": "002",
+          "at": 1.35
+        }
+      }
+    },
+    {
+      "kicker": "// 02 · રોડમેપ",
+      "transition": "halftone",
+      "say": [
+        "તો હું તમને *બધું* બતાવીશ:",
+        "આવી reel બનાવવા માટેનું દરેક *સ્ટેપ.*"
+      ],
+      "visual": {
+        "type": "steps",
+        "at": 0.3,
+        "items": [
+          {
+            "title": "Desktop app",
+            "sub": "claude code"
+          },
+          {
+            "title": "Folder",
+            "sub": "ai video editor"
+          },
+          {
+            "title": "Local chat",
+            "sub": "નવી chat"
+          },
+          {
+            "title": "Setup",
+            "sub": "check my setup"
+          },
+          {
+            "title": "1 લાઇન",
+            "sub": "idea લખો"
+          },
+          {
+            "title": "Feedback",
+            "sub": "શું સુધારવું એ કહો"
+          }
+        ],
+        "sweep": true,
+        "until": 1.99,
+        "title": "*6* સ્ટેપ્સ"
+      }
+    },
+    {
+      "kicker": "// 03 · સ્ટેપ 1 · desktop app",
+      "transition": "halftone",
+      "say": [
+        "સૌથી પહેલા, તમારે *Claude* Code જોઈએ."
+      ],
+      "label": "*Claude Code* લો",
+      "badge": 1,
+      "visual": {
+        "type": "appIcon",
+        "name": "Claude *Code*",
+        "at": 0.3
+      }
+    },
+    {
+      "kicker": "// 03 · સ્ટેપ 1 · desktop app",
+      "say": [
+        "એને *browser* માં ના વાપરો.",
+        "*Desktop* app download કરો."
+      ],
+      "label": "*Desktop* app",
+      "badge": 1,
+      "visual": [
+        {
+          "type": "versus",
+          "bad": "Browser માં",
+          "good": "Desktop app",
+          "at": 0.4,
+          "goodAt": 1.1
+        },
+        {
+          "type": "window",
+          "title": "Claude Code",
+          "at": 1.3,
+          "placeholder": "What should we build?"
+        }
+      ]
+    },
+    {
+      "kicker": "// 04 · સ્ટેપ 2 · folder",
+      "say": [
+        "હવે તમારા computer પર એક *folder* બનાવો",
+        "અને એનું નામ રાખો *AI Video Editor.*"
+      ],
+      "label": "*Folder* બનાવો",
+      "badge": 2,
+      "visual": {
+        "type": "finder",
+        "folder": "AI Video Editor",
+        "at": 0.3,
+        "hint": "નામ લખો · return દબાવો"
+      }
+    },
+    {
+      "kicker": "// 05 · એનું ઘર",
+      "say": [
+        "તમારી *skill files* અને દરેક",
+        "તૈયાર reel અહીં જ રહેશે."
+      ],
+      "visual": {
+        "type": "folder",
+        "name": "AI Video Editor",
+        "files": [
+          "SKILL.md",
+          "guides.md",
+          "kit.js",
+          "reel.mp4"
+        ],
+        "count": "skill files + reels",
+        "at": 0.1
+      }
+    },
+    {
+      "kicker": "// 06 · સ્ટેપ 3",
+      "transition": "halftone",
+      "say": [
+        "પછી નવી *Claude* Code chat શરૂ કરો,"
+      ],
+      "label": "નવી *chat*",
+      "badge": 3,
+      "visual": {
+        "type": "number",
+        "n": 3,
+        "of": 6,
+        "at": 0.15
+      }
+    },
+    {
+      "kicker": "// 06 · સ્ટેપ 3",
+      "say": [
+        "*Local* પસંદ કરો, અને એ *folder* select કરો."
+      ],
+      "label": "Local + *folder*",
+      "badge": 3,
+      "visual": {
+        "type": "window",
+        "title": "New session",
+        "at": 0,
+        "placeholder": "What should we build?",
+        "menu": {
+          "at": 0.15,
+          "select": 0,
+          "until": 0.75,
+          "items": [
+            {
+              "title": "Local",
+              "sub": "runs on this computer"
+            },
+            {
+              "title": "Cloud",
+              "sub": "runs on a remote machine"
+            }
+          ]
+        },
+        "chips": [
+          {
+            "text": "☁ Environment: Local",
+            "at": 0.2,
+            "hotAt": 0.45
+          },
+          {
+            "text": "📁 AI Video Editor",
+            "at": 0.6,
+            "hotAt": 0.75
+          }
+        ]
+      }
+    },
+    {
+      "kicker": "// સ્ટેપ 3 · read + write",
+      "say": [
+        "હવે *Claude* તમારી *files* વાંચી અને લખી શકે છે."
+      ],
+      "visual": [
+        {
+          "type": "window",
+          "title": "AI Video Editor",
+          "sub": "Started on this computer · AI Video Editor",
+          "at": 0,
+          "rows": [
+            {
+              "kind": "text",
+              "text": "Working in AI Video Editor…",
+              "at": 0.1
+            },
+            {
+              "kind": "check",
+              "text": "*Read* SKILL.md",
+              "meta": "142 lines",
+              "at": 0.35,
+              "doneAt": 0.6,
+              "hl": true
+            },
+            {
+              "kind": "check",
+              "text": "*Write* script.json",
+              "at": 0.7,
+              "doneAt": 0.95
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "AI Video Editor",
+          "files": [
+            "guides.md",
+            "SKILL.md"
+          ],
+          "count": "2 files",
+          "at": 0.3,
+          "dy": -20
+        }
+      ]
+    },
+    {
+      "kicker": "// સ્ટેપ 4 · setup",
+      "transition": "halftone",
+      "say": [
+        "Animate, voice અને render કરવા",
+        "*Claude* ને થોડા *tools* જોઈએ,",
+        "તો એને તમારું *setup* check કરવાનું કહો."
+      ],
+      "label": "થોડા *tools*",
+      "badge": 4,
+      "visual": {
+        "type": "window",
+        "title": "AI Video Editor",
+        "sub": "Started on this computer · AI Video Editor",
+        "at": 0.2,
+        "rows": [
+          {
+            "kind": "check",
+            "text": "Animate",
+            "pill": "canvas + node",
+            "at": 0.6,
+            "doneAt": 0.9
+          },
+          {
+            "kind": "check",
+            "text": "Voice",
+            "pill": "ElevenLabs",
+            "at": 1.0,
+            "doneAt": 1.4
+          },
+          {
+            "kind": "check",
+            "text": "Render",
+            "pill": "ffmpeg",
+            "at": 1.5,
+            "doneAt": 1.9
+          }
+        ],
+        "prompt": {
+          "text": "check my setup",
+          "at": 2.1,
+          "cps": 16
+        }
+      }
+    },
+    {
+      "kicker": "// સ્ટેપ 4 · setup",
+      "say": [
+        "જે ખૂટે છે એ જાતે install કરે છે",
+        "અને દરેક click માં તમને રસ્તો બતાવે છે."
+      ],
+      "label": "Auto *install*",
+      "badge": 4,
+      "visual": {
+        "type": "window",
+        "title": "AI Video Editor",
+        "sub": "Started on this computer · AI Video Editor",
+        "at": 0,
+        "rows": [
+          {
+            "kind": "text",
+            "text": "Checking your setup…",
+            "meta": "1/3",
+            "at": 0.05
+          },
+          {
+            "kind": "check",
+            "text": "Node.js",
+            "pill": "animate",
+            "meta": "v22.11",
+            "at": 0.2,
+            "doneAt": 0.45
+          },
+          {
+            "kind": "progress",
+            "text": "ffmpeg",
+            "pill": "render",
+            "meta": "installed",
+            "at": 0.4,
+            "doneAt": 1.2,
+            "hl": true
+          },
+          {
+            "kind": "progress",
+            "text": "Voice key",
+            "pill": "voice",
+            "meta": "saved",
+            "at": 1.0,
+            "doneAt": 1.85
+          }
+        ]
+      }
+    },
+    {
+      "kicker": "// સ્ટેપ 5 · એક લાઇન",
+      "transition": "halftone",
+      "say": [
+        "હવે *મજાનો* ભાગ."
+      ],
+      "label": "*મજા* શરૂ",
+      "badge": 5,
+      "visual": {
+        "type": "number",
+        "n": 5,
+        "of": 6,
+        "at": 0.1
+      },
+      "fx": [
+        {
+          "type": "confetti",
+          "at": 0.3,
+          "x": 90,
+          "y": 820
+        },
+        {
+          "type": "confetti",
+          "at": 0.45,
+          "x": 450,
+          "y": 840
+        }
+      ]
+    },
+    {
+      "kicker": "// સ્ટેપ 5 · એક લાઇન",
+      "say": [
+        "Reel શેના વિશે છે એ",
+        "*એક લાઇન* માં લખો."
+      ],
+      "label": "*1* લાઇન",
+      "badge": 5,
+      "visual": {
+        "type": "window",
+        "title": "AI Video Editor",
+        "sub": "Started on this computer · AI Video Editor",
+        "at": 0,
+        "placeholder": "What should we build?"
+      }
+    },
+    {
+      "kicker": "// 11 · એક લાઇન",
+      "say": [
+        "જેમ કે, એક reel બનાવો કે",
+        "વિમાનનું ખાવાનું કેમ *ફિક્કું* લાગે છે."
+      ],
+      "label": "ફક્ત *10 શબ્દો*",
+      "badge": 5,
+      "visual": {
+        "type": "window",
+        "title": "AI Video Editor",
+        "sub": "Started on this computer · AI Video Editor",
+        "at": 0,
+        "placeholder": "What should we build?",
+        "prompt": {
+          "text": "વિમાનનું ખાવાનું કેમ ફિક્કું લાગે છે એના પર reel બનાવો",
+          "at": 0.25,
+          "cps": 20
+        }
+      }
+    },
+    {
+      "kicker": "// 12 · reel તૈયાર થાય છે",
+      "transition": "halftone",
+      "say": [
+        "એ *script* લખે છે, *voiceover* રેકોર્ડ કરે છે,",
+        "દરેક *scene* animate કરે છે,",
+        "દરેક શબ્દ સાથે *captions* ગોઠવે છે",
+        "અને પોતાનું *motion* જાતે તપાસે છે."
+      ],
+      "visual": {
+        "type": "phone",
+        "title": "વિમાનનું ખાવાનું કેમ *ફિક્કું*?",
+        "panelTitle": "Building your reel",
+        "at": 0,
+        "until": 3.7,
+        "steps": [
+          {
+            "text": "Write script",
+            "at": 0.1
+          },
+          {
+            "text": "Record voiceover",
+            "at": 0.6,
+            "role": "voice"
+          },
+          {
+            "text": "Animate scenes",
+            "at": 1.0,
+            "role": "anim"
+          },
+          {
+            "text": "Time captions",
+            "at": 2.0,
+            "role": "caption"
+          },
+          {
+            "text": "Check motion",
+            "at": 3.0
+          }
+        ],
+        "captions": [
+          "વિમાન",
+          "ખાવાનું",
+          "ફિક્કું."
+        ]
+      }
+    },
+    {
+      "kicker": "// સ્ટેપ 6 · શું સુધારવું એ કહો",
+      "transition": "halftone",
+      "say": [
+        "જો કંઈક બરાબર ના લાગે,",
+        "તો બસ કહી દો,",
+        "જેમ સાચા editor ને કહો,",
+        "અને એ *સુધારી* દે છે."
+      ],
+      "label": "બરાબર *નથી?*",
+      "badge": 6,
+      "visual": {
+        "type": "feedback",
+        "title": "AI Video Editor",
+        "file": "airplane_food.mp4",
+        "phoneTitle": "વિમાનના *ખાવાનો* વીડિયો.",
+        "checks": [
+          "Voiceover recorded",
+          "Captions synced to every word",
+          "Motion check passed"
+        ],
+        "ask": {
+          "text": "મીઠાવાળો ભાગ વધુ દમદાર બનાવો",
+          "at": 1.0
+        },
+        "fix": "વધારે મીઠું.",
+        "fixedAt": 3.1,
+        "at": 0
+      }
+    },
+    {
+      "kicker": "// 15 · આખું workflow",
+      "transition": "halftone",
+      "say": [
+        "બસ, આ જ છે આખું *workflow.*"
+      ],
+      "minDuration": 3.2,
+      "visual": {
+        "type": "steps",
+        "at": 0,
+        "items": [
+          {
+            "title": "Desktop app",
+            "sub": "claude code"
+          },
+          {
+            "title": "Folder",
+            "sub": "ai video editor"
+          },
+          {
+            "title": "Local chat",
+            "sub": "નવી chat"
+          },
+          {
+            "title": "Setup",
+            "sub": "check my setup"
+          },
+          {
+            "title": "1 લાઇન",
+            "sub": "idea લખો"
+          },
+          {
+            "title": "Feedback",
+            "sub": "શું સુધારવું એ કહો"
+          }
+        ],
+        "sweep": true,
+        "until": {
+          "sec": 3.0
+        },
+        "title": "*6* સ્ટેપ્સ"
+      }
+    },
+    {
+      "kicker": "// 16 · મારી system",
+      "say": [
+        "અને જો તમારે આની પાછળની *skill files* જોઈએ,",
+        "તો એ બધી આ *folder* માં છે."
+      ],
+      "label": "મારી *system*",
+      "visual": {
+        "type": "folder",
+        "name": "ai-video",
+        "files": [
+          "SKILL.md",
+          "guides.md",
+          "render.js",
+          "check.js"
+        ],
+        "count": "open source",
+        "at": 0.1
+      }
+    },
+    {
+      "kicker": "// comment કરો",
+      "say": [
+        "*SKILL* comment કરો, હું તમને મોકલી દઈશ."
+      ],
+      "hold": 1.4,
+      "visual": {
+        "type": "cta",
+        "pre": "COMMENT કરો",
+        "word": "SKILL",
+        "bubble": "અને હું તમને *આખી system* મોકલીશ",
+        "at": 0.2
+      }
+    }
+  ],
+  "lang": "gu",
+  "voice": {
+    "provider": "google",
+    "language": "gu-IN",
+    "name": "gu-IN-Wavenet-B",
+    "rate": 1.05
+  }
+}
