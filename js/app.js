@@ -48,6 +48,7 @@
   }
 
   function toast(msg) {
+    $all('.toast').forEach(function (t) { t.remove(); });
     var el = document.createElement('div');
     el.className = 'toast';
     el.textContent = msg;
@@ -553,7 +554,7 @@
     var cols = stages.slice();
     if (orphan.length) cols.push('Other');
     var total = deals.filter(isOpenDeal).reduce(function (a, d) { return a + (Number(d.value) || 0); }, 0);
-    var html = pageHeader('Sales pipeline', 'Drag deals between stages · open value ' + money(total), '<a class="btn" href="#/settings">Edit stages</a><button class="btn btn-primary" data-action="new-deal">+ New deal</button>');
+    var html = pageHeader('Sales pipeline', 'Drag deals or use the dropdown on each card · open value ' + money(total), '<a class="btn" href="#/settings">Edit stages</a><button class="btn btn-primary" data-action="new-deal">+ New deal</button>');
     if (!deals.length) html += emptyState('📈', 'No deals yet', 'Create a deal for every enquiry or opportunity and move it across stages until it is won.', '<button class="btn btn-primary" data-action="new-deal">+ New deal</button>');
     html += '<div class="board">' + cols.map(function (st) {
       var ds = st === 'Other' && orphan.length ? orphan : deals.filter(function (d) { return d.stage === st; });
@@ -564,7 +565,11 @@
           var late = d.expectedClose && isOpenDeal(d) && U.isOverdue(d.expectedClose);
           return '<div class="deal" draggable="true" data-id="' + esc(d.id) + '" data-action="edit-deal"><div class="deal-title">' + esc(d.title) + '</div>' +
             '<div class="deal-cust">' + esc(S.customerName(d.customerId)) + '</div>' +
-            '<div class="deal-foot"><b>' + money(d.value) + '</b><span class="' + (late ? 'overdue' : 'muted') + '">' + (d.expectedClose ? U.formatDate(d.expectedClose) : '') + '</span></div></div>';
+            '<div class="deal-foot"><b>' + money(d.value) + '</b><span class="' + (late ? 'overdue' : 'muted') + '">' + (d.expectedClose ? U.formatDate(d.expectedClose) : '') + '</span></div>' +
+            '<select class="deal-stage" data-id="' + esc(d.id) + '" aria-label="Move to stage">' +
+            (stages.indexOf(d.stage) === -1 ? '<option selected>' + esc(d.stage) + '</option>' : '') +
+            stages.map(function (s2) { return '<option value="' + esc(s2) + '"' + (s2 === d.stage ? ' selected' : '') + '>Move to: ' + esc(s2) + '</option>'; }).join('') +
+            '</select></div>';
         }).join('') + '</div></div>';
     }).join('') + '</div>';
     return html;
@@ -780,11 +785,7 @@
         col.classList.remove('drop');
         var id = dragId || e.dataTransfer.getData('text/plain');
         var stage = col.getAttribute('data-stage');
-        if (id && stage !== 'Other') {
-          S.upsert('deals', { id: id, stage: stage });
-          toast('Moved to ' + stage + (isWon(stage) ? ' 🎉' : ''));
-          render();
-        }
+        if (id && stage !== 'Other') moveDeal(id, stage);
       });
     });
   }
@@ -884,7 +885,19 @@
     'toggle-nav': function () { document.body.classList.toggle('nav-open'); },
   };
 
+  function moveDeal(id, stage) {
+    S.upsert('deals', { id: id, stage: stage });
+    toast('Moved to ' + stage + (isWon(stage) ? ' 🎉' : ''));
+    render();
+  }
+
+  // Stage dropdown on deal cards: works on phones where drag-and-drop does not.
+  document.addEventListener('change', function (e) {
+    if (e.target.classList.contains('deal-stage')) moveDeal(e.target.dataset.id, e.target.value);
+  });
+
   document.addEventListener('click', function (e) {
+    if (e.target.closest('.deal-stage')) return;
     var el = e.target.closest('[data-action]');
     if (el && ACTIONS[el.dataset.action]) {
       if (el.type === 'checkbox') { ACTIONS[el.dataset.action](el, e); return; }
