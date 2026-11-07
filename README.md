@@ -43,6 +43,7 @@ js/utils.js         Pure helpers: money formatting, invoice/GST maths, CSV, date
 js/store.js         Data layer (localStorage), industry presets, demo data
 js/app.js           Views, forms, router and actions
 tests/              Unit tests for the business logic
+marketing/          Reel / video prompt kits (documentary 3D style)
 ```
 
 ## Development
