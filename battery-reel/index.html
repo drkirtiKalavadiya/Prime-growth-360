@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Battery Myth Reel</title>
+  <meta name="description" content="A 90-second vertical (9:16) animated explainer: does keeping your laptop plugged in wear out the battery?">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="reel.css">
+</head>
+<body>
+  <div id="viewport">
+    <!-- 720 x 1280 vertical stage (scaled to fit the window) -->
+    <div id="stage" class="dark">
+      <div class="grid-bg"></div>
+      <div id="visual"></div>
+      <div id="caption"></div>
+      <div id="presenter"></div>
+      <div id="flash"></div>
+    </div>
+  </div>
+
+  <div id="controls">
+    <button id="btn-play" title="Play / pause (Space)">▶</button>
+    <button id="btn-restart" title="Restart (R)">⟲</button>
+    <input id="scrub" type="range" min="0" max="90" step="0.01" value="0">
+    <span id="clock">0:00 / 1:30</span>
+    <label class="file" title="Load your own voice-over (mp3 / wav). The animation then syncs to it.">
+      🎙 Voice-over<input id="voice" type="file" accept="audio/*">
+    </label>
+    <button id="btn-full" title="Fullscreen (F)">⛶</button>
+  </div>
+
+  <audio id="audio" preload="auto"></audio>
+  <script src="reel.js"></script>
+</body>
+</html>
