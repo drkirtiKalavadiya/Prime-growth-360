@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MSME Growth Masterclass | Prime Growth 360</title>
+<meta name="description" content="A 3-hour live masterclass for MSME owners: get more leads, follow up better, and grow sales with simple systems.">
+<meta name="theme-color" content="#4f46e5">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%234f46e5'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>P</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ======= EDIT THESE COLOURS TO MATCH YOUR BRAND ======= */
+:root{
+  --primary:#4f46e5; --primary-dark:#3730a3; --accent:#f59e0b; --accent-dark:#d97706;
+  --bg:#ffffff; --bg-alt:#f5f6fb; --text:#1c1f2e; --muted:#5f647a; --border:#e4e6ef;
+  --hero-from:#1e1b4b; --hero-to:#4338ca; --card:#ffffff; --ok:#16a34a;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11121a; --bg-alt:#181a25; --text:#ecedf3; --muted:#a3a7bd; --border:#2b2e40;
+    --card:#1d2030; --primary:#818cf8; --primary-dark:#6366f1;
+  }
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;padding-bottom:84px}
+img{max-width:100%;display:block}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+section{padding:64px 0}
+.alt{background:var(--bg-alt)}
+h1,h2,h3{line-height:1.25}
+h2{font-size:clamp(1.5rem,4vw,2.2rem);text-align:center;margin-bottom:12px}
+.sub{text-align:center;color:var(--muted);max-width:640px;margin:0 auto 40px}
+.hl{color:var(--accent)}
+.btn{display:inline-block;background:linear-gradient(180deg,var(--accent),var(--accent-dark));color:#1c1300;font-weight:800;
+  font-size:1.1rem;padding:16px 34px;border-radius:999px;text-decoration:none;box-shadow:0 8px 24px rgba(245,158,11,.35);
+  transition:transform .15s;border:0;cursor:pointer;text-align:center}
+.btn:hover{transform:translateY(-2px)}
+.btn small{display:block;font-weight:600;font-size:.75rem;opacity:.85}
+.center{text-align:center}
+
+/* top strip */
+.strip{background:#111;color:#fff;text-align:center;font-size:.85rem;padding:8px 16px}
+.strip b{color:var(--accent)}
+
+/* hero */
+.hero{background:linear-gradient(135deg,var(--hero-from),var(--hero-to));color:#fff;padding:56px 0 64px}
+.hero-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center}
+.tag{display:inline-block;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);padding:6px 14px;border-radius:999px;font-size:.8rem;margin-bottom:16px}
+.hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;margin-bottom:16px}
+.hero p.lead{font-size:1.1rem;opacity:.9;margin-bottom:24px}
+.facts{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:28px}
+.fact{background:rgba(255,255,255,.1);border-radius:12px;padding:12px 14px;font-size:.9rem}
+.fact b{display:block;font-size:1rem}
+.hero-card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:24px;text-align:center}
+.avatar{width:160px;height:160px;border-radius:50%;margin:0 auto 16px;background:linear-gradient(135deg,var(--accent),#fb7185);
+  display:grid;place-items:center;font-size:3.4rem;font-weight:800;color:#fff;border:4px solid rgba(255,255,255,.4)}
+.hero-card h3{font-size:1.2rem}
+.hero-card p{opacity:.85;font-size:.9rem}
+.price{margin:18px 0 6px;font-size:2.4rem;font-weight:800}
+.price s{font-size:1.1rem;opacity:.6;font-weight:400;margin-left:8px}
+.countdown{display:flex;justify-content:center;gap:8px;margin:14px 0}
+.countdown div{background:#fff;color:var(--hero-from);border-radius:10px;padding:8px 10px;min-width:60px}
+.countdown b{display:block;font-size:1.4rem;line-height:1.1}
+.countdown span{font-size:.65rem;text-transform:uppercase;letter-spacing:.05em}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:-36px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center;box-shadow:0 10px 30px rgba(20,20,60,.08)}
+.stat b{font-size:1.8rem;color:var(--primary);display:block}
+.stat span{color:var(--muted);font-size:.85rem}
+
+/* cards */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px}
+.card .ico{font-size:2rem;margin-bottom:10px}
+.card h3{font-size:1.1rem;margin-bottom:6px}
+.card p{color:var(--muted);font-size:.95rem}
+
+/* pain list */
+.checks{list-style:none;max-width:720px;margin:0 auto}
+.checks li{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 18px 14px 52px;margin-bottom:12px;position:relative}
+.checks li::before{content:"✕";position:absolute;left:18px;top:13px;width:24px;height:24px;border-radius:50%;background:#fee2e2;color:#dc2626;display:grid;place-items:center;font-size:.8rem;font-weight:800}
+.checks.ok li::before{content:"✓";background:#dcfce7;color:var(--ok)}
+
+/* modules */
+.module{display:flex;gap:18px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:14px}
+.module .n{flex:0 0 52px;height:52px;border-radius:14px;background:var(--primary);color:#fff;display:grid;place-items:center;font-weight:800;font-size:1.2rem}
+.module h3{font-size:1.05rem}
+.module p{color:var(--muted);font-size:.93rem}
+
+/* bonuses */
+.bonus{border:2px dashed var(--accent);background:var(--card);border-radius:16px;padding:22px;position:relative}
+.bonus .val{position:absolute;top:-12px;right:16px;background:var(--accent);color:#1c1300;font-weight:700;font-size:.8rem;padding:2px 12px;border-radius:999px}
+
+/* mentor */
+.mentor{display:grid;grid-template-columns:280px 1fr;gap:36px;align-items:center}
+.mentor .avatar{width:260px;height:260px;font-size:5rem}
+.mentor p{color:var(--muted);margin-bottom:12px}
+
+/* testimonials */
+.t{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px}
+.t .stars{color:var(--accent);letter-spacing:2px}
+.t p{margin:10px 0;font-size:.95rem}
+.t .who{display:flex;gap:10px;align-items:center;font-size:.85rem;color:var(--muted)}
+.t .who i{width:40px;height:40px;border-radius:50%;background:var(--primary);color:#fff;display:grid;place-items:center;font-style:normal;font-weight:700}
+
+/* offer box */
+.offer{max-width:640px;margin:0 auto;background:var(--card);border:2px solid var(--primary);border-radius:20px;padding:32px;text-align:center}
+.offer ul{list-style:none;text-align:left;margin:20px 0}
+.offer li{padding:8px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;gap:12px}
+.offer li span:last-child{color:var(--muted);white-space:nowrap}
+.offer .total{font-size:1.1rem;margin:12px 0}
+.offer .total s{color:var(--muted)}
+.offer .big{font-size:2.6rem;font-weight:800;color:var(--primary)}
+.guarantee{margin-top:18px;font-size:.85rem;color:var(--muted)}
+
+/* faq */
+.faq{max-width:760px;margin:0 auto}
+details{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;padding:16px 20px}
+summary{font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::after{content:"+";font-size:1.3rem;line-height:1;color:var(--primary)}
+details[open] summary::after{content:"–"}
+details p{color:var(--muted);margin-top:10px}
+
+footer{background:#0f1020;color:#a3a7bd;text-align:center;padding:32px 16px;font-size:.85rem}
+footer a{color:#cfd2e6}
+
+/* sticky bar */
+.sticky{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--border);box-shadow:0 -8px 24px rgba(0,0,0,.08);z-index:50}
+.sticky .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:12px;padding-bottom:12px}
+.sticky .p{font-weight:800;font-size:1.4rem}
+.sticky .p s{font-weight:400;font-size:.9rem;color:var(--muted)}
+.sticky .p small{display:block;font-weight:600;font-size:.75rem;color:#dc2626}
+.sticky .btn{padding:12px 24px;font-size:1rem}
+
+@media (max-width:820px){
+  .hero-grid,.mentor,.grid2{grid-template-columns:1fr}
+  .grid3{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .mentor .avatar{width:180px;height:180px;font-size:3.6rem;margin:0 auto}
+  section{padding:48px 0}
+}
+@media (max-width:420px){
+  .facts{grid-template-columns:1fr}
+  .countdown div{min-width:52px}
+  .sticky .p{font-size:1.15rem}
+  .sticky .btn{padding:11px 16px;font-size:.9rem}
+}
+</style>
+</head>
+<body>
+
+<div class="strip">🔥 Only <b id="seats">47</b> seats left for this live batch. Registration closes soon.</div>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="tag">🎯 LIVE MASTERCLASS FOR BUSINESS OWNERS</span>
+      <h1>Turn Your Small Business Into a <span class="hl">Growth Machine</span> in 3 Hours</h1>
+      <p class="lead">Learn the simple system to get more leads, never miss a follow-up and close more sales. No marketing degree or big budget needed.</p>
+      <div class="facts">
+        <div class="fact">📅 <b id="event-date">Sunday, 15 Nov</b>Date</div>
+        <div class="fact">⏰ <b>11:00 AM – 2:00 PM</b>Time (IST)</div>
+        <div class="fact">💻 <b>Live on Zoom</b>Join from anywhere</div>
+        <div class="fact">🗣️ <b>Hindi + English</b>Language</div>
+      </div>
+      <a href="#register" class="btn">Register Now for ₹99 <small>Limited seats at this price</small></a>
+    </div>
+    <div class="hero-card">
+      <div class="avatar">KK</div>
+      <h3>Dr. Kirti Kalavadiya</h3>
+      <p>Founder, Prime Growth 360 · MSME Growth Coach</p>
+      <div class="price">₹99 <s>₹1,999</s></div>
+      <p>Offer ends in</p>
+      <div class="countdown" aria-live="polite">
+        <div><b data-cd="h">00</b><span>Hours</span></div>
+        <div><b data-cd="m">00</b><span>Mins</span></div>
+        <div><b data-cd="s">00</b><span>Secs</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- STATS -->
+<div class="wrap">
+  <div class="stats">
+    <div class="stat"><b>5,000+</b><span>Business owners trained</span></div>
+    <div class="stat"><b>4.8★</b><span>Average rating</span></div>
+    <div class="stat"><b>25+</b><span>Industries covered</span></div>
+    <div class="stat"><b>3 hrs</b><span>Practical, live session</span></div>
+  </div>
+</div>
+
+<!-- PAIN -->
+<section>
+  <div class="wrap">
+    <h2>Does This Sound Like <span class="hl">Your Business?</span></h2>
+    <p class="sub">Most MSME owners work hard every day but still feel stuck. If you nod at any of these, this masterclass is for you.</p>
+    <ul class="checks">
+      <li>Enquiries come in, but most never turn into paying customers</li>
+      <li>You forget to follow up, and customers go to a competitor</li>
+      <li>Sales depend only on word of mouth and old customers</li>
+      <li>You don't know which marketing actually brings money</li>
+      <li>Payments get delayed and cash flow is always tight</li>
+      <li>You are doing everything yourself and have no time to grow</li>
+    </ul>
+  </div>
+</section>
+
+<!-- WHAT YOU'LL LEARN -->
+<section class="alt">
+  <div class="wrap">
+    <h2>What You Will <span class="hl">Learn</span></h2>
+    <p class="sub">A step-by-step plan you can start using the very next day, built for Indian small businesses.</p>
+    <div class="module"><div class="n">1</div><div><h3>The 360° Growth Framework</h3><p>See exactly where your business is leaking money, from first enquiry to repeat customer.</p></div></div>
+    <div class="module"><div class="n">2</div><div><h3>Get More Leads Without Big Ad Budgets</h3><p>Use WhatsApp, Google Business Profile, Instagram and referrals to bring in steady enquiries.</p></div></div>
+    <div class="module"><div class="n">3</div><div><h3>The Follow-up System That Closes Sales</h3><p>Simple scripts and a follow-up calendar so no lead is ever forgotten again.</p></div></div>
+    <div class="module"><div class="n">4</div><div><h3>Pricing & Offers That Sell</h3><p>Price with confidence, create irresistible packages and stop competing only on discounts.</p></div></div>
+    <div class="module"><div class="n">5</div><div><h3>Track Everything With a Free CRM</h3><p>Set up the Prime Growth 360 CRM live: contacts, pipeline, GST invoices and payment reminders.</p></div></div>
+    <div class="module"><div class="n">6</div><div><h3>Your 30-Day Growth Action Plan</h3><p>Walk away with a clear plan, daily habits and targets for the next month.</p></div></div>
+  </div>
+</section>
+
+<!-- WHO IS IT FOR -->
+<section>
+  <div class="wrap">
+    <h2>Who Is This <span class="hl">For?</span></h2>
+    <p class="sub">Any business owner who wants more customers and more control.</p>
+    <div class="grid3">
+      <div class="card"><div class="ico">🏪</div><h3>Shop & Retail Owners</h3><p>Bring more footfall and repeat buyers.</p></div>
+      <div class="card"><div class="ico">🏭</div><h3>Manufacturers & Traders</h3><p>Manage dealers, quotations and B2B follow-ups.</p></div>
+      <div class="card"><div class="ico">🩺</div><h3>Clinics & Professionals</h3><p>Fill your appointment calendar consistently.</p></div>
+      <div class="card"><div class="ico">🎓</div><h3>Coaches & Institutes</h3><p>Convert enquiries into admissions.</p></div>
+      <div class="card"><div class="ico">🏠</div><h3>Real-Estate & Agencies</h3><p>Track every site visit and deal.</p></div>
+      <div class="card"><div class="ico">🚀</div><h3>New Entrepreneurs</h3><p>Start with the right systems from day one.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- BONUSES -->
+<section class="alt">
+  <div class="wrap">
+    <h2>Free Bonuses When You <span class="hl">Attend Live</span></h2>
+    <p class="sub">Stay till the end of the session to unlock these.</p>
+    <div class="grid2">
+      <div class="bonus"><span class="val">Worth ₹1,499</span><h3>🎁 50 WhatsApp Sales Scripts</h3><p>Ready-to-copy messages for enquiries, follow-ups, offers and payment reminders.</p></div>
+      <div class="bonus"><span class="val">Worth ₹999</span><h3>🎁 Prime Growth 360 CRM Setup Guide</h3><p>Step-by-step video to set up your free CRM in 20 minutes.</p></div>
+      <div class="bonus"><span class="val">Worth ₹799</span><h3>🎁 30-Day Growth Planner</h3><p>A printable daily planner to track leads, sales and targets.</p></div>
+      <div class="bonus"><span class="val">Worth ₹1,999</span><h3>🎁 Live Q&A Session</h3><p>Ask about your own business and get direct answers.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- MENTOR -->
+<section>
+  <div class="wrap mentor">
+    <div class="avatar">KK</div>
+    <div>
+      <h2 style="text-align:left">Meet Your <span class="hl">Mentor</span></h2>
+      <p><b style="color:var(--text)">Dr. Kirti Kalavadiya</b> is the founder of Prime Growth 360 and works with MSMEs to build simple, practical systems for sales and growth.</p>
+      <p>[Add your story here: years of experience, businesses helped, key achievements, media features and why you started Prime Growth 360.]</p>
+      <a href="#register" class="btn">Book My Seat for ₹99</a>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="alt">
+  <div class="wrap">
+    <h2>What Business Owners <span class="hl">Say</span></h2>
+    <p class="sub">Replace these sample cards with real reviews from your participants.</p>
+    <div class="grid3">
+      <div class="t"><div class="stars">★★★★★</div><p>"[Participant review: the result they got after the masterclass.]"</p><div class="who"><i>A</i><div><b>Name</b><br>Business, City</div></div></div>
+      <div class="t"><div class="stars">★★★★★</div><p>"[Participant review: what they liked most and what changed.]"</p><div class="who"><i>B</i><div><b>Name</b><br>Business, City</div></div></div>
+      <div class="t"><div class="stars">★★★★★</div><p>"[Participant review: a specific number, e.g. more leads or sales.]"</p><div class="who"><i>C</i><div><b>Name</b><br>Business, City</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- OFFER -->
+<section id="register">
+  <div class="wrap">
+    <h2>Everything You <span class="hl">Get Today</span></h2>
+    <div class="offer">
+      <ul>
+        <li><span>✅ 3-Hour Live Growth Masterclass</span><span>₹1,999</span></li>
+        <li><span>✅ 50 WhatsApp Sales Scripts</span><span>₹1,499</span></li>
+        <li><span>✅ CRM Setup Guide</span><span>₹999</span></li>
+        <li><span>✅ 30-Day Growth Planner</span><span>₹799</span></li>
+        <li><span>✅ Live Q&A Session</span><span>₹1,999</span></li>
+      </ul>
+      <p class="total">Total value: <s>₹7,295</s></p>
+      <p>Today only</p>
+      <div class="big">₹99</div>
+      <br>
+      <!-- Replace PAYMENT_LINK with your Razorpay / Instamojo / Cosmofeed payment page URL -->
+      <a href="PAYMENT_LINK" class="btn">Yes! Reserve My Seat Now <small>Secure payment · Instant confirmation</small></a>
+      <p class="guarantee">🔒 100% secure payment · Zoom link sent on WhatsApp & email after registration</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="alt">
+  <div class="wrap">
+    <h2>Frequently Asked <span class="hl">Questions</span></h2>
+    <div class="faq">
+      <details><summary>Is this a live session or recorded?</summary><p>It is a 100% live session on Zoom, with time for your questions.</p></details>
+      <details><summary>I'm not good with technology. Can I still join?</summary><p>Yes. Everything is explained in simple language and step by step. You only need a phone or laptop with internet.</p></details>
+      <details><summary>Will I get a recording?</summary><p>The session is designed to be attended live. Bonuses are given only to live attendees.</p></details>
+      <details><summary>How will I receive the joining link?</summary><p>Right after payment you will get a confirmation on WhatsApp and email with the Zoom link.</p></details>
+      <details><summary>My business is very small. Is this useful for me?</summary><p>Yes. The system works for one-person businesses as well as teams, across retail, services, manufacturing and more.</p></details>
+      <details><summary>Who do I contact for help?</summary><p>WhatsApp us at +91 XXXXX XXXXX or email primegrowth360@gmail.com.</p></details>
+    </div>
+    <p class="center" style="margin-top:32px"><a href="#register" class="btn">Register Now for ₹99</a></p>
+  </div>
+</section>
+
+<footer>
+  <p>© <span id="yr"></span> Prime Growth 360. All rights reserved.</p>
+  <p style="margin-top:8px"><a href="#">Privacy Policy</a> · <a href="#">Terms</a> · <a href="#">Refund Policy</a></p>
+  <p style="margin-top:12px;font-size:.75rem">Results vary from business to business. This page is not part of or endorsed by Facebook, Instagram or Google.</p>
+</footer>
+
+<!-- STICKY BAR -->
+<div class="sticky">
+  <div class="wrap">
+    <div class="p">₹99 <s>₹1,999</s><small>⏳ Offer ends in <span data-cd="full">--:--:--</span></small></div>
+    <a href="#register" class="btn">Register Now</a>
+  </div>
+</div>
+
+<script>
+/* ======= SETTINGS: edit these ======= */
+// Masterclass start time (IST). Countdown runs until this moment.
+const EVENT_TIME = "2026-11-15T11:00:00+05:30";
+
+(function(){
+  const end = new Date(EVENT_TIME).getTime();
+  const pad = n => String(n).padStart(2,"0");
+  const els = k => document.querySelectorAll('[data-cd="'+k+'"]');
+  function tick(){
+    let d = Math.max(0, end - Date.now());
+    // If the event has passed, fall back to a rolling 24-hour countdown.
+    if (d === 0) d = 86400000 - (Date.now() % 86400000);
+    const h = Math.floor(d/3600000), m = Math.floor(d/60000)%60, s = Math.floor(d/1000)%60;
+    els("h").forEach(e=>e.textContent=pad(h));
+    els("m").forEach(e=>e.textContent=pad(m));
+    els("s").forEach(e=>e.textContent=pad(s));
+    els("full").forEach(e=>e.textContent=pad(h)+":"+pad(m)+":"+pad(s));
+  }
+  tick(); setInterval(tick,1000);
+  document.getElementById("yr").textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
