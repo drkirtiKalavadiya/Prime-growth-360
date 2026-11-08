@@ -1,42 +1,40 @@
-# Battery Myth Reel (9:16 animated explainer)
+# Laptop Battery Reel (Gujarati, 9:16)
 
-A 90-second vertical reel built only with HTML, CSS and SVG: no image or video files.
-It covers one question: does keeping your laptop plugged in wear out the battery?
+A 1 minute 47 second vertical reel in Gujarati: does keeping your laptop plugged in wear out the battery?
+It is built only with HTML, CSS and SVG, synced to the voice-over played at 1.5× speed, with your own character as the presenter.
 
-Open `battery-reel/index.html` in a browser. It plays automatically.
+- **Ready video:** `laptop-battery-reel-gujarati.mp4` (720×1280, 30 fps, with audio). Post it directly to Reels / Shorts.
+- **Live version:** open `index.html` in a browser and tap ▶ (browsers only allow sound after a tap).
 
-## Layout (same on every shot)
-- **Top:** word-by-word captions. The word being spoken turns bold, earlier words go grey, and the key word gets a blue selection box with corner handles.
-- **Middle:** the animated visual. It opens with a blur, scale and push-in, and its top and bottom edges fade out.
-- **Bottom:** a cartoon host whose pose changes with the script and who lip-syncs while a caption is on screen.
-- The background switches between dark and light (with a grid) to match each section.
-
-## Shots
-| Time | Visual |
+## Files
+| File | What it is |
 | --- | --- |
-| 0–3.4 s | Charger plugging in, battery shatters |
-| 3.4–8.5 s | Battery packs (light) |
-| 8.5–19.5 s | Cell cross-section: anode, separator, cathode; lithium ions moving across; electrons going round through the laptop |
-| 19.5–24.5 s | See-through cell discharging, then charging when the plug goes in |
-| 24.5–34.5 s | Graphite layers, side reactions trapping lithium, smaller battery |
-| 34.5–40 s | Crust (SEI) growing and slowing the ions |
-| 40–50 s | Heat: thermal camera, sun, hot car, duvet, overheating cell |
-| 50–61.5 s | 3D lattices: 0 % vs 100 % extremes, 20–80 % sweet spot |
-| 61.5–74.5 s | Desk scene, charging chart that holds at 80 %, circuit board |
-| 74.5–83.8 s | Mac and PC battery settings mock-ups |
-| 83.8–90 s | Switching the setting on, notification, share sheet |
+| `index.html`, `reel.css`, `reel.js` | The animated reel |
+| `voiceover.mp3` | Your voice-over, sped up to 1.5× (pitch kept the same) |
+| `assets/presenter.png` | Your character with the white background removed |
+| `render-mp4.js` | Re-renders the MP4 after you edit anything (`node render-mp4.js`; needs Playwright and ffmpeg) |
 
-## Controls
+## How it is synced
+All times in `reel.js` are in seconds of the **original (1×) voice-over**. Playback runs 1.5× faster, so a line at 30 s in the voice-over appears at 20 s in the reel.
+- `LINES`: each spoken sentence with its start and end time, measured from the audio. Put a word in `[brackets]` to give it the blue highlight box. Lines are split automatically into short on-screen chunks.
+- `SCENES`: which visual shows when, dark or light, and a small time map that lines the animation up with the words.
+- The presenter bounces with the loudness of the voice (`ENV`) and pops on each highlighted word.
+
+## Note about the voice-over
+The recording does not include these five script lines, so they are not in the captions either:
+1. જવાબ છે — આજકાલનાં મોટાભાગનાં નવા લેપટોપમાં એવું જરૂરી નથી.
+2. જ્યારે લેપટોપને ખબર પડે છે … લગભગ 80% પર ચાર્જિંગ રોકી દે છે.
+3. ત્યારબાદ લેપટોપ બેટરીને બદલે સીધું ચાર્જરથી મળતી વીજળી પર ચાલે છે.
+4. જો તમારી પાસે MacBook છે … Charge Limit ને 80% પર સેટ કરી શકો છો.
+5. જો તમારી પાસે Windows Laptop છે … Battery Management App ખોલો.
+
+If you re-record with these lines, add them to `LINES` and re-add the Mac and PC settings scenes (`macset`, `limit`).
+
+## Controls (browser)
 - Space: play / pause
 - R: restart
 - ← / →: jump 2 s
 - F: fullscreen
-- The **🎙 Voice-over** button loads your own narration (mp3 / wav), and the animation then follows the audio. If the page is served over http(s), a `voiceover.mp3` file in this folder is picked up automatically.
-- `index.html?t=42` opens paused at 42 s.
-- `index.html?record=1` hides the controls so you can screen-record a clean 9:16 video.
-
-## Editing
-Everything is in `reel.js`:
-- `SCRIPT`: caption phrases and their start times. Put a key word in `[brackets]` to highlight it.
-- `SCENES`: which visual is shown when, and whether it is dark or light.
-- `POSES`: the host's gestures over time.
+- `?t=20` opens paused at 20 s
+- `?record=1` hides the controls
+- `?mute=1` plays without sound

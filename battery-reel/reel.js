@@ -1,12 +1,13 @@
 /* Battery Myth Reel — 90 s vertical explainer.
- * Everything is drawn with SVG / HTML / CSS; no external images or video.
- * Timeline: SCRIPT (captions), SCENES (visual panel), POSES (presenter).
- * URL options: ?t=12.5 jumps to that second and pauses (handy for screenshots).
+ * Gujarati voice-over edition: 1.5x voice-over, captions, visuals and presenter in sync.
+ * Everything is drawn with SVG / HTML / CSS. Timeline: LINES (captions), SCENES (visuals).
+ * URL options: ?t=12.5 opens paused at that second; ?record=1 hides controls; ?mute=1 runs without sound.
  */
 (() => {
 'use strict';
 
-const DUR = 90;
+const SPEED = 1.5;          // voice-over is played at 1.5x
+const A_END = 158.12;      // length of the original (1x) voice-over
 
 /* ------------------------------------------------------------------ */
 /* helpers                                                              */
@@ -875,127 +876,167 @@ V.share = el => {
   };
 };
 
-/* ------------------------------------------------------------------ */
-/* timeline                                                             */
-/* ------------------------------------------------------------------ */
-// [time, text]  — [word] marks the highlighted key word
-const SCRIPT = [
-  [0, '[Stop] keeping your laptop'], [1, 'on the [charger]'], [2, "you're [destroying]"], [2.6, 'its battery.'],
-  [3.4, 'Nope,'], [4, "that's completely [outdated.]"], [5.5, 'To know what [wears] a battery out,'], [7.4, 'you need to know how it [works.]'],
-  [8.5, 'Inside, [lithium] ions'], [10, 'travel from one side,'], [11, 'the [anode,]'], [12, 'to the other,'], [12.6, 'the [cathode.]'],
-  [13.5, "Their [electrons] can't go"], [14.5, 'through the inside,'], [15.1, 'so they take a [detour]'], [16.3, 'through your [laptop.]'],
-  [17.4, 'That detour is the'], [18.4, 'electric [current.]'],
-  [19.5, 'Once nearly every ion'], [20.6, 'has made the trip,'], [21.8, 'the battery is [empty.]'], [22.6, '[Plug] it in, and they all head back.'],
-  [24.5, "In practice, it's [messier.]"], [26.2, 'Small [side] reactions'], [27.6, 'grab some of the [lithium]'], [28.6, 'on the anode side'], [29.6, 'and [lock] it there for good.'],
-  [31, 'Less lithium that can move'], [32.1, 'means [fewer] ions,'], [33.2, 'and a [smaller] battery.'],
-  [34.5, 'On top of that,'], [35.5, 'those reactions build'], [36.6, 'a thin [crust]'], [37.5, 'that grows over time,'], [38.6, 'and [slows] the ions down.'],
-  [40, 'And the [hotter] it gets,'], [41.1, 'the more'], [41.6, 'those reactions [happen.]'],
-  [43, 'A laptop'], [43.8, 'in the [sun,]'], [44.6, 'sitting in a [hot] car'], [45.6, 'all summer,'], [46.2, 'or on a [duvet]'], [47, 'with its fans covered,'],
-  [48, "that's how you cook"], [49, 'a battery [fast.]'],
-  [50, 'The second thing that hurts'], [51.2, 'is the [extremes,]'], [52.2, '[zero] percent,'], [53.1, 'or a [hundred.]'],
-  [54, 'At either end,'], [54.8, 'nearly all the ions'], [55.8, 'are [crammed] on one side'], [57, 'and the damage [speeds] up.'],
-  [58.5, 'Somewhere around'], [59.2, '20 to 80%'], [60.2, "is where it's [happiest.]"],
-  [61.5, "So if it's always on the charger,"], [63, 'it sits at [100%] all day'], [64.6, "and I'm [wrecking] it?"], [65.6, '[Not] on most recent laptops.'],
-  [67.5, "Once it notices it's"], [68.2, 'always [plugged] in,'], [69.2, 'it stops around'], [69.8, '[80%] by itself.'],
-  [71.3, 'After that, it [stays] there'], [72.6, 'and runs'], [73.4, 'off the [cable.]'],
-  [74.6, 'On a [Mac,]'], [75.2, "that's [Optimized] Battery Charging,"], [76.9, 'already on,'], [77.5, 'or set the Charge Limit'], [78.6, 'to [80%.]'],
-  [80.4, 'On a [PC,]'], [81, 'open your battery [app,]'], [82.4, 'some ship with it off.'],
-  [83.8, 'Switch it [on,]'], [84.5, 'and keep it plugged in,'], [85.4, 'no [stress.]'],
-  [86.2, '[Send] this to the friend'], [87.5, 'who unplugs at [100%]'], [88.6, 'every [time.]'],
-  [90, '']
-];
 
-const SCENES = [
-  [0, 'charger', 'dark'], [2, 'shatter', 'dark'], [3.4, 'slab', 'light'], [5.5, 'packs', 'light'],
-  [8.5, 'cell', 'dark'], [19.5, 'labcell', 'light'], [24.5, 'graphite', 'dark'], [31, 'rods', 'dark'],
-  [32.1, 'labcell', 'dark', { fewer: true }], [34.5, 'sei', 'light'], [40, 'thermal', 'dark'], [43, 'table', 'dark'],
-  [44.6, 'car', 'dark'], [46.2, 'duvet', 'dark'], [48, 'heatcell', 'dark'], [50, 'lattice', 'light'],
-  [61.5, 'desk', 'dark'], [67.5, 'chart', 'light'], [69.8, 'board', 'light'], [74.6, 'macset', 'dark'],
-  [76.9, 'limit', 'dark'], [80.4, 'pcapps', 'dark'], [83.8, 'notify', 'light'], [86.2, 'share', 'light']
-];
-
-const POSES = [
-  [0, 'idle'], [3.4, 'stop'], [5.5, 'point'], [8.5, 'idle'], [10, 'point'], [12.6, 'pointBoth'], [14.5, 'shrug'], [16.3, 'pointBoth'], [18.4, 'idle'],
-  [19.5, 'shrug'], [22.6, 'plug'], [24.5, 'idle'], [26.2, 'point'], [29.6, 'together'], [31, 'idle'], [32.1, 'chin'], [34.5, 'point'], [36.6, 'pointBoth'], [38.6, 'cross'],
-  [40, 'thermo'], [43, 'cross'], [44.6, 'idle'], [46.2, 'salute'], [48, 'heads'], [50, 'peace'], [52.2, 'thumbs'], [54.8, 'point'], [55.8, 'thumbs'], [57, 'idle'],
-  [60.2, 'fist'], [61.5, 'chin'], [64.6, 'chest'], [65.6, 'together'], [67.5, 'idle'], [69.8, 'palm'], [71.3, 'stop'], [74.6, 'idle'], [76.9, 'point'], [78.6, 'idle'],
-  [80.4, 'point'], [82.4, 'shrug'], [83.8, 'plug'], [86.2, 'pointBoth'], [88.6, 'wave']
-];
-// [leftShoulder, leftElbow, rightShoulder, rightElbow] in degrees (CSS rotate)
-const POSE_ANGLES = {
-  idle: [10, 0, -10, 0], point: [10, 0, -45, -125], pointBoth: [45, 125, -45, -125], stop: [-15, -160, -10, 0],
-  shrug: [62, 58, -62, -58], chin: [10, 0, 48, 132], heads: [128, 62, -128, -62], cross: [-40, -70, 40, 70],
-  thumbs: [38, 105, -38, -105], fist: [10, 0, -70, -95], together: [5, -112, -5, 112], chest: [10, 0, 30, 120],
-  wave: [10, 0, -150, -20], peace: [10, 0, -60, -110], palm: [-10, -92, -10, 0], salute: [10, 0, -95, -120],
-  thermo: [10, 0, -35, -118], plug: [10, 0, -35, -110]
+/* ---- CTA: course announcement + comment ---- */
+V.cta = el => {
+  el.innerHTML = `
+    <div class="ui ctacard" style="left:70px;top:40px;width:580px;border-radius:28px;padding:30px;color:#fff;
+      background:linear-gradient(135deg,#5b2bd9 0%,#2f6df0 55%,#11b5c9 100%);box-shadow:0 30px 70px rgba(47,109,240,.35);
+      font-family:'Hind Vadodara','Figtree',sans-serif;opacity:0;transform:translateY(30px) scale(.96);transition:all .6s cubic-bezier(.2,.8,.2,1)">
+      <div style="display:flex;align-items:center;gap:12px;font-family:Figtree;font-weight:800;font-size:18px;letter-spacing:2px;opacity:.9">
+        <span style="width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:22px">▶</span>COMING SOON</div>
+      <div style="font-family:Figtree;font-weight:800;font-size:56px;line-height:1.05;margin-top:22px">AI Video<br>Course</div>
+      <div style="font-size:27px;font-weight:600;margin-top:14px;line-height:1.35">તમારા Business માટે<br>આવા AI Videos બનાવતા શીખો</div>
+      <div style="display:flex;gap:12px;margin-top:22px;flex-wrap:wrap;font-family:Figtree;font-size:17px;font-weight:700">
+        <span style="background:rgba(255,255,255,.18);border-radius:30px;padding:8px 16px">🎬 Script → Video</span>
+        <span style="background:rgba(255,255,255,.18);border-radius:30px;padding:8px 16px">🎙 AI Voice</span>
+        <span style="background:rgba(255,255,255,.18);border-radius:30px;padding:8px 16px">✨ Animation</span></div>
+      <div class="seats" style="position:absolute;right:-14px;top:-18px;background:#ff3b30;color:#fff;border-radius:40px;padding:10px 20px;
+        font-weight:700;font-size:22px;box-shadow:0 10px 24px rgba(255,59,48,.45);transform:scale(0) rotate(8deg);transition:transform .45s cubic-bezier(.2,1.5,.4,1)">🔥 લિમિટેડ સીટ્સ</div>
+    </div>
+    <div class="ui cbox" style="left:70px;top:460px;width:580px;background:#fff;border-radius:22px;padding:18px 20px;
+      box-shadow:0 18px 50px rgba(0,0,0,.18);display:flex;align-items:center;gap:14px;opacity:0;transform:translateY(60px);transition:all .5s cubic-bezier(.2,.8,.2,1)">
+      <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#f9ce34,#ee2a7b,#6228d7);padding:3px;flex:none">
+        <div style="width:100%;height:100%;border-radius:50%;background:#e9e9ee;display:flex;align-items:center;justify-content:center;font-size:24px">🙂</div></div>
+      <div style="flex:1;min-width:0"><div style="font-size:14px;color:#8e8e93;font-family:Figtree">કોમેન્ટ કરો…</div>
+        <div class="typed" style="font-family:Figtree;font-weight:700;font-size:28px;color:#111;white-space:nowrap;border-right:3px solid #3478f6;display:inline-block;padding-right:3px"></div></div>
+      <div class="post" style="font-family:Figtree;font-weight:800;font-size:20px;color:#b9d3fb;transition:color .3s">Post</div>
+      <div class="heart" style="position:absolute;right:24px;top:-40px;font-size:38px;opacity:0;transition:all .5s">❤️</div>
+    </div>`;
+  const card = $(el, '.ctacard'), seats = $(el, '.seats'), cbox = $(el, '.cbox'), typed = $(el, '.typed'), post = $(el, '.post'), heart = $(el, '.heart');
+  const msg = 'I am Interested';
+  return a => {
+    const on = a >= 149.1;
+    card.style.opacity = on ? 1 : 0; card.style.transform = on ? 'none' : 'translateY(30px) scale(.96)';
+    seats.style.transform = a >= 154.8 ? 'scale(1) rotate(8deg)' : 'scale(0) rotate(8deg)';
+    const box = a >= 155.9;
+    cbox.style.opacity = box ? 1 : 0; cbox.style.transform = box ? 'none' : 'translateY(60px)';
+    const n = Math.round(prog(a, 157.0, 158.0) * msg.length);
+    typed.textContent = msg.slice(0, n);
+    const done = n >= msg.length;
+    post.style.color = done ? '#3478f6' : '#b9d3fb';
+    heart.style.opacity = a >= 158.4 ? 1 : 0; heart.style.top = a >= 158.4 ? '-56px' : '-30px';
+  };
 };
 
 /* ------------------------------------------------------------------ */
-/* presenter (original cartoon host)                                    */
+/* timeline — all times below are in the ORIGINAL (1x) voice-over      */
+/* seconds; playback runs SPEED x faster.                              */
 /* ------------------------------------------------------------------ */
-function armSVG(side) {
-  const sx = side === 'L' ? 92 : 208;
-  const props = side === 'R' ? `
-    <g class="prop-thermo fade-el" opacity="0"><rect x="${sx - 6}" y="300" width="12" height="62" rx="6" fill="#fff" stroke="#999"/><rect x="${sx - 3}" y="322" width="6" height="34" fill="#e0342a"/><circle cx="${sx}" cy="362" r="9" fill="#e0342a"/></g>
-    <g class="prop-plug fade-el" opacity="0"><rect x="${sx - 10}" y="336" width="20" height="34" rx="5" fill="#eee" stroke="#999"/><rect x="${sx - 5}" y="322" width="10" height="14" fill="url(#silver)"/></g>` : '';
-  return `<g class="arm" id="arm${side}" style="transform-origin:${sx}px 215px">
-      <rect x="${sx - 15}" y="218" width="30" height="74" rx="15" fill="var(--skin)"/>
-      <rect x="${sx - 19}" y="206" width="38" height="44" rx="17" fill="var(--shirt)"/>
-      <g class="fore" id="fore${side}" style="transform-origin:${sx}px 286px">
-        <rect x="${sx - 12}" y="280" width="24" height="64" rx="12" fill="var(--skin)"/>
-        <circle cx="${sx}" cy="346" r="17" fill="var(--skin)"/>
-        <rect x="${sx - 5}" y="352" width="10" height="24" rx="5" fill="var(--skin)"/>
-        <rect x="${side === 'L' ? sx + 10 : sx - 20}" y="336" width="10" height="16" rx="5" fill="#e9b48b"/>
-        ${props}
-      </g></g>`;
-}
-document.getElementById('presenter').innerHTML = `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
-  <g id="char-body">
-    <path d="M36 320 C40 240 78 206 122 198 L178 198 C222 206 260 240 264 320 Z" fill="var(--shirt)"/>
-    <path d="M128 198 Q150 222 172 198" fill="#b5161c"/>
-    <rect x="134" y="158" width="32" height="44" rx="12" fill="#e8b085"/>
-    <g id="char-head">
-      <circle cx="99" cy="122" r="13" fill="var(--skin)"/><circle cx="201" cy="122" r="13" fill="var(--skin)"/>
-      <ellipse cx="150" cy="116" rx="51" ry="57" fill="var(--skin)"/>
-      <path d="M97 112 C88 58 126 36 160 42 C200 46 214 78 203 114 C198 88 184 76 158 80 C136 70 112 84 97 112Z" fill="#6b3d1e"/>
-      <path d="M120 52 C140 22 186 26 196 54 C176 40 150 44 120 52Z" fill="#7d4a25"/>
-      <path d="M118 92 q12 -7 24 0 M158 92 q12 -7 24 0" stroke="#5a3418" stroke-width="5" fill="none" stroke-linecap="round"/>
-      <g stroke="#1a1a1a" stroke-width="4"><circle cx="128" cy="113" r="16" fill="#1f3448"/><circle cx="172" cy="113" r="16" fill="#1f3448"/><path d="M144 112 h12" fill="none"/></g>
-      <path d="M118 106 l8 -6 M162 106 l8 -6" stroke="#fff" stroke-width="3" opacity=".6" stroke-linecap="round"/>
-      <path d="M150 120 q-5 12 2 14" stroke="#d99a72" stroke-width="3" fill="none" stroke-linecap="round"/>
-      <path id="smile" d="M134 148 Q150 160 166 148" stroke="#8a3b2a" stroke-width="4" fill="none" stroke-linecap="round"/>
-      <ellipse id="mouth" cx="150" cy="151" rx="11" ry="7" fill="#6b1f1a" style="transform-origin:150px 147px;transform-box:view-box"/>
-    </g>
-    ${armSVG('L')}${armSVG('R')}
-  </g></svg>`;
-const armL = document.getElementById('armL'), armR = document.getElementById('armR');
-const foreL = document.getElementById('foreL'), foreR = document.getElementById('foreR');
-const mouth = document.getElementById('mouth'), smile = document.getElementById('smile'), head = document.getElementById('char-head');
-let curPose = '';
-function setPose(name) {
-  if (name === curPose) return;
-  curPose = name;
-  const [a, b, c, d] = POSE_ANGLES[name] || POSE_ANGLES.idle;
-  armL.style.transform = `rotate(${a}deg)`; foreL.style.transform = `rotate(${b}deg)`;
-  armR.style.transform = `rotate(${c}deg)`; foreR.style.transform = `rotate(${d}deg)`;
-  document.querySelector('.prop-thermo').setAttribute('opacity', name === 'thermo' ? 1 : 0);
-  document.querySelector('.prop-plug').setAttribute('opacity', name === 'plug' ? 1 : 0);
-}
+// [speech start, speech end, text]; [word] = highlighted key word
+const LINES = [
+  [0.00, 4.11, 'તમારા [લેપટોપને] આખો દિવસ ચાર્જર સાથે લગાવીને રાખવાનું [બંધ] કરો.'],
+  [4.49, 6.30, 'તેનાથી તેની બેટરી [ખરાબ] થઈ રહી છે!'],
+  [6.75, 7.23, '[ના!]'],
+  [7.44, 9.18, 'આ વાત હવે [જૂની] થઈ ગઈ છે.'],
+  [9.67, 16.87, 'બેટરી ખરેખર કેવી રીતે [ખરાબ] થાય છે એ સમજવા માટે પહેલાં એ જાણવું જરૂરી છે કે બેટરી [કામ] કેવી રીતે કરે છે.'],
+  [17.78, 20.72, 'તમારા લેપટોપની અંદર [Lithium-Ion] બેટરી હોય છે.'],
+  [21.19, 24.41, 'તેમાં Lithium [Ions] એક બાજુ એટલે કે [Anode] થી'],
+  [24.66, 26.94, 'બીજી બાજુ એટલે કે [Cathode] તરફ જાય છે.'],
+  [27.44, 31.62, 'આ Ions ના [Electrons] સીધા બેટરીની અંદરથી પસાર થઈ [શકતા] નથી.'],
+  [32.04, 35.37, 'એટલે તેઓ તમારા [લેપટોપના] સર્કિટમાંથી થઈને પસાર થાય છે.'],
+  [35.72, 38.72, 'અને આ જ પ્રક્રિયાથી Electric [Current] ઉત્પન્ન થાય છે.'],
+  [39.27, 43.01, 'જ્યારે લગભગ બધા જ Ions એક બાજુથી બીજી બાજુ [પહોંચી] જાય છે,'],
+  [43.20, 46.62, 'ત્યારે બેટરી ડિસ્ચાર્જ થઈને [0%] પર આવી જાય છે.'],
+  [47.12, 49.09, 'હવે જ્યારે તમે [ચાર્જર] લગાવો છો,'],
+  [49.32, 53.12, 'ત્યારે આ Ions ફરીથી [પાછા] પોતાની મૂળ જગ્યાએ જવા લાગે છે.'],
+  [53.67, 56.74, 'પરંતુ હકીકતમાં આ પ્રક્રિયા થોડી [જટિલ] છે.'],
+  [57.27, 60.46, 'બેટરીની અંદર કેટલીક નાની Chemical [Reactions] થાય છે,'],
+  [60.81, 63.81, 'જે [Lithium] નો થોડો ભાગ પોતાની સાથે જોડી લે છે'],
+  [64.16, 66.25, 'અને તેને કાયમ માટે [Lock] કરી દે છે.'],
+  [66.66, 70.11, 'એટલે કે હવે એ Lithium ફરીથી [હલનચલન] કરી શકતું નથી.'],
+  [70.51, 75.25, 'જેટલું [ઓછું] Lithium હલનચલન કરી શકે, એટલી જ બેટરીની [ક્ષમતા] ઘટતી જાય છે.'],
+  [75.74, 76.34, 'આ ઉપરાંત,'],
+  [76.70, 81.03, 'આ Chemical Reactions ના કારણે બેટરીની અંદર એક [પાતળું] પડ પણ બને છે.'],
+  [81.43, 83.39, 'સમય જતાં આ પડ [વધતું] જાય છે'],
+  [83.70, 85.89, 'અને Ions ની હલનચલન [ધીમી] કરી દે છે.'],
+  [86.33, 90.46, 'અને સૌથી મહત્વની વાત એ છે કે બેટરી જેટલી વધારે [ગરમ] થાય,'],
+  [90.80, 93.28, 'એટલી જ આ Chemical Reactions [ઝડપથી] થાય છે.'],
+  [93.82, 94.57, 'ઉદાહરણ તરીકે:'],
+  [94.99, 96.55, 'લેપટોપને [તડકામાં] રાખવું.'],
+  [96.98, 99.05, 'ઉનાળામાં [ગરમ] કારની અંદર રાખવું.'],
+  [99.45, 104.95, 'અથવા પલંગ પર ગાદલા કે [ધાબળા] ઉપર રાખીને તેના [Fans] અને Air Vents બંધ કરી દેવા.'],
+  [105.45, 108.85, 'આવી ભૂલો તમારી લેપટોપ બેટરીને [ઝડપથી] જૂની કરી શકે છે.'],
+  [109.52, 111.94, 'બીજી વસ્તુ જે બેટરીને [નુકસાન] પહોંચાડે છે,'],
+  [112.20, 114.36, 'તે છે Battery ના [Extreme] Levels'],
+  [114.63, 116.62, 'એટલે કે [0%] અને [100%].'],
+  [117.01, 124.38, 'આ બંને સ્થિતિમાં Lithium Ions એક જ બાજુએ ખૂબ વધારે પ્રમાણમાં [એકઠા] થઈ જાય છે અને બેટરી પર [તણાવ] વધે છે.'],
+  [124.79, 131.00, 'સામાન્ય રીતે [20%] થી [80%] ની વચ્ચે બેટરીને રાખવી તેના માટે વધુ [અનુકૂળ] માનવામાં આવે છે.'],
+  [131.54, 137.56, 'તો હવે સવાલ એ છે કે જો મારું લેપટોપ આખો દિવસ [ચાર્જર] સાથે જોડાયેલું રહે અને બેટરી [100%] પર રહે, તો શું હું તેની બેટરી [ખરાબ] કરી રહ્યો છું?'],
+  [137.90, 140.19, 'કેટલાક લેપટોપમાં આ ફીચર [બંધ] હોય છે.'],
+  [140.66, 145.93, 'તેને [ચાલુ] કરો અને પછી જરૂર મુજબ લેપટોપને ચાર્જર સાથે [જોડેલું] રાખી શકો છો.'],
+  [146.31, 148.71, 'હવે બેટરીની [ચિંતા] કરવાની જરૂર નથી!'],
+  [149.31, 154.60, 'આ પ્રકારના [AI video] તમારા [business] માટે બનાવવાનું શીખવા માટે અમે એક [Course] લાવી રહ્યાં છીએ'],
+  [154.86, 155.75, '[લિમિટેડ] લોકો માટે,'],
+  [156.04, 156.86, '[કોમેન્ટ] કરો'],
+  [157.15, 158.12, '[I am Interested]']
+];
+
+// [start, visual, theme, opts, warp]  warp = [[voiceTime, visualTime], ...]
+// The visuals were designed on their own clock; warp maps voice time onto it.
+const SCENES = [
+  [0, 'charger', 'dark', {}, [[0, 0], [4.49, 2]]],
+  [4.49, 'shatter', 'dark', {}, [[4.49, 2], [6.75, 3.4]]],
+  [6.75, 'slab', 'light', {}, [[6.75, 3.4], [9.67, 5.5]]],
+  [9.67, 'packs', 'light', {}, [[9.67, 5.5], [17.78, 8.5]]],
+  [17.78, 'cell', 'dark', {}, [[17.78, 8.6], [21.19, 9.99], [23.3, 11], [25.8, 12.6], [27.44, 13.5], [29.6, 14.45], [32.04, 15.1], [36.4, 18.4], [39.27, 19.4]]],
+  [39.27, 'labcell', 'light', {}, [[39.27, 19.6], [46.62, 22.3], [47.12, 22.6], [50, 23], [53.12, 24.49]]],
+  [53.67, 'graphite', 'dark', {}, [[53.67, 24.5], [57.27, 26.2], [60.81, 27.4], [66.25, 30.6], [70.51, 30.99]]],
+  [70.51, 'rods', 'dark', {}, [[70.51, 31], [72.9, 32]]],
+  [72.9, 'labcell', 'dark', { fewer: true }, [[72.9, 32.1], [75.74, 34.4]]],
+  [75.74, 'sei', 'light', {}, [[75.74, 34.5], [78.6, 36.6], [85.9, 39.8], [86.33, 39.99]]],
+  [86.33, 'thermal', 'dark', {}, [[86.33, 40.1], [93.28, 43]]],
+  [93.82, 'table', 'dark', {}, [[93.82, 43], [96.98, 44.5]]],
+  [96.98, 'car', 'dark', {}, [[96.98, 44.6], [99.45, 46.1]]],
+  [99.45, 'duvet', 'dark', {}, [[99.45, 46.2], [102.5, 47.25], [105.45, 47.99]]],
+  [105.45, 'heatcell', 'dark', {}, [[105.45, 48], [109.52, 50]]],
+  [109.52, 'lattice', 'light', {}, [[109.52, 50], [115.3, 52.2], [115.9, 53.1], [117.01, 54.8], [118.6, 55.8], [120.4, 56.4], [124.6, 58.5], [125.6, 59.2], [126.6, 59.8], [128.4, 60.2], [131.54, 61.4]]],
+  [131.54, 'desk', 'dark', {}, [[131.54, 61.5], [136.0, 64.6], [137.9, 65.5]]],
+  [137.9, 'pcapps', 'dark', {}, [[137.9, 80.4], [140.0, 81.9], [140.66, 82.3]]],
+  [140.66, 'notify', 'light', {}, [[140.66, 83.8], [141.2, 84.15], [143.0, 84.6], [144.0, 85.0], [146.31, 86.1]]],
+  [146.31, 'chart', 'light', {}, [[146.31, 67.5], [149.0, 70.4]]],
+  [149.01, 'cta', 'light', {}, [[149.01, 149.01], [160, 160]]]
+];
+const A_HOLD = A_END + 1.8;           // keep the last frame a moment after the voice ends
+const DUR = A_HOLD / SPEED;           // reel length in real seconds
+
+// loudness of the voice-over, 20 samples per (1x) second, 0-9
+const ENV = '0045776788710584047652013201247478565000667639721641777368555645300454642477561320000000001235659273652432266121589218998630100000000000554764310000000000155749971568722467825633320000000000000111442025511376716510156456257025673015652024431001551558638857514683034557200154559756634556562012410000000063246622442000146976187754151222000000000000000000000356767676009704665444742000146851069521047787658613542331010000000000657743583089431466666300039422753135310003147217300356899400233100000127646658521100002226325002771398226541452100000000000005775248765652662237300554551000002563887327640476632344753151241575105631400554520100000000066148641002698154778666302960366103740441575491355551460785103310000000002562001567621383268753016410004683005300578512300645302421000000000000011768556217721145236983325666776100284226962740363125536499371344155863101000000000265622676125742000127300088640025434421037557344275265534232100000000000002699511145668153640265539948658643103320000027663015886366555541000186661164200566304722534645444698457147641656332120000000000000012233134447413304328203688763001221043013541025343215247520000000000000011676136556654477420062135214455666640056662685688721353003320000000000127534850185446200264792235651100461675622533842299896432000000000045615565001478776565227775599200455343100000000000332913742264974696783038632100006857305563157965066652379724201442000000000001167126630047712967650685457754286531566244024310000169203674358712656512443156312730294442100000000000006778223333300000000567407564395687611564374045565531000116761355566444774016100155404453004797166535331000000000000274786661587400472048652450079464210100000004540257786636763578633545452179883454243100000000000155610376409769970556668840014871024421000522576113552117401364364248994898540133410000000594015962138305564495355521165421016992006213310000000000000147988852333100000000000257203960145510775188564310001000000000134897656763127796515985463114779744310010000000004404887200667553056541277613876206212363798703745520675431000005564102666563001453003776445441113986615443310000000000003676586448787504578676650078227521454553101577300862677525431202100000000000000000156648476102443934651254654400577526534633202421000007741046631126740356574101300001787765210000000001315614411278895460673100044640089613111000000002675326766893017144344410123962088334556665000048207833776256750000373313523699636589646641027315649751010000000003462267504651485100778984342332000000000000077476588653046531111646203605750452014633825417555461026346512546636631134310004677584156313746841256714984554464432221000000000000002456631013364015476310135410145341003447545557466104650000232013634356200044542952353571444776654446531000000001446666520000000781376358820485036865146404613753398965253101000000000036661245892977410000003562063037652221178675567359536551027502344300056643973045207631687989683153130220000000000003768952245541444641541782656455467653385284100000000000000478247169746973015879785853555611657774357349505653635566466551240197663034310144461000699613875654453001000000366684935632442100000000000027486318675200000046555412941001000000';
+const loud = a => { const i = Math.floor(a * 20); return i >= 0 && i < ENV.length ? +ENV[i] / 9 : 0; };
 
 /* ------------------------------------------------------------------ */
-/* captions                                                             */
+/* presenter (your character)                                           */
+/* ------------------------------------------------------------------ */
+const pres = document.getElementById('presenter');
+pres.innerHTML = '<div class="pres-inner"><img src="assets/presenter.png" alt="Presenter" draggable="false"></div>';
+const presInner = pres.firstElementChild;
+let popAt = -1;
+
+/* ------------------------------------------------------------------ */
+/* captions: each line is split into short on-screen chunks            */
 /* ------------------------------------------------------------------ */
 const capEl = document.getElementById('caption');
-const phrases = SCRIPT.slice(0, -1).map(([ts, text], i) => {
-  const te = SCRIPT[i + 1][0];
-  const words = text.split(' ').map(w => {
-    const key = /^\[.*\]$/.test(w);
-    return { text: key ? w.slice(1, -1) : w, key };
+const phrases = [];
+LINES.forEach(([s, e, text], li) => {
+  const toks = text.match(/\[[^\]]+\]|\S+/g).map(w => /^\[/.test(w) ? { text: w.slice(1, -1), key: true } : { text: w, key: false });
+  const chunks = []; let cur = [];
+  const len = c => c.reduce((n, w) => n + w.text.length + 1, 0);
+  toks.forEach(w => {
+    if (cur.length && (cur.length >= 4 || len(cur) + w.text.length > 24)) { chunks.push(cur); cur = []; }
+    cur.push(w);
   });
-  const span = Math.min(te - ts, .2 + words.length * .3) * .92;
-  words.forEach((w, k) => { w.t = ts + (k / words.length) * span; });
-  return { ts, te, words, talkEnd: ts + span + .15 };
+  if (cur.length) chunks.push(cur);
+  // avoid a lonely last word
+  if (chunks.length > 1 && chunks[chunks.length - 1].length === 1 && len(chunks[chunks.length - 2]) < 22) chunks[chunks.length - 2].push(...chunks.pop());
+  const total = toks.reduce((n, w) => n + w.text.length + 1, 0);
+  let acc = 0;
+  chunks.forEach(words => {
+    const ts = s + (e - s) * acc / total;
+    words.forEach(w => { w.t = s + (e - s) * acc / total; acc += w.text.length + 1; });
+    phrases.push({ ts, te: 0, words, lineEnd: e });
+  });
 });
+phrases.forEach((p, i) => { p.te = i + 1 < phrases.length ? phrases[i + 1].ts : A_HOLD; });
 let curPhrase = -1;
 function renderCaption(i) {
   const p = phrases[i];
@@ -1012,7 +1053,15 @@ const visual = document.getElementById('visual');
 const flash = document.getElementById('flash');
 let curScene = -1, sceneUpdate = null;
 
-function findIdx(list, t) { let k = 0; for (let i = 0; i < list.length; i++) if (t >= list[i][0]) k = i; return k; }
+function findIdx(list, a) { let k = 0; for (let i = 0; i < list.length; i++) if (a >= list[i][0]) k = i; return k; }
+function warp(keys, a) {
+  if (a <= keys[0][0]) return keys[0][1] + (a - keys[0][0]);
+  for (let i = 1; i < keys.length; i++) {
+    const [a0, v0] = keys[i - 1], [a1, v1] = keys[i];
+    if (a <= a1) return v0 + (v1 - v0) * (a - a0) / (a1 - a0);
+  }
+  return keys[keys.length - 1][1];
+}
 
 function showScene(i) {
   const [, name, theme, opts] = SCENES[i];
@@ -1027,27 +1076,31 @@ function showScene(i) {
   if (was !== (theme === 'light')) { flash.classList.remove('go'); void flash.offsetWidth; flash.classList.add('go'); }
 }
 
-function render(t) {
-  const si = findIdx(SCENES, t);
+function render(T) {
+  const a = T * SPEED;                       // position in the 1x voice-over
+  const si = findIdx(SCENES, a);
   if (si !== curScene) { curScene = si; showScene(si); }
-  if (sceneUpdate) sceneUpdate(t);
+  if (sceneUpdate) sceneUpdate(warp(SCENES[si][4], a));
 
   let pi = -1;
-  for (let i = 0; i < phrases.length; i++) if (t >= phrases[i].ts && t < phrases[i].te) pi = i;
+  for (let i = 0; i < phrases.length; i++) if (a >= phrases[i].ts && a < phrases[i].te) pi = i;
   if (pi !== curPhrase) { curPhrase = pi; renderCaption(pi); }
   if (pi >= 0) {
     const p = phrases[pi], spans = capEl.children;
     let cur = -1;
-    p.words.forEach((w, k) => { const on = t >= w.t; spans[k].classList.toggle('on', on); if (on) cur = k; });
+    p.words.forEach((w, k) => {
+      const on = a >= w.t;
+      if (on && w.key && !spans[k].classList.contains('on')) popAt = T;
+      spans[k].classList.toggle('on', on); if (on) cur = k;
+    });
     for (let k = 0; k < spans.length; k++) spans[k].classList.toggle('cur', k === cur);
-    const talking = t < p.talkEnd;
-    mouth.style.transform = `scaleY(${talking ? f1(.25 + .75 * Math.abs(Math.sin(t * 17))) : .01})`;
-    smile.style.opacity = talking ? 0 : 1;
-  } else { mouth.style.transform = 'scaleY(.01)'; smile.style.opacity = 1; }
+  }
 
-  setPose(POSES[findIdx(POSES, t)][1]);
-  head.style.transform = `rotate(${f1(Math.sin(t * 1.7) * 2.5)}deg)`;
-  if (curPose === 'wave') armR.style.transform = `rotate(${f1(-150 + Math.sin(t * 10) * 12)}deg)`;
+  // presenter: moves with the voice, pops on highlighted words
+  const v = (loud(a) + loud(a - .05) + loud(a - .1)) / 3;
+  const pop = popAt >= 0 && T - popAt < .35 ? Math.sin((T - popAt) / .35 * Math.PI) : 0;
+  presInner.style.transform =
+    `translateY(${f1(-v * 9 - pop * 10)}px) rotate(${f1(Math.sin(a * 1.3) * 1.6 + v * 1.2)}deg) scale(${(1 + v * .018 + pop * .035).toFixed(3)})`;
 }
 
 /* ---- clock / controls ---- */
@@ -1055,40 +1108,45 @@ const audio = document.getElementById('audio');
 const btnPlay = document.getElementById('btn-play');
 const scrub = document.getElementById('scrub');
 const clock = document.getElementById('clock');
-let playing = false, t0 = 0, base = 0, hasAudio = false;
+const params = new URLSearchParams(location.search);
+const useAudio = !params.has('record') && !params.has('mute');
+let playing = false, t0 = 0, base = 0;
 const now = () => performance.now() / 1000;
+const audioOK = () => useAudio && audio.src && audio.readyState >= 1 && !audio.error;
 function time() {
-  if (hasAudio) return audio.currentTime;
+  if (playing && audioOK() && !audio.ended && !audio.paused) return audio.currentTime;
   return playing ? base + (now() - t0) : base;
 }
-function seek(t) {
-  t = clamp(t, 0, DUR);
-  base = t; t0 = now();
-  if (hasAudio) audio.currentTime = t;
-  curScene = -1; curPose = '';
-  // rebuild immediately so time-based state is exact
-  render(t);
+function seek(T) {
+  T = clamp(T, 0, DUR);
+  base = T; t0 = now();
+  if (audioOK()) { try { audio.currentTime = Math.min(T, audio.duration || T); } catch (e) {} }
+  curScene = -1; curPhrase = -1; popAt = -1;
+  render(T);
 }
 function play() {
   if (time() >= DUR - .05) seek(0);
-  playing = true; t0 = now();
-  if (hasAudio) audio.play();
+  base = time(); t0 = now(); playing = true;
+  if (audioOK() && base < audio.duration) { audio.currentTime = base; audio.play().catch(() => {}); }
   btnPlay.textContent = '❚❚';
+  document.getElementById('start')?.remove();
 }
 function pause() {
   base = time(); playing = false;
-  if (hasAudio) audio.pause();
+  audio.pause();
   btnPlay.textContent = '▶';
 }
+audio.addEventListener('ended', () => { base = audio.duration; t0 = now(); });
 const fmt = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 function loop() {
-  let t = time();
-  if (t >= DUR) { t = DUR - .001; if (playing) pause(); }
-  render(t);
-  scrub.value = t;
-  clock.textContent = `${fmt(t)} / ${fmt(DUR)}`;
+  let T = time();
+  if (T >= DUR) { T = DUR - .001; if (playing) pause(); }
+  render(T);
+  scrub.value = T;
+  clock.textContent = `${fmt(T)} / ${fmt(DUR)}`;
   requestAnimationFrame(loop);
 }
+scrub.max = DUR.toFixed(2);
 btnPlay.onclick = () => (playing ? pause() : play());
 document.getElementById('btn-restart').onclick = () => { seek(0); play(); };
 scrub.oninput = () => seek(+scrub.value);
@@ -1100,10 +1158,7 @@ document.getElementById('voice').onchange = e => {
   const f = e.target.files[0];
   if (!f) return;
   audio.src = URL.createObjectURL(f);
-  hasAudio = true;
-  audio.currentTime = base;
 };
-audio.onended = () => pause();
 addEventListener('keydown', e => {
   if (e.code === 'Space') { e.preventDefault(); playing ? pause() : play(); }
   if (e.key === 'r') { seek(0); play(); }
@@ -1118,17 +1173,19 @@ function fit() {
   const k = Math.min(vp.clientWidth / 720, vp.clientHeight / 1280);
   stage.style.transform = `scale(${k})`;
 }
-addEventListener('resize', fit); fit();
+addEventListener('resize', fit);
 
-/* optional: voiceover.mp3 next to this file is picked up automatically */
-if (location.protocol !== 'file:') fetch('voiceover.mp3', { method: 'HEAD' }).then(r => {
-  if (r.ok) { audio.src = 'voiceover.mp3'; hasAudio = true; }
-}).catch(() => {});
-
-const params = new URLSearchParams(location.search);
-if (params.has('record')) document.body.classList.add('record'), fit();
-if (params.has('t')) { seek(+params.get('t')); }
-else { seek(0); setTimeout(play, 400); }
+if (useAudio) audio.src = 'voiceover.mp3';   // the 1.5x voice-over next to this file
+if (params.has('record')) document.body.classList.add('record');
+fit();
+if (params.has('t')) seek(+params.get('t'));
+else if (params.has('record')) { seek(0); }
+else {
+  seek(0);
+  // browsers only allow sound after a click, so show a start button
+  stage.insertAdjacentHTML('beforeend', '<button id="start">▶<span>Tap to play</span></button>');
+  document.getElementById('start').onclick = play;
+}
 requestAnimationFrame(loop);
 
 window.REEL = { seek, play, pause, time, DUR };
