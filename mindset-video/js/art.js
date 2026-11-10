@@ -378,6 +378,14 @@
         s += `<path class="fillwash" d="${body}" fill="#7e6d5c" opacity="0.65"/>`;
         s += P(shoulders) + P(mirror(shoulders)) + P('M-40,126 C-20,150 20,150 40,126', 'ink') + hatchLines(-190, 230, -70, 320, 12, 30, 60);
         break;
+      case 'robe':
+        s += `<path class="fillwash" d="${body}" fill="#2b2a3a"/>`;
+        s += `<path class="fillwash" d="M-176,192 C-100,200 -20,240 40,320 L-200,320 C-196,262 -190,216 -176,192Z" fill="#3d3a52" opacity="0.9"/>`;
+        s += P(shoulders) + P(mirror(shoulders)) +
+          P('M-176,192 C-100,200 -20,240 40,320', 'ink2 thin hl') + P('M-150,170 C-80,190 0,220 70,300', 'ink2 thin hl') +
+          P('M40,130 C80,180 110,220 150,320', 'ink2 thin hl') + P('M-40,128 C-20,146 20,146 40,128', 'ink2 thin hl') +
+          `<path class="fillwash" d="M-36,126 C-20,140 20,140 36,126 L40,134 C20,150 -20,150 -40,134Z" fill="${C.gold}" opacity="0.8"/>`;
+        break;
       case 'bandhgala':
         s += `<path class="fillwash" d="${body}" fill="#1f1f2a"/>`;
         s += `<path class="fillwash" d="${body}" fill="url(#cross)" opacity="0.35"/>`;
@@ -594,7 +602,22 @@
       hatchLines(130, 34, 190, 34, 8, 40, 90, 'ink2 thin');
   }
 
-  window.ART = { C, defs, background, vignette, pen, title, flourish, face, hair, beard, laurel, helmet, clothes, bust, profile, figure,
+  // name caption, handwritten, with small flourish (centred on x)
+  function caption(id, text, x, y, size = 34) {
+    const w = text.length * size * 0.42;
+    return `<g id="${id}"><text x="${x}" y="${y}" class="hand" font-size="${size}" text-anchor="middle" fill="${C.ink2}">${text}</text>` +
+      `<path class="ink thin" d="M${x - w / 2},${y + 12} C${x - w / 6},${y + 6} ${x + w / 6},${y + 16} ${x + w / 2},${y + 9}"/></g>`;
+  }
+  // small marble statue on a plinth held by two hands (origin = plinth centre)
+  function statuette() {
+    return `<g transform="translate(0,-92) scale(0.3)">${bust({ statue: true, laurel: true, hair: 'neat', color: '#9a96a2', cloth: 'toga', eyes: 'stern' })}</g>` +
+      `<path class="fillwash" d="M-66,0 L66,0 L58,40 L-58,40Z" fill="#d6d2ca"/>` + P('M-66,0 L66,0 L58,40 L-58,40Z') + P('M-60,12 L60,12', 'ink2 thin') +
+      [-1, 1].map(sd => `<path class="fillwash" d="M${sd * 52},14 C${sd * 80},10 ${sd * 96},30 ${sd * 92},52 C${sd * 80},62 ${sd * 60},58 ${sd * 48},44Z" fill="${C.skin}"/>` +
+        P(`M${sd * 52},14 C${sd * 80},10 ${sd * 96},30 ${sd * 92},52 C${sd * 80},62 ${sd * 60},58 ${sd * 48},44`) +
+        P(`M${sd * 60},24 C${sd * 70},26 ${sd * 76},32 ${sd * 78},40 M${sd * 58},34 C${sd * 66},36 ${sd * 70},42 ${sd * 72},48`, 'ink2 thin')).join('');
+  }
+
+  window.ART = { C, caption, statuette, defs, background, vignette, pen, title, flourish, face, hair, beard, laurel, helmet, clothes, bust, profile, figure,
     sword, katana, shield, hourglass, chessPiece, chessboard, scroll, padlock, trophy, mask, arrow, mountain, stairs, cloud, lightning, hand,
     wash, blobPath, splatter, hatchLines, P, g, tr, mirror };
 })();

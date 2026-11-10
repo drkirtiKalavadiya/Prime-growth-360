@@ -3,7 +3,7 @@
 import json, base64, subprocess, os, html
 here = os.path.dirname(os.path.abspath(__file__))
 shots = json.load(open(os.path.join(here, 'shots.json')))
-DUR = 54.36
+DUR = 66.0
 
 def thumb(t):
     src = os.path.join(here, 'frames', 't_%06d.png' % round(t * 1000))
@@ -37,6 +37,7 @@ for i, q in enumerate(seqs):
     <dl>
       <dt>Visual</dt><dd>{e(s['visual'])}</dd>
       <dt>Animation</dt><dd>{e(s['anim'])}</dd>
+      <dt>Voice-over</dt><dd class="vo" lang="gu">{e(s.get('vo', ''))}</dd>
       <dt>On screen</dt><dd class="ost">{e(s['text'])}</dd>
       <dt>Sound</dt><dd>{e(s['sound'])}</dd>
     </dl>
@@ -50,7 +51,7 @@ for i, q in enumerate(seqs):
 page = f'''<title>5 Mindset Rules Storyboard</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Patrick+Hand+SC&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Patrick+Hand+SC&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&family=Noto+Sans+Gujarati:wght@400;500&display=swap">
 <style>
 /* Layout: a shooting script. Timeline strip on top, then one band per sequence with shot cards (9:16 frame left, production notes right). */
 :root {{
@@ -91,14 +92,15 @@ figcaption {{ display: flex; justify-content: space-between; font: 500 11.5px va
 dl {{ margin: 0; display: grid; grid-template-columns: 86px minmax(0, 1fr); gap: 6px 10px; font-size: 13.5px; }}
 dt {{ font: 500 10.5px/1.9 var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }}
 dd {{ margin: 0; }}
+.vo {{ font-family: 'Noto Sans Gujarati', var(--body); font-size: 14.5px; }}
 .ost {{ font-family: var(--display); font-size: 16px; color: var(--pen); }}
 @media (max-width: 480px) {{ .shot {{ grid-template-columns: 1fr; }} figure {{ max-width: 220px; }} dl {{ grid-template-columns: 1fr; gap: 0 0; }} dd {{ margin-bottom: 6px; }} }}
 </style>
 <div class="wrap">
   <header class="top">
     <h1>5 Mindset Rules</h1>
-    <p>Shot-by-shot storyboard for the coded sketch-and-watercolor short. Every frame below is rendered from the animation code at the shot's key moment.</p>
-    <div class="meta"><span>Runtime <b>{DUR}s</b></span><span>Format <b>720×1280 · 9:16</b></span><span>Frame rate <b>30 fps</b></span><span>Shots <b>{n}</b></span><span>Sequences <b>{len(seqs)}</b></span></div>
+    <p>Shot-by-shot storyboard for the coded sketch-and-watercolor short, synced to the Gujarati voice-over at 1.3× speed. Every frame below is rendered from the animation code at the shot's key moment.</p>
+    <div class="meta"><span>Runtime <b>{DUR}s</b></span><span>Format <b>1080×1920 · 9:16</b></span><span>Audio <b>voice 1.3× · music bed · SFX every 2s</b></span><span>Frame rate <b>30 fps</b></span><span>Shots <b>{n}</b></span><span>Sequences <b>{len(seqs)}</b></span></div>
     <nav class="timeline" aria-label="Sequences">{bar}</nav>
   </header>
   {body}

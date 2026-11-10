@@ -7,7 +7,7 @@ const path = require('path');
   const out = process.argv[2] || 'mindset_silent.mp4';
   const fps = +(process.argv[3] || 30);
   const browser = await chromium.launch();
-  const page = await browser.newPage({ viewport: { width: 720, height: 1280 }, deviceScaleFactor: 1 });
+  const page = await browser.newPage({ viewport: { width: 720, height: 1280 }, deviceScaleFactor: +(process.env.SCALE || 1) });
   page.on('pageerror', e => console.error('pageerror', e.message));
   await page.goto('file://' + path.resolve(__dirname, '../index.html') + '?capture');
   await page.waitForFunction('window.READY === true');
