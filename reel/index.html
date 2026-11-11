@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Story Reel Studio</title>
+  <meta name="description" content="Animated 9:16 story reel: Ken Burns photos, typed counters, neon highlights and cinematic transitions. Export as a video.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="reel.css">
+</head>
+<body>
+  <main class="studio">
+    <section class="stage">
+      <div class="phone"><canvas id="reel" width="720" height="1280"></canvas></div>
+      <div class="transport">
+        <button id="play" class="btn primary" aria-label="Play">▶</button>
+        <input id="scrub" type="range" min="0" max="1000" value="0" step="1" aria-label="Timeline">
+        <span id="clock" class="clock">0:00 / 0:00</span>
+      </div>
+    </section>
+
+    <aside class="panel">
+      <h1>Story Reel Studio</h1>
+      <p class="muted" id="reel-title"></p>
+
+      <div class="group">
+        <label class="btn file">🖼 Add scene images
+          <input id="images" type="file" accept="image/*" multiple hidden>
+        </label>
+        <label class="btn file">🎵 Add voice-over / music
+          <input id="audio" type="file" accept="audio/*,video/*" hidden>
+        </label>
+        <p class="hint">Name images after the scene they belong to (<code>02.jpg</code>, <code>03.jpg</code> … <code>wood.jpg</code>, <code>candy.png</code>), or put them in <code>reel/assets/</code>.</p>
+      </div>
+
+      <div class="group">
+        <button id="record" class="btn accent">⏺ Record video</button>
+        <label class="check"><input id="hints" type="checkbox" checked> Show missing-image hints</label>
+        <label class="check"><input id="loop" type="checkbox" checked> Loop preview</label>
+        <p class="hint" id="status"></p>
+      </div>
+
+      <h2>Scenes</h2>
+      <ol id="scenes" class="scenes"></ol>
+    </aside>
+  </main>
+  <audio id="track" preload="auto"></audio>
+
+  <script src="js/engine.js"></script>
+  <script src="js/scenes.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
