@@ -1,11 +1,10 @@
-/* Prime Growth 360 — motion-design reel (47 s, 1080x1920).
+/* Prime Growth 360 — motion-design reel (Gujarati voice-over at 1.3x, ~67 s, 1080x1920).
  * Every frame is a pure function of time t, so the same t always draws the same frame.
  * That makes frame-exact MP4 rendering possible (see render.js).
  * URL options: ?t=12.3 opens paused at that second; ?record=1 hides the controls.
  */
 (() => {
 'use strict';
-const DUR = 47;
 const cl = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
 const pr = (t, a, b) => cl((t - a) / (b - a));
 const lerp = (a, b, k) => a + (b - a) * k;
@@ -146,7 +145,7 @@ const S = [];
 // wide-angle "laid back" pose, also used for the outro
 const WIDE = { persp: 1100, po: '34% 30%', rx: 44, rz: -8, s: 1.2, glow: .55 };
 S.push([0, 2.85, el => {
-  const words = ['This', 'entire', 'reel', '<br>was', 'made', '<br>with', '<span style="color:#ff2d1a;text-shadow:0 0 30px rgba(255,45,26,.8)">Claude.</span>'];
+  const words = ['આ', 'આખી', 'Reel', '<br>એક', '<span style="color:#ff2d1a;text-shadow:0 0 30px rgba(255,45,26,.8)">Secret LLM</span>', 'ની', '<br>મદદથી', 'બનાવી છે.'];
   let rings = '';
   for (let i = 0; i < 7; i++) rings += `<i style="position:absolute;left:0;top:${70 - i * 13}px;width:340px;height:120px;border-radius:50%;border:5px solid rgba(255,70,40,${f(.95 - i * .1)});box-shadow:0 0 26px rgba(255,45,26,.8),inset 0 0 20px rgba(255,45,26,.5)"></i>`;
   el.innerHTML = phoneHTML() +
@@ -155,12 +154,12 @@ S.push([0, 2.85, el => {
        <div class="tile" style="position:absolute;left:90px;top:-120px;width:160px;height:160px;border-radius:40px;overflow:hidden;background:#fff;box-shadow:0 0 40px rgba(255,255,255,.55),0 20px 40px rgba(0,0,0,.5)"><img src="${A}avatar.jpg" style="width:100%;height:100%;display:block"></div>
        <b style="position:absolute;left:330px;top:150px;font:300 60px Inter;color:#fff">+</b></div>
      <div class="snapNo layer" style="opacity:0;background:radial-gradient(ellipse 70% 55% at 50% 48%,#8a1508 0%,#3a0904 55%,#000 100%)"></div><div class="snapBars layer" style="opacity:0;background:#000"></div>
-     <div class="hd1" style="position:absolute;left:0;right:0;top:150px;text-align:center;font:800 84px/1.12 Inter;letter-spacing:-2px;z-index:5">${words.map((w, i) => `<span class="w${i}" style="display:inline-block">${w.replace('<br>', '')}</span>${' '}`).join('').replace('<span class="w3"', '<br><span class="w3"').replace('<span class="w5"', '<br><span class="w5"')}</div>`;
+     <div class="hd1" style="position:absolute;left:0;right:0;top:150px;text-align:center;font:800 86px/1.25 Inter, 'Anek Gujarati';letter-spacing:-1px;z-index:5">${words.map((w, i) => `${w.startsWith('<br>') ? '<br>' : ''}<span class="w${i}" style="display:inline-block">${w.replace('<br>', '')}</span> `).join('')}</div>`;
   fitIG(el);
   const av = $(el, '.ig .av'), icon = $(el, '.iconStack'), tile = $(el, '.tile');
   const snapNo = $(el, '.snapNo'), snapBars = $(el, '.snapBars');
   let builtSnaps = false;
-  const WT = [0.38, 0.75, 1.25, 1.62, 1.75, 2.0, 2.13];
+  const WT = [0.05, 0.25, 0.6, 0.95, 1.15, 1.6, 1.95, 2.5].map(v => v * .8);
   const ws = WT.map((t0, i) => [t0, $(el, '.w' + i)]);
   // [start, shot]
   const SHOTS = [[0, 'wide'], [.25, 'posts'], [.375, 'header'], [.75, 'icon'], [1.25, 'hlblur'], [1.5, 'hl'], [1.625, 'no'], [1.75, 'bars'], [1.875, 'hl2'], [2.125, 'avatar'], [2.625, 'full']];
@@ -501,7 +500,7 @@ S.push([40.0, 42.4, el => {
   el.innerHTML = `<svg class="lock" viewBox="0 0 60 80" style="position:absolute;left:495px;top:380px;width:90px">
       <path class="sh" d="M14 34 V22 a16 16 0 0 1 32 0 V34" fill="none" stroke="#ff2d1a" stroke-width="7" stroke-linecap="round"/>
       <rect x="6" y="34" width="48" height="40" rx="9" fill="#ff2d1a"/><circle cx="30" cy="52" r="5" fill="#3a0b06"/><rect x="28" y="54" width="4" height="10" fill="#3a0b06"/></svg>
-    <div style="position:absolute;left:0;right:0;top:530px;text-align:center;font:800 62px/1.25 Inter;letter-spacing:-1.5px">The full method<br><span style="font-weight:700;font-size:56px">→ inside the <span style="color:#ff2d1a">Prime Growth 360</span> course</span></div>`;
+    <div style="position:absolute;left:0;right:0;top:530px;text-align:center;font:800 70px/1.3 Inter, 'Anek Gujarati';letter-spacing:-1px"><span style="color:#ff2d1a">Premium 3D AI Videos</span><br><span style="font-size:62px">બનાવતાં શીખવું છે?</span></div>`;
   const sh = $(el, '.sh');
   return t => {
     const open = t < 40.3 ? 1 : 1 - eo(pr(t, 40.3, 40.5));
@@ -512,17 +511,17 @@ S.push([40.0, 42.4, el => {
 /* 15. Comment AI */
 S.push([42.4, 46.0, el => {
   el.innerHTML = `<div class="c1" style="position:absolute;left:0;right:0;top:230px;text-align:center;font:800 92px Inter;letter-spacing:-2px">Comment</div>
-    <div class="c2" style="position:absolute;left:0;right:0;top:345px;text-align:center;font:900 330px/1 Inter;letter-spacing:-10px;color:#ff2d1a;text-shadow:0 0 60px rgba(255,45,26,.7)">AI</div>` +
+    <div class="c2" style="position:absolute;left:0;right:0;top:345px;text-align:center;font:900 250px/1.2 Inter;letter-spacing:-8px;color:#ff2d1a;text-shadow:0 0 60px rgba(255,45,26,.7)">LEARN</div>` +
     glass(40, 840, 1000, 450, `<div style="text-align:center;font:700 26px Inter;color:#fff;padding-top:20px">Comments</div>
       <div class="empty" style="text-align:center;font-family:Inter;padding-top:80px"><div style="font-weight:700;font-size:28px;color:#fff">No comments yet</div><div style="font-size:21px;color:#aaa;margin-top:6px">Start the conversation.</div></div>
       <div class="cm" style="font-family:Inter;padding:22px 30px;display:none">
         <div style="display:flex;gap:16px"><div style="width:54px;height:54px;border-radius:50%;background:#555;flex:none"></div>
-          <div style="flex:1"><div style="font-size:19px;color:#aaa">you <span style="color:#777">now</span></div><div style="font-weight:800;font-size:44px;color:#fff">AI</div>
+          <div style="flex:1"><div style="font-size:19px;color:#aaa">you <span style="color:#777">now</span></div><div style="font-weight:800;font-size:44px;color:#fff">LEARN</div>
             <div class="rep" style="opacity:0;margin-top:8px">
               <div style="display:flex;align-items:center;gap:10px"><img src="${A}avatar.jpg" style="width:40px;height:40px;border-radius:50%"><span style="font-weight:700;font-size:21px;color:#fff">primegrowth360</span><span style="font-size:15px;background:#3a3a3a;color:#ccc;border-radius:6px;padding:2px 8px">Author</span></div>
-              <div style="font-size:27px;color:#fff;margin:4px 0 0 50px">Here's the link.</div>
+              <div style="font-size:28px;color:#fff;margin:4px 0 0 50px;font-family:'Anek Gujarati',Inter">Details મોકલી દીધી છે ✓</div>
               <div class="card" style="opacity:0;margin:12px 0 0 50px;display:flex;gap:14px;align-items:center;background:rgba(0,0,0,.35);border-radius:14px;padding:12px">
-                <img src="${A}post7.jpg" style="width:60px;height:80px;border-radius:8px;object-fit:cover"><div><div style="font-weight:700;font-size:24px;color:#fff">AI Video Course</div><div style="font-size:19px;color:#aaa">The full method</div></div></div></div></div>
+                <img src="${A}post7.jpg" style="width:60px;height:80px;border-radius:8px;object-fit:cover"><div><div style="font-weight:700;font-size:24px;color:#fff">AI Video Training Batch</div><div style="font-size:20px;color:#aaa;font-family:'Anek Gujarati',Inter">1 ડિસેમ્બરથી શરૂ</div></div></div></div></div>
           <div class="heart" style="font-size:34px;color:#888">♡</div></div></div>
       <div style="position:absolute;left:24px;right:24px;bottom:20px;height:60px;border-radius:30px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:space-between;padding:0 10px 0 26px;font:21px Inter;color:#999"><span class="inp" style="font-weight:600">Add a comment…</span><span class="send" style="width:44px;height:44px;border-radius:50%;background:#fff;color:#111;display:flex;align-items:center;justify-content:center;font-size:24px">↑</span></div>`, 'cp');
   const c1 = $(el, '.c1'), c2 = $(el, '.c2'), empty = $(el, '.empty'), cm = $(el, '.cm'), rep = $(el, '.rep'), card = $(el, '.card'), heart = $(el, '.heart'), cp = $(el, '.cp'), inp = $(el, '.inp'), send = $(el, '.send');
@@ -533,7 +532,7 @@ S.push([42.4, 46.0, el => {
     c2.style.opacity = b; c2.style.transform = `translateY(${f((1 - eo(b)) * -80)}px) scale(${f(lerp(1.6, 1, eo(b)))})`;
     cp.style.opacity = eo(pr(t, 42.45, 42.75));
     const has = t >= 43.4;
-    const typed = 'AI'.slice(0, Math.ceil(pr(t, 42.85, 43.1) * 2));
+    const typed = 'LEARN'.slice(0, Math.ceil(pr(t, 42.85, 43.25) * 5));
     inp.textContent = t >= 43.4 || !typed ? 'Add a comment…' : typed;
     inp.style.color = typed && t < 43.4 ? '#fff' : '#999';
     send.style.background = typed && t < 43.4 ? '#ff2d1a' : '#fff'; send.style.color = typed && t < 43.4 ? '#fff' : '#111';
@@ -545,11 +544,10 @@ S.push([42.4, 46.0, el => {
 }]);
 
 /* 16. outro — the phone pops out of the comment panel in a black card, wide-angle pose */
-S.push([45.95, DUR, el => {
+S.push([45.95, 47, el => {
   el.innerHTML = `<div class="snapC layer"></div><div class="card" style="position:absolute;border-radius:34px;background:#040404;box-shadow:0 30px 90px rgba(0,0,0,.7)"></div>` + phoneHTML();
   fitIG(el);
   const snap = $(el, '.snapC'), card = $(el, '.card');
-  S[14][2](snap)(45.5);
   return t => {
     const g = eo(pr(t, 45.95, 46.4));
     snap.style.opacity = 1 - pr(t, 46.0, 46.35);
@@ -560,35 +558,164 @@ S.push([45.95, DUR, el => {
   };
 }]);
 
+/* ---- extra CTA shots for the Gujarati voice-over (their time = voice time) ---- */
+const GJ = `'Anek Gujarati', Inter, sans-serif`;
+/* 17. ખાસ તમારા માટે — નવી Training Batch — 1 ડિસેમ્બર */
+S.push([62.6, 67.4, el => {
+  el.innerHTML = `<div class="l1" style="position:absolute;left:0;right:0;top:360px;text-align:center;font:800 96px/1.15 ${GJ};text-shadow:0 0 40px rgba(255,45,26,.5)">ખાસ તમારા માટે</div>
+    <div class="l2" style="position:absolute;left:0;right:0;top:360px;text-align:center;font:800 78px/1.15 ${GJ};opacity:0">નવી <span style="color:#ff2d1a">Training Batch</span></div>
+    <div class="cal glass" style="left:330px;top:560px;width:420px;height:470px;opacity:0;text-align:center;font-family:Inter">
+      <div style="background:#ff2d1a;color:#fff;font:800 58px Inter;letter-spacing:6px;padding:18px 0;box-shadow:0 0 40px rgba(255,45,26,.6)">DEC</div>
+      <div style="font:900 270px/1.15 Inter;color:#fff;letter-spacing:-10px">1</div></div>
+    <div class="l3" style="position:absolute;left:0;right:0;top:1080px;text-align:center;font:800 92px ${GJ};color:#ff2d1a;text-shadow:0 0 40px rgba(255,45,26,.7);opacity:0">થી શરૂ!</div>`;
+  const l1 = $(el, '.l1'), l2 = $(el, '.l2'), cal = $(el, '.cal'), l3 = $(el, '.l3');
+  return t => {
+    const a = eo(pr(t, 62.7, 63.0));
+    l1.style.opacity = t < 63.9 ? a : 1 - pr(t, 63.9, 64.1);
+    l1.style.transform = `scale(${f(lerp(1.3, 1, a))})`; l1.style.filter = `blur(${f((1 - a) * 12)}px)`;
+    const b = eo(pr(t, 64.0, 64.3));
+    l2.style.opacity = b; l2.style.transform = `translateY(${f((1 - b) * 40)}px)`;
+    const c = pr(t, 65.45, 65.8);
+    cal.style.opacity = c; cal.style.transform = `perspective(900px) rotateX(${f((1 - eo(c)) * 50)}deg) translateY(${f((1 - eo(c)) * -120 + Math.sin(t * 2) * 6)}px) scale(${f(back(c))})`;
+    const d = pr(t, 66.1, 66.35);
+    l3.style.opacity = d; l3.style.transform = `scale(${f(lerp(1.4, 1, eo(d)))})`;
+  };
+}]);
+
+/* 18. આમાં તમે શીખી શકશો — 4 modules checklist */
+S.push([67.4, 74.0, el => {
+  const items = [['AI Tools', 67.9], ['3D Animation', 69.2], ['Cinematic Editing', 70.5], ['Advanced Video Creation', 72.1]];
+  el.innerHTML = `<div class="ttl" style="position:absolute;left:0;right:0;top:330px;text-align:center;font:800 80px ${GJ}">આમાં તમે <span style="color:#ff2d1a">શીખશો</span></div>` +
+    items.map(([txt], i) => glass(110, 540 + i * 175, 860, 140, `<div style="display:flex;align-items:center;gap:28px;height:100%;padding:0 34px;font:800 54px Inter;color:#fff;letter-spacing:-1px">
+      <span style="flex:none;width:76px;height:76px;border-radius:50%;background:#ff2d1a;display:flex;align-items:center;justify-content:center;font-size:44px;box-shadow:0 0 30px rgba(255,45,26,.7)">✓</span>${txt}</div>`, 'it it' + i)).join('');
+  const rows = items.map((_, i) => $(el, '.it' + i)), ttl = $(el, '.ttl');
+  return t => {
+    const a = eo(pr(t, 67.45, 67.8));
+    ttl.style.opacity = a; ttl.style.transform = `translateY(${f((1 - a) * 30)}px)`;
+    rows.forEach((r, i) => {
+      const k = pr(t, items[i][1], items[i][1] + .3);
+      r.style.opacity = k; r.style.transform = `translateX(${f((1 - eo(k)) * 300)}px)`;
+      r.style.borderColor = t >= items[i][1] && t < items[i][1] + 1.0 ? 'rgba(255,45,26,.9)' : 'rgba(255,255,255,.16)';
+    });
+  };
+}]);
+
+/* 19. શીખવા માટે તૈયાર છો? */
+S.push([74.0, 75.6, el => {
+  el.innerHTML = `<div class="kin" style="font-family:${GJ}"><div class="r1" style="font-size:110px;font-weight:800">શીખવા માટે</div>
+    <div class="r2" style="font-size:160px;font-weight:800;color:#ff2d1a;text-shadow:0 0 50px rgba(255,45,26,.8)">તૈયાર છો?</div></div>`;
+  const r1 = $(el, '.r1'), r2 = $(el, '.r2');
+  return t => {
+    const a = eo(pr(t, 74.1, 74.35)), b = pr(t, 74.6, 74.9);
+    r1.style.opacity = a; r1.style.transform = `translateY(${f((1 - a) * 40)}px)`;
+    r2.style.opacity = b; r2.style.transform = `scale(${f(lerp(1.5, 1, eo(b)))})`; r2.style.filter = `blur(${f((1 - b) * 12)}px)`;
+  };
+}]);
+
+/* 20. WhatsApp number — digits typed with the voice */
+S.push([78.2, 82.6, el => {
+  el.innerHTML = glass(90, 560, 900, 560, `<div style="text-align:center;font-family:${GJ};padding-top:56px">
+      <div style="width:150px;height:150px;margin:0 auto;border-radius:50%;background:#25d366;display:flex;align-items:center;justify-content:center;box-shadow:0 0 50px rgba(37,211,102,.55)">
+        <svg viewBox="0 0 24 24" width="80" height="80"><path fill="#fff" d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z"/></svg></div>
+      <div style="font-size:64px;font-weight:800;color:#fff;margin-top:34px">WhatsApp કરો</div>
+      <div class="num" style="font:800 116px Inter;letter-spacing:2px;color:#fff;margin-top:26px;text-shadow:0 0 30px rgba(255,45,26,.6)"></div>
+      <div style="font:600 34px Inter;color:#cdbbb5;margin-top:10px">primegrowth360</div></div>`, 'wa');
+  const num = $(el, '.num'), wa = $(el, '.wa');
+  const D1 = '84603', D2 = '72867';
+  return t => {
+    const a = eo(pr(t, 78.2, 78.5));
+    wa.style.opacity = a; wa.style.transform = `scale(${f(lerp(.9, 1, a))})`;
+    const n1 = Math.round(pr(t, 78.45, 80.1) * 5), n2 = Math.round(pr(t, 80.5, 82.3) * 5);
+    const caret = Math.floor(t * 3) % 2 ? '<span style="color:#ff2d1a">|</span>' : '<span style="opacity:0">|</span>';
+    num.innerHTML = D1.slice(0, n1) + (n1 === 5 ? ' ' : '') + D2.slice(0, n2) + (n2 < 5 ? caret : '');
+  };
+}]);
+
 /* ------------------------------------------------------------------ */
-/* captions: [start, text]  — [word] goes in the red pill              */
+/* timeline — voice-over times (1x seconds); playback runs SPEED x faster */
 /* ------------------------------------------------------------------ */
-const CAPS = [
-  [0, ''], [5.4, '[First,]'], [6.4, 'the [rhythm.]'], [7.4, 'Claude [maps]'], [8.4, '[every]'], [8.9, 'and [every]'], [9.4, '[to]'], [9.9, 'to [the beat,]'],
-  [10.4, '[frame]'], [11.0, 'frame [by]'], [11.5, 'frame by [frame.]'],
-  [12.5, '[Then]'], [13.0, 'Then the [3D.]'], [14.0, '[Claude]'], [14.5, '[the]'], [15.0, 'the whole [3D]'], [15.5, '3D [scene:]'],
-  [16.5, 'the [phone,]'], [17.0, 'the [titanium,]'], [18.0, '[the]'], [18.5, 'the [light,]'], [19.0, 'the [motion]'], [19.5, 'the motion [blur.]'],
-  [20.5, 'The [screen]'], [21.5, "[isn't]"], [22.0, "isn't a [picture.]"], [22.5, "[It's]"], [23.0, "It's [real]"], [23.5, "It's real [code,]"],
-  [24.0, '[pinned]'], [24.5, '[four]'], [25.0, 'four [corners]'], [25.5, 'of the [phone,]'], [26.0, 'so it [stays]'], [26.5, '[razor]'], [27.0, 'razor [sharp.]'],
-  [28.0, '[And]'], [28.5, 'And [the type]'], [29.2, '[driven]'], [29.8, 'driven by [one]'], [30.3, 'driven by one [file.]'],
-  [31.0, '[Change]'], [31.5, 'Change a [word,]'], [32.0, 'and [the]'], [32.5, '[sequence]'], [33.0, 'sequence [re-renders.]'], [35.0, ''],
-  [35.6, '[Zero]'], [36.0, 'Zero [keyframes.]'], [37.0, '[Just]'], [37.6, 'Just [direction.]'], [38.5, ''],
-  [40.5, '[full]'], [41.0, 'full [method?]'], [42.0, ''], [43.0, "and we'll [send]"], [44.0, 'the [link.]'], [45.5, '']
+const SPEED = 1.3;
+// [voice start, scene index in S, warp [[voiceTime, sceneTime], ...], caption top]
+const SCN = [
+  [0, 0, [[0, 0], [3.56, 2.85]], 0],
+  [3.56, 1, [[3.56, 2.85], [4.2, 3.25], [6.3, 4.0], [8.6, 5.38]], 1350],
+  [8.6, 2, [[8.6, 5.4], [10.85, 6.4], [16.9, 12.55]], 1350],
+  [16.9, 3, [[16.9, 12.6], [19.8, 14.3], [23.9, 16.45]], 1350],
+  [23.9, 4, [[23.9, 16.5], [25.2, 17.4], [26.0, 18.5], [26.9, 19.1], [27.6, 19.6], [29.1, 20.25]], 1470],
+  [29.1, 5, [[29.1, 20.3], [29.6, 20.65], [31.9, 21.5], [33.4, 22.45], [34.3, 23.3], [34.8, 23.95]], 1470],
+  [34.8, 6, [[34.8, 24.0], [38.5, 25.89]], 1470],
+  [38.5, 7, [[38.5, 25.9], [38.6, 26.0], [40.1, 27.15], [41.5, 27.99]], 1470],
+  [41.5, 8, [[41.5, 28.0], [43.4, 28.45], [44.5, 28.95], [47.6, 30.95], [48.9, 31.7], [49.1, 32.0], [51.4, 34.5], [51.9, 34.99]], 1350],
+  [51.9, 9, [[51.9, 35.0], [52.4, 35.59]], 1350],
+  [52.4, 10, [[52.4, 35.6], [54.9, 36.99]], 1470],
+  [54.9, 11, [[54.9, 37.0], [55.4, 37.45], [56.6, 37.9], [58.1, 38.49]], 1470],
+  [58.1, 12, [[58.1, 38.5], [59.4, 39.99]], 1350],
+  [59.4, 13, [[59.4, 40.0], [59.9, 40.3], [62.6, 42.39]], 1180],
+  [62.6, 16, [[0, 0], [100, 100]], 1450],
+  [67.4, 17, [[0, 0], [100, 100]], 1500],
+  [74.0, 18, [[0, 0], [100, 100]], 1400],
+  [75.6, 14, [[75.6, 42.4], [76.25, 42.85], [76.9, 43.4], [77.3, 43.9], [77.5, 44.0], [77.8, 44.4], [78.2, 44.9]], 1380],
+  [78.2, 19, [[0, 0], [100, 100]], 1450],
+  [82.6, 15, [[82.6, 45.95], [83.4, 46.4], [86.4, 47.0]], 1600],
 ];
+const A_END = 86.36, A_HOLD = A_END + .6;
+const DUR = A_HOLD / SPEED;
+
+/* captions: spoken lines [voice start, voice end, text] — words appear as spoken, the latest one sits in the red pill */
+const LINES = [
+  [3.93, 5.92, 'તેમાં After Effects નથી,'], [6.12, 8.27, 'Manual Keyframes બનાવવાની પણ જરૂર નથી!'],
+  [8.92, 10.28, 'સૌથી પહેલાં Rhythm'],
+  [10.85, 16.80, 'Secret LLM દરેક Cut અને દરેક શબ્દને Music ના Beat સાથે Frame-by-Frame Match કરે છે.'],
+  [17.40, 19.29, 'ત્યારબાદ 3D Animation'],
+  [19.81, 23.64, 'Secret LLM આખું Blender Scene તૈયાર કરવા માટે Code લખે છે.'],
+  [24.10, 28.77, 'તેમાં Foam, Titanium, Lighting અને Motion Blur જેવી દરેક વસ્તુ સામેલ છે.'],
+  [29.33, 30.31, 'Screen Animation'],
+  [30.84, 32.91, 'સ્ક્રીન માત્ર એક સામાન્ય Picture નથી.'], [33.45, 34.43, 'તે Real Code છે,'],
+  [34.83, 38.25, 'જે ફોનના ચારેય ખૂણા સાથે ચોક્કસ રીતે જોડાયેલો રહે છે,'], [38.60, 40.98, 'જેથી સ્ક્રીન હંમેશાં Sharp દેખાય છે.'],
+  [41.52, 42.87, 'ત્યારબાદ Typography'],
+  [43.43, 46.97, 'આખા Text Animation ને એક જ File દ્વારા Control કરવામાં આવે છે.'],
+  [47.44, 48.88, 'તમે માત્ર એક શબ્દ બદલો'], [49.05, 51.40, 'અને આખી Sequence ફરીથી Render થઈ જાય છે.'],
+  [51.99, 54.84, 'ન After Effects, ન Manual Keyframes.'], [55.04, 56.60, 'માત્ર તમારી Direction'], [56.77, 58.05, 'અને AI ની Power!'],
+  [58.64, 62.23, 'તમારે પણ આ પ્રકારના Premium 3D AI Videos બનાવતાં શીખવું છે?'],
+  [62.71, 65.33, 'તો ખાસ તમારા માટે અમારી નવી Training Batch'], [65.49, 67.06, '1 ડિસેમ્બરથી શરૂ થઈ રહી છે!'],
+  [67.50, 69.00, 'આમાં તમે AI Tools,'], [69.17, 70.28, '3D Animation,'], [70.43, 73.66, 'Cinematic Editing અને Advanced Video Creation શીખી શકશો.'],
+  [74.13, 75.27, 'શીખવા માટે તૈયાર છો?'], [75.68, 76.95, 'કોમેન્ટમાં LEARN લખો'], [77.18, 78.04, 'અથવા WhatsApp કરો:'],
+  [78.41, 80.19, '84603'], [80.47, 82.39, '72867'],
+  [82.84, 86.12, 'તમારી Editing ને Next Level પર લઈ જવાનો સમય આવી ગયો છે!'],
+];
+// split each line into short chunks (max 3 words / 22 chars); word times follow character count
+const CH = [];
+LINES.forEach(([s, e, text]) => {
+  const words = text.split(' ');
+  const total = words.reduce((n, w) => n + w.length + 1, 0);
+  let acc = 0, cur = [];
+  const flush = () => { if (cur.length) { CH.push(cur); cur = []; } };
+  words.forEach(w => {
+    const len = cur.reduce((n, x) => n + x.w.length + 1, 0);
+    if (cur.length && (cur.length >= 3 || len + w.length > 22)) flush();
+    cur.push({ w, t: s + (e - s) * acc / total }); acc += w.length + 1;
+  });
+  flush();
+  CH[CH.length - 1].end = e;
+});
+CH.forEach((c, i) => { c.ts = c[0].t; c.te = i + 1 < CH.length ? Math.min(CH[i + 1][0].t, (c.end ?? CH[i + 1][0].t) + .5) : A_HOLD; });
+
 const capEl = document.getElementById('cap');
-let capCur = -1;
-function renderCap(t) {
-  let i = 0; CAPS.forEach((c, k) => { if (t >= c[0]) i = k; });
-  if (i !== capCur) {
-    capCur = i;
-    capEl.innerHTML = CAPS[i][1].replace(/\[([^\]]+)\]|(\S+)/g, (m, hl, w) => hl ? `<span class="w hl">${hl}</span>` : `<span class="w">${w}</span>`);
+let capCur = -1, capN = -1;
+function renderCap(a, top) {
+  let i = -1; CH.forEach((c, k) => { if (a >= c.ts && a < c.te) i = k; });
+  if (i < 0) { capEl.innerHTML = ''; capCur = -1; return; }
+  const c = CH[i];
+  let n = 0; c.forEach((w, k) => { if (a >= w.t) n = k + 1; });
+  if (i !== capCur || n !== capN) {
+    capCur = i; capN = n;
+    capEl.innerHTML = c.slice(0, n).map((w, k) => `<span class="w${k === n - 1 ? ' hl' : ''}">${w.w}</span>`).join('');
   }
-  const lt = t - CAPS[i][0];
-  const a = pr(lt, 0, .14);
-  capEl.style.transform = `scale(${f(lerp(.86, 1, back(a)))})`;
-  capEl.style.opacity = a;
-  // captions sit lower on the comment screen, higher over the 3D phone shots
-  capEl.style.top = (t >= 16.5 && t < 28.0) || (t >= 35.6 && t < 38.5) ? '1470px' : t >= 40 && t < 42.4 ? '1080px' : t >= 42.4 ? '1380px' : '1350px';
+  const lt = a - c[n - 1].t;
+  const k = pr(lt, 0, .12);
+  capEl.style.transform = `scale(${f(lerp(.9, 1, back(k)))})`;
+  capEl.style.opacity = 1;
+  capEl.style.top = top + 'px';
 }
 
 /* ------------------------------------------------------------------ */
@@ -598,30 +725,41 @@ const sceneEl = document.getElementById('scene');
 const bgEl = document.getElementById('bg');
 const flash = document.getElementById('flash');
 let cur = -1, upd = null;
-function bg(t) {
+function warp(keys, a) {
+  if (a <= keys[0][0]) return keys[0][1] + (a - keys[0][0]);
+  for (let i = 1; i < keys.length; i++) {
+    const [a0, v0] = keys[i - 1], [a1, v1] = keys[i];
+    if (a <= a1) return v0 + (v1 - v0) * (a - a0) / (a1 - a0);
+  }
+  const [a0, v0] = keys[keys.length - 2], [a1, v1] = keys[keys.length - 1];
+  return v1 + (a - a1) * Math.min(1, (v1 - v0) / (a1 - a0));
+}
+function bg(vt, a) {
   // red radial glow; stronger on the "No" and CTA shots, near-black on the close-ups
   let inner = '#3d0c07', mid = '#1c0503', glowY = 48;
-  if (t >= 2.85 && t < 5.4) { inner = '#8a1508'; mid = '#3a0904'; }
-  else if (t < 2.85 || (t >= 26.4 && t < 28.0) || (t >= 35.0 && t < 38.5)) { inner = '#140404'; mid = '#070101'; }
-  else if (t >= 40) { inner = '#5a1209'; mid = '#240604'; glowY = 40; }
+  if (a >= 59.4) { inner = '#5a1209'; mid = '#240604'; glowY = 40; }
+  else if (vt >= 2.85 && vt < 5.4) { inner = '#8a1508'; mid = '#3a0904'; }
+  else if (vt < 2.85 || (vt >= 26.4 && vt < 28.0) || (vt >= 35.0 && vt < 38.5)) { inner = '#140404'; mid = '#070101'; }
   bgEl.style.background = `radial-gradient(ellipse 70% 55% at 50% ${glowY}%, ${inner} 0%, ${mid} 55%, #000 100%)`;
 }
-function render(t) {
-  let i = 0; S.forEach((s, k) => { if (t >= s[0]) i = k; });
+function render(T) {
+  const a = T * SPEED;                       // position in the 1x voice-over
+  let i = 0; SCN.forEach((s, k) => { if (a >= s[0]) i = k; });
+  const [a0, si, keys, top] = SCN[i];
   if (i !== cur) {
     cur = i;
     sceneEl.innerHTML = '<div class="layer"></div>';
-    upd = S[i][2](sceneEl.firstChild) || null;
+    upd = S[si][2](sceneEl.firstChild) || null;
   }
-  if (upd) upd(t);
+  const vt = warp(keys, a);
+  if (upd) upd(vt);
   // cut transition: quick zoom-blur into every new shot
-  const lt = t - S[i][0];
-  const w = i === 0 ? 1 : pr(lt, 0, .22);
+  const w = i === 0 ? 1 : pr(a - a0, 0, .28);
   sceneEl.style.transform = `scale(${f(lerp(1.08, 1, eo(w)))})`;
   sceneEl.style.filter = w < 1 ? `blur(${f((1 - w) * 14)}px)` : 'none';
-  flash.style.opacity = (t >= 5.35 && t < 5.6) ? f((1 - pr(t, 5.35, 5.6)) * .9) : (t >= 38.45 && t < 38.65) ? f((1 - pr(t, 38.45, 38.65)) * .5) : 0;
-  bg(t);
-  renderCap(t);
+  flash.style.opacity = (a >= 8.5 && a < 8.9) ? f((1 - pr(a, 8.5, 8.9)) * .9) : (a >= 58.0 && a < 58.3) ? f((1 - pr(a, 58.0, 58.3)) * .5) : 0;
+  bg(vt, a);
+  if (top) renderCap(a, top); else capEl.innerHTML = '';
 }
 
 /* ---- clock & controls ---- */
@@ -640,6 +778,7 @@ function play() {
 }
 function pause() { base = time(); playing = false; audio.pause(); playBtn.textContent = '▶'; }
 playBtn.onclick = () => playing ? pause() : play();
+scrub.max = DUR.toFixed(2);
 scrub.oninput = () => seek(+scrub.value);
 document.getElementById('full').onclick = () => document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.();
 addEventListener('keydown', e => {
@@ -647,9 +786,10 @@ addEventListener('keydown', e => {
   if (e.key === 'f') document.getElementById('full').click();
   if (e.key === 'ArrowRight') seek(time() + 1); if (e.key === 'ArrowLeft') seek(time() - 1);
 });
+const fmt = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 function loop() {
   if (playing) { const t = time(); render(t); if (t >= DUR) pause(); }
-  scrub.value = time(); clock.textContent = `0:${String(Math.floor(time())).padStart(2, '0')} / 0:47`;
+  scrub.value = time(); clock.textContent = `${fmt(time())} / ${fmt(DUR)}`;
   requestAnimationFrame(loop);
 }
 function fit() {
@@ -665,5 +805,5 @@ if (!params.has('t') && !params.has('record')) {
   document.getElementById('start').onclick = play;
 }
 requestAnimationFrame(loop);
-window.REEL = { seek, play, pause, DUR, render };
+window.REEL = { seek, play, pause, DUR, render, SPEED };
 })();

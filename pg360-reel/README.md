@@ -1,55 +1,50 @@
-# Prime Growth 360 — motion-design reel (47 s, 9:16)
+# Prime Growth 360 — motion-design reel (Gujarati voice-over, ~67 s, 9:16)
 
-A remake of the dark-red "this reel was made with Claude" motion-design style, rebranded for **@primegrowth360**.
+A remake of the dark-red motion-design reel style for **@primegrowth360**, with your Gujarati ElevenLabs voice-over played at **1.3×**.
 It is built only with HTML, CSS and JavaScript. Your Instagram profile on the 3D phone is real code, not a screenshot.
 
-- **Ready video:** `primegrowth360-reel.mp4` (1080×1920, 30 fps, with soundtrack)
+- **Ready video:** `primegrowth360-reel.mp4` (1080×1920, 30 fps, voice + music + sound effects, −14 LUFS)
 - **Live version:** open `index.html` in a browser and tap ▶
 
-## Shots
-| Time | Shot |
-| --- | --- |
-| 0–2.8 s | Close-up of the 3D phone showing your profile; headline "This entire reel was made with Claude." |
-| 2.8–5 s | Big red "No": "After Effects." and "Keyframes." get struck through; your logo floats as an app icon |
-| 5–12.6 s | Small phone with kinetic text (Grow your Business, SOP, AI, 2000+, 10+ Years, BRANDING) above a glass timeline panel |
-| 12.6–16.5 s | Glass code panel: "Claude · Writing the 3D scene", scrolling with motion blur |
-| 16.5–20.3 s | Titanium back of the phone turning, then a fast spin with motion blur |
-| 20.3–24.5 s | The screen switches off, then is rebuilt from the `ProfileIG.jsx` code |
-| 24.5–28.3 s | Red pins on the 4 screen corners, then an extreme close-up (×7.7) of your profile |
-| 28.3–34.4 s | `script.json` edit "1,095" → "177K"; the sequence re-renders as a time-lapse |
-| 34.4–39 s | "177K of you", "Zero keyframes", "Just direction" |
-| 39–47 s | primegrowth360 logo card, lock "The full method", "Comment AI" with an Instagram-style comment reply, final 3D phone |
+## Shots (reel time, at 1.3×)
+| Time | Voice line | Shot |
+| --- | --- | --- |
+| 0–2.7 s | આ આખી Reel એક Secret LLM ની મદદથી… | 11-cut 3D montage + Gujarati headline |
+| 2.7–6.6 s | After Effects નથી, Manual Keyframes… | Big red "No" + struck-through words |
+| 6.6–13 s | સૌથી પહેલાં Rhythm… Frame-by-Frame Match | Small phone with kinetic text + timeline |
+| 13–18.4 s | ત્યારબાદ 3D Animation… Blender Scene | Code panel typing, then fast scroll |
+| 18.4–22.4 s | Foam, Titanium, Lighting, Motion Blur | Phone back, materials change, spin |
+| 22.4–26.8 s | Screen Animation… Real Code છે | Screen off → code → screen on |
+| 26.8–31.9 s | ચારેય ખૂણા… હંમેશાં Sharp | Corner pins, then ×1.0 → ×7.7 zoom |
+| 31.9–40 s | Typography… એક શબ્દ બદલો… Render | `script.json` edit + re-render time-lapse |
+| 40–44.7 s | ન After Effects… Direction… AI ની Power! | "177K of you", "Zero keyframes", "grow with AI" |
+| 44.7–48.2 s | Premium 3D AI Videos શીખવું છે? | Logo card, lock card |
+| 48.2–51.8 s | નવી Training Batch 1 ડિસેમ્બરથી | Calendar card "DEC 1" |
+| 51.8–56.9 s | AI Tools, 3D Animation, Cinematic Editing, Advanced Video Creation | 4-item checklist |
+| 56.9–60.2 s | તૈયાર છો? / કોમેન્ટમાં LEARN લખો | "Comment LEARN" + comment typed and answered |
+| 60.2–63.5 s | WhatsApp કરો: 84603 72867 | WhatsApp card, number typed with the voice |
+| 63.5–67 s | Next Level… | Final 3D phone |
 
 ## Files
 | File | What it is |
 | --- | --- |
 | `index.html`, `reel.css`, `reel.js` | The reel (each frame is a pure function of time) |
 | `assets/` | Profile photo, 3 highlights and 9 grid posts, cropped from your screenshots |
-| `make_soundtrack.py` | Builds `soundtrack.wav` / `.mp3`: drone, 100 bpm pulse, whooshes on cuts, impacts, riser, UI clicks (no samples) |
+| `voiceover-original.mp3` | Your ElevenLabs voice-over (1×) |
+| `make_soundtrack.py` | Builds `soundtrack.wav` / `.mp3`: your voice at 1.3× + synthesised music (109 bpm beat, drone), whooshes on cuts, impacts, riser, UI clicks; music ducks under the voice |
 | `render.js` | Frame-exact MP4 render: `node render.js` (needs Playwright and ffmpeg) |
 
-## Narration script (to record your own voice-over)
-The captions follow this script and timing. Record it, put it in `soundtrack.mp3`, or mix it over the music, and re-render.
-
-| Start | Line |
-| --- | --- |
-| 0.0 | This entire reel was made with Claude. |
-| 2.8 | No After Effects. No keyframes. |
-| 5.0 | First, the rhythm. Claude maps every cut and every word to the beat, frame by frame. |
-| 12.6 | Then the 3D. Claude writes the whole 3D scene: |
-| 16.5 | the phone, the titanium, the light, the motion blur. |
-| 20.3 | The screen isn't a picture. It's real code, |
-| 24.5 | pinned to the four corners of the phone, so it stays razor sharp. |
-| 28.3 | And the type is driven by one file. Change a word, |
-| 32.1 | and the whole sequence re-renders. |
-| 35.8 | Zero keyframes. Just direction. |
-| 40.2 | Want the full method? |
-| 41.9 | Comment AI, and we'll send you the link. |
+## Rebuild after changes
+```
+ffmpeg -i voiceover-original.mp3 -af atempo=1.3 -ar 44100 -ac 1 voice-1.3x.wav
+python3 make_soundtrack.py && ffmpeg -y -i soundtrack.wav -b:a 192k soundtrack.mp3
+node render.js
+```
 
 ## Editing
 In `reel.js`:
-- `CAPS`: caption text and times. A `[word]` goes in the red pill.
-- `S`: the shots in order.
-- `igHTML()`: the profile shown on the phone (name, bio, counts).
-- `SLIDES`: the kinetic text.
-- To change the comment keyword, replace `AI` in shot 15 and in `CAPS`.
+- `LINES`: every spoken line with its start and end in the 1× voice-over. Captions show the words as they are spoken, and the latest word sits in the red pill.
+- `SCN`: which shot plays during which part of the voice, with a time map that lines each animation up with the words.
+- `S`: the shots themselves.
+- `igHTML()`: the profile on the phone.
+- To change the speed, set `SPEED` in both `reel.js` and `make_soundtrack.py`, and change the `atempo` value.

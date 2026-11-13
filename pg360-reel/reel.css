@@ -21,7 +21,7 @@ body.record #controls { display: none; }
 
 /* ---------- captions ---------- */
 #cap { position: absolute; left: 0; right: 0; top: 1350px; text-align: center; pointer-events: none;
-  font: 800 66px/1.1 Inter, sans-serif; letter-spacing: -1.5px; white-space: nowrap; }
+  font: 800 64px/1.25 Inter, "Anek Gujarati", sans-serif; letter-spacing: -.5px; white-space: nowrap; }
 #cap .w { display: inline-block; margin: 0 7px; text-shadow: 0 4px 18px rgba(0,0,0,.6); }
 #cap .hl { background: var(--red); border-radius: 12px; padding: 0 16px 6px; margin: 0 4px;
   box-shadow: 0 0 34px rgba(255,45,26,.55), inset 0 -3px 0 rgba(0,0,0,.15); text-shadow: none; }

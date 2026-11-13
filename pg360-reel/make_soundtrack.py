@@ -1,4 +1,4 @@
-"""Synthesises the 47 s soundtrack for the reel (no samples, numpy only).
+"""Builds the reel soundtrack: your voice-over at 1.3x + synthesised music and SFX (numpy only).
 
 Dark sub drone, a 100 bpm pulse, whooshes on every cut, impacts on the big moments,
 a riser into the logo and small UI clicks. Writes soundtrack.wav next to this file.
@@ -10,16 +10,18 @@ import wave
 import numpy as np
 
 SR = 44100
-DUR = 47.0
+SPEED = 1.3                      # voice-over is played 1.3x faster
+A_END = 86.36 + .6               # end of the voice (1x seconds) + hold
+DUR = A_END / SPEED
+T = lambda a: a / SPEED          # voice time -> reel time
 N = int(SR * DUR)
 rng = np.random.default_rng(7)
 t = np.arange(N) / SR
 mix = np.zeros((N, 2))
 
-# scene cuts (must match reel.js)
-CUTS = [2.85, 5.4, 12.6, 16.5, 20.3, 24.0, 25.9, 28.0, 35.0, 35.6, 37.0, 37.45, 38.5, 40.0, 42.4, 45.95]
-IMPACTS = [2.85, 35.3, 38.5, 42.45, 45.92]
-
+# scene cuts in voice time (must match SCN in reel.js)
+CUTS = [T(a) for a in [3.56, 8.6, 16.9, 23.9, 29.1, 34.8, 38.5, 41.5, 51.9, 52.4, 54.9, 58.1, 59.4, 62.6, 67.4, 74.0, 75.6, 78.2, 82.6]]
+IMPACTS = [T(a) for a in [3.56, 51.9, 58.1, 65.45, 75.6]]
 
 def band(x, lo, hi):
     """Band-pass x between lo and hi Hz via FFT."""
@@ -57,9 +59,7 @@ drone *= swell * np.clip(t / 1.5, 0, 1) * np.clip((DUR - t) / 1.2, 0, 1)
 mix[:, 0] += drone * .16
 mix[:, 1] += drone * .16
 
-# --- pulse: kick + hat + clap on the same grid as the reference reel
-#     ~109 bpm (one beat every 0.55 s), first beat at 5.47 s, music stops at 44.5 s,
-#     with the beat dropping out at 8.0-9.0 s and 24.0-25.0 s
+# --- pulse: kick + hat + clap, ~109 bpm (as in the reference), from the rhythm shot to the end
 def kick():
     n = int(.35 * SR)
     tt = np.arange(n) / SR
@@ -79,23 +79,20 @@ def clap():
 
 
 BEAT = 60 / 109.1
-DROPS = [(8.0, 9.0), (24.0, 25.0)]
-x, k = 5.47, 0
-while x < 44.4:
+DROPS = [(T(51.6), T(52.5)), (T(57.6), T(58.6))]   # breaks before the big hits
+x, k = T(8.6), 0
+while x < DUR - .8:
     if not any(a <= x < b for a, b in DROPS):
-        add(kick(), x, .6)
-        add(hat(), x + BEAT / 2, .12, pan=.3 if k % 2 else -.3)
+        add(kick(), x, .55)
+        add(hat(), x + BEAT / 2, .1, pan=.3 if k % 2 else -.3)
         if k % 2 == 1:
-            add(clap(), x, .18)
+            add(clap(), x, .15)
     x += BEAT
     k += 1
-# the bed (drone) also stops with the music at 44.5 s
-mute = np.clip((44.5 - t) / .15, 0, 1) + np.clip((t - 45.85) / .1, 0, 1) * np.clip((DUR - t) / 1.0, 0, 1)
-mix *= np.clip(mute, 0, 1)[:, None]
 
-# intro hits (montage) — same moments as the reference
-for x in [0.41, 1.09, 3.25, 4.37]:
-    add(kick(), x, .7)
+# intro montage hits
+for x in [0.33, 0.87, 1.6, 2.2]:
+    add(kick(), x, .6)
 
 # --- whoosh on every cut
 def whoosh(d=.45):
@@ -112,9 +109,9 @@ def whoosh(d=.45):
 
 for c in CUTS:
     add(whoosh(), c - .25, .22, pan=rng.uniform(-.4, .4))
-# extra whooshes/ticks where the reference has high-frequency hits
-for c in [0.78, 10.92, 12.29, 12.57, 14.48, 17.91, 21.81, 26.55, 28.97, 46.16, 46.47]:
-    add(whoosh(.3), c - .15, .2, pan=rng.uniform(-.5, .5))
+# extra whooshes on the montage cuts and the zoom
+for c in [0.2, 0.3, 0.6, 1.0, 1.3, 1.65, 1.95, 2.25, T(38.6), T(43.4)]:
+    add(whoosh(.3), c - .1, .16, pan=rng.uniform(-.5, .5))
 
 # --- impacts: sub boom + noise crack + tail
 def impact():
@@ -134,7 +131,7 @@ n = int(1.8 * SR)
 tt = np.arange(n) / SR
 riser = np.sin(2 * np.pi * np.cumsum(200 + 900 * (tt / 1.8) ** 2) / SR) * (tt / 1.8) ** 2
 riser += band(rng.standard_normal(n), 2000, 10000) * (tt / 1.8) ** 3 * .6
-add(riser, 36.7, .22)
+add(riser, T(56.2), .22)
 
 # --- UI clicks: typing the edit, comment pop, heart, reply
 def click(f=2400, d=.03):
@@ -143,23 +140,47 @@ def click(f=2400, d=.03):
     return np.sin(2 * np.pi * f * tt) * np.exp(-tt * 120)
 
 
-for x in np.arange(31.0, 31.25, .08):
-    add(click(1800), x, .25)
-for x in np.arange(31.3, 31.6, .15):
-    add(click(2600), x, .25)
-for x, f in [(42.9, 2600), (43.05, 2600), (43.4, 1400), (43.9, 2200), (44.0, 1600), (44.4, 1900), (24.0, 3000), (24.06, 3000), (24.12, 3000), (24.18, 3000)]:
-    add(click(f, .08), x, .35)
+# script.json edit (delete + type), pins, checklist rows, comment typing, WhatsApp digits
+clicks = [(T(a), 1800) for a in np.arange(47.6, 48.0, .1)] + [(T(a), 2600) for a in np.arange(48.1, 48.8, .17)]
+clicks += [(T(a), 3000) for a in [34.8, 34.88, 34.96, 35.04]]
+clicks += [(T(a), 1500) for a in [67.9, 69.2, 70.5, 72.1]]
+clicks += [(T(a), 2600) for a in np.arange(76.25, 76.7, .09)] + [(T(76.9), 1400), (T(77.3), 2200), (T(77.5), 1600), (T(77.8), 1900)]
+clicks += [(T(78.45 + i * .33), 2400) for i in range(5)] + [(T(80.5 + i * .36), 2400) for i in range(5)]
+for x, f in clicks:
+    add(click(f, .06), x, .3)
 
-# --- master: gentle limiter
+# --- master: gentle limiter on the music bed
 mix *= .9 / max(1e-9, np.percentile(np.abs(mix), 99.9))
 mix = np.tanh(mix * 1.2) / np.tanh(1.2)
+
+# --- voice-over (already sped up to 1.3x by ffmpeg) with the music ducked under it
+here = os.path.dirname(os.path.abspath(__file__))
+vpath = os.path.join(here, 'voice-1.3x.wav')
+if os.path.exists(vpath):
+    with wave.open(vpath) as w:
+        v = np.frombuffer(w.readframes(w.getnframes()), dtype='<i2').astype(float) / 32768
+    v = np.pad(v, (0, max(0, N - len(v))))[:N]
+    v *= .5 / max(1e-9, np.percentile(np.abs(v), 99.9))
+    # envelope follower: fast attack, slow release
+    hop = 441
+    rms = np.sqrt(np.convolve(v ** 2, np.ones(hop) / hop, 'same'))
+    env = np.zeros(N)
+    g = 0.0
+    for i in range(0, N, hop):
+        target = min(1.0, rms[i] / .05)
+        g = target if target > g else g * .93
+        env[i:i + hop] = g
+    duck = 1 - .62 * env
+    mix = mix * duck[:, None] * .7 + v[:, None] * 1.0
+    mix *= .95 / max(1e-9, np.abs(mix).max())
+
 fade = int(.4 * SR)
 mix[-fade:] *= np.linspace(1, 0, fade)[:, None]
 
-out = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'soundtrack.wav')
+out = os.path.join(here, 'soundtrack.wav')
 with wave.open(out, 'wb') as w:
     w.setnchannels(2)
     w.setsampwidth(2)
     w.setframerate(SR)
     w.writeframes((mix * 32000).astype('<i2').tobytes())
-print('wrote', out)
+print('wrote', out, f'{DUR:.2f}s')

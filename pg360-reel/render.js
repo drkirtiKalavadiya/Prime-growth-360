@@ -1,4 +1,4 @@
-// Frame-exact MP4 render: 1080x1920, 30 fps, with soundtrack.mp3.
+// Frame-exact MP4 render: 1080x1920, 30 fps, with soundtrack.mp3 (voice-over + music + SFX).
 // Every frame is drawn at its exact time (REEL.seek), so nothing depends on machine speed.
 // Needs Node with Playwright (Chromium) and ffmpeg.   Usage: node render.js [out.mp4] [parts=3]
 const { chromium } = require('playwright');
@@ -14,9 +14,12 @@ const FPS = 30;
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'pg360-'));
   const url = 'file://' + path.join(__dirname, 'index.html') + '?record=1';
   const browser = await chromium.launch();
-  const dur = 47, total = Math.round(dur * FPS);
-  const per = Math.ceil(total / parts);
   let done = 0;
+  const probe = await browser.newPage();
+  await probe.goto(url);
+  const dur = await probe.evaluate(() => REEL.DUR);
+  await probe.close();
+  const total = Math.round(dur * FPS), per = Math.ceil(total / parts);
   await Promise.all([...Array(parts)].map(async (_, k) => {
     const page = await browser.newPage({ viewport: { width: 1080, height: 1920 } });
     await page.goto(url);
