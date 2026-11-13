@@ -1,0 +1,111 @@
+:root {
+  --red: #ff2d1a;
+  --red2: #ff4a2e;
+  --ink: #0c1014;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+body { font-family: "Inter", system-ui, sans-serif; color: #fff; }
+
+#viewport { position: fixed; inset: 0 0 56px 0; display: flex; align-items: center; justify-content: center; }
+body.record #viewport { inset: 0; }
+body.record #controls { display: none; }
+#stage { position: relative; width: 1080px; height: 1920px; flex: none; overflow: hidden; background: #000; transform-origin: center; }
+
+#bg { position: absolute; inset: 0; }
+#vig { position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 75% 60% at 50% 46%, transparent 55%, rgba(0,0,0,.55) 100%); }
+#flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+#scene { position: absolute; inset: 0; }
+.layer { position: absolute; inset: 0; }
+
+/* ---------- captions ---------- */
+#cap { position: absolute; left: 0; right: 0; top: 1350px; text-align: center; pointer-events: none;
+  font: 800 66px/1.1 Inter, sans-serif; letter-spacing: -1.5px; white-space: nowrap; }
+#cap .w { display: inline-block; margin: 0 7px; text-shadow: 0 4px 18px rgba(0,0,0,.6); }
+#cap .hl { background: var(--red); border-radius: 12px; padding: 0 16px 6px; margin: 0 4px;
+  box-shadow: 0 0 34px rgba(255,45,26,.55), inset 0 -3px 0 rgba(0,0,0,.15); text-shadow: none; }
+
+/* ---------- glass panel ---------- */
+.glass { position: absolute; border-radius: 28px;
+  background: linear-gradient(180deg, rgba(70,26,20,.62), rgba(32,10,8,.72));
+  border: 2px solid rgba(255,255,255,.16);
+  box-shadow: 0 30px 80px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.18);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  font-family: "JetBrains Mono", monospace; color: #d8c8c3; overflow: hidden; }
+.glass .hd { display: flex; justify-content: space-between; padding: 20px 26px 0; font-size: 22px; color: #cdbbb5; }
+.glass .hd b { color: #fff; font-family: Inter; font-weight: 700; }
+.glass .hd .dot { color: var(--red); }
+.code { padding: 14px 26px 24px; font-size: 21px; line-height: 1.62; white-space: pre; }
+.code .ln { display: inline-block; width: 60px; color: #7d6560; }
+.code .hi { background: rgba(255,45,26,.18); border-left: 4px solid var(--red); margin-left: -26px; padding-left: 22px; display: block; }
+.code .k { color: #ff8a73; } .code .s { color: #f2d6a2; } .code .c { color: #8a706a; } .code .n { color: #fff; }
+
+/* ---------- 3D phone ---------- */
+.cam { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; perspective: 2600px; perspective-origin: 50% 45%; }
+.phone { position: absolute; width: 430px; height: 904px; left: 325px; top: 470px; transform-style: preserve-3d; }
+.phone .slice { position: absolute; inset: 0; border-radius: 74px;
+  background: linear-gradient(90deg, #5d5f63, #c9cbcf 30%, #8d9095 60%, #4b4d51); }
+.phone .face { position: absolute; inset: 0; border-radius: 74px; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.phone .front { background: #050505; border: 3px solid #9a9da2; padding: 12px; }
+.phone .screen { position: relative; width: 100%; height: 100%; border-radius: 62px; overflow: hidden; background: var(--ink); }
+.phone .island { position: absolute; left: 50%; top: 18px; width: 120px; height: 34px; margin-left: -60px; border-radius: 20px; background: #000; z-index: 9; }
+.phone .back { background: linear-gradient(135deg, #f0efec 0%, #cfcdc9 35%, #a9a7a3 55%, #e7e5e1 80%, #bdbbb7 100%); background-size: 300% 300%;
+  border: 3px solid #b9b7b3; }
+.phone .bump { position: absolute; left: 34px; top: 34px; width: 190px; height: 200px; border-radius: 52px;
+  background: linear-gradient(135deg, #dddbd7, #b2b0ac); box-shadow: inset 0 2px 6px rgba(255,255,255,.7), 0 6px 14px rgba(0,0,0,.25); }
+.phone .lens { position: absolute; width: 78px; height: 78px; border-radius: 50%;
+  background: radial-gradient(circle at 40% 38%, #4a5466 0 10%, #10131a 30%, #000 60%); border: 7px solid #9fa1a5; box-shadow: 0 3px 8px rgba(0,0,0,.45); }
+.phone .shine { position: absolute; inset: 0; border-radius: 74px; pointer-events: none;
+  background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.22) 45%, transparent 60%); mix-blend-mode: screen; }
+.pin { position: absolute; width: 26px; height: 26px; border-radius: 50%; background: var(--red); border: 4px solid #fff; box-shadow: 0 0 18px var(--red); margin: -13px 0 0 -13px; }
+
+/* ---------- Instagram profile (390 px design width) ---------- */
+.ig { position: absolute; left: 0; top: 0; width: 390px; height: 844px; transform-origin: 0 0; font-family: Inter, sans-serif; color: #f5f5f5; background: var(--ink); }
+.ig .sb { height: 48px; display: flex; justify-content: space-between; align-items: center; padding: 6px 30px 0; font: 700 15px Inter; }
+.ig .top { display: flex; align-items: center; gap: 8px; padding: 4px 14px 6px; font-size: 22px; }
+.ig .top .name { font-weight: 800; font-size: 19px; flex: 1; text-align: center; white-space: nowrap; }
+.ig .tick { display: inline-block; width: 15px; height: 15px; border-radius: 50%; background: #3897f0; vertical-align: -1px; position: relative; }
+.ig .tick::after { content: ""; position: absolute; left: 4px; top: 3px; width: 5px; height: 7px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+.ig .row { display: flex; align-items: center; padding: 6px 14px; gap: 14px; }
+.ig .av { width: 86px; height: 86px; border-radius: 50%; padding: 3px; background: #2a2a2e; flex: none; }
+.ig .av img { width: 100%; height: 100%; border-radius: 50%; display: block; }
+.ig .ttl { font-weight: 700; font-size: 13.5px; line-height: 1.25; }
+.ig .stats { display: flex; gap: 22px; margin-top: 6px; }
+.ig .stats div { font-size: 12.5px; line-height: 1.15; color: #ddd; }
+.ig .stats b { display: block; font-size: 17px; color: #fff; }
+.ig .bio { padding: 2px 14px; font-size: 12.5px; line-height: 1.45; }
+.ig .bio .g { color: #a8a8a8; }
+.ig .chips { display: flex; gap: 6px; padding: 6px 14px; }
+.ig .chip { border: 1px solid #333; border-radius: 16px; padding: 5px 10px; font-size: 11.5px; font-weight: 600; white-space: nowrap; overflow: hidden; }
+.ig .dash { margin: 6px 12px; background: #262a30; border-radius: 10px; padding: 9px 12px; }
+.ig .dash b { font-size: 13px; } .ig .dash div { font-size: 11px; color: #a8a8a8; margin-top: 2px; }
+.ig .btns { display: flex; gap: 5px; padding: 4px 12px; }
+.ig .btn { flex: 1; background: #262a30; border-radius: 8px; padding: 7px 0; text-align: center; font-size: 12px; font-weight: 700; }
+.ig .btn.sm { flex: none; width: 32px; }
+.ig .hls { display: flex; gap: 12px; padding: 10px 12px 4px; }
+.ig .hl { width: 66px; text-align: center; font-size: 10.5px; white-space: nowrap; overflow: hidden; }
+.ig .hl i { display: block; width: 62px; height: 62px; margin: 0 auto 4px; border-radius: 50%; border: 2px solid #3a3a3e; padding: 2px; overflow: hidden; }
+.ig .hl i img { width: 100%; height: 100%; border-radius: 50%; display: block; }
+.ig .hl i.new { display: flex; align-items: center; justify-content: center; font-size: 30px; font-style: normal; border-color: #fff; }
+.ig .tabs { display: flex; justify-content: space-around; padding: 8px 0 6px; font-size: 18px; color: #bbb; border-bottom: 1px solid #222; }
+.ig .tabs span:first-child { color: #fff; border-bottom: 2px solid #fff; padding: 0 22px 5px; }
+.ig .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+.ig .grid img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; display: block; }
+.ig .nav { position: absolute; left: 0; right: 0; bottom: 0; height: 58px; background: rgba(12,16,20,.96); display: flex; justify-content: space-around; align-items: center; font-size: 22px; border-top: 1px solid #222; }
+.ig .nav img { width: 26px; height: 26px; border-radius: 50%; border: 2px solid #fff; }
+
+/* ---------- misc ---------- */
+.mini { position: absolute; left: 325px; top: 248px; width: 430px; height: 765px; border-radius: 44px; overflow: hidden; background: #000;
+  border: 3px solid rgba(255,255,255,.14); box-shadow: 0 40px 90px rgba(0,0,0,.6); }
+.kin { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: Inter; font-weight: 900; letter-spacing: -2px; line-height: .95; text-align: center; }
+.outline { position: absolute; left: -40px; font: 900 300px/0.92 Inter; color: transparent; -webkit-text-stroke: 2px rgba(255,80,60,.12); white-space: nowrap; letter-spacing: -6px; }
+.bars { position: absolute; inset: 0; display: flex; justify-content: space-around; }
+.bars i { display: block; width: 13%; height: 100%; border-radius: 60px;
+  background: linear-gradient(90deg, #050608 0%, #2b3340 35%, #6b7a90 48%, #1b2029 62%, #050608 100%); }
+
+#controls { position: fixed; left: 0; right: 0; bottom: 0; height: 56px; display: flex; align-items: center; gap: 10px; padding: 0 16px; background: #111; border-top: 1px solid #222; }
+#controls button { background: #222; color: #fff; border: 1px solid #333; border-radius: 8px; height: 36px; min-width: 42px; cursor: pointer; font: inherit; }
+#scrub { flex: 1; accent-color: var(--red); }
+#clock { color: #aaa; font-variant-numeric: tabular-nums; font-size: 14px; }
+#start { position: absolute; inset: 0; z-index: 30; border: 0; background: rgba(0,0,0,.5); color: #fff; font: 800 140px Inter; cursor: pointer; }
