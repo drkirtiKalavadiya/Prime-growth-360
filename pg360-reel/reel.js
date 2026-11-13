@@ -59,13 +59,21 @@ function phoneHTML(opts = {}) {
 }
 function fitIG(root) { $$(root, '.ig').forEach(ig => { ig.style.transform = `scale(${400 / 390})`; }); }
 function setPhone(root, p) {
-  const ph = $(root, '.phone');
+  const ph = $(root, '.phone'), cam = $(root, '.cam');
   ph.style.transform = `translate3d(${f(p.x || 0)}px,${f(p.y || 0)}px,${f(p.z || 0)}px) rotateX(${f(p.rx || 0)}deg) rotateY(${f(p.ry || 0)}deg) rotateZ(${f(p.rz || 0)}deg) scale(${f(p.s || 1)})`;
-  $(root, '.cam').style.filter = p.blur ? `blur(${f(p.blur)}px)` : 'none';
+  cam.style.perspective = (p.persp || 2600) + 'px';
+  cam.style.perspectiveOrigin = p.po || '50% 45%';
+  const fl = [];
+  if (p.blur) fl.push(`blur(${f(p.blur)}px)`);
+  cam.style.filter = fl.length ? fl.join(' ') : 'none';
+  // red rim glow on the frame itself (a filter here would soften the 3D phone)
+  $(root, '.front').style.boxShadow = p.glow ? `0 ${f(p.glowY ?? 30)}px ${f(p.glowR ?? 60)}px rgba(255,45,26,${f(p.glow)})` : 'none';
+  $(root, '.back').style.boxShadow = p.glow ? `0 0 ${f(p.glowR ?? 60)}px rgba(255,45,26,${f(p.glow)})` : 'none';
+  cam.style.opacity = p.op ?? 1;
   // light sweep on the titanium back and the glass
   const ry = ((p.ry || 0) % 360 + 360) % 360;
   $(root, '.back').style.backgroundPosition = `${f(50 + Math.sin(ry * Math.PI / 180) * 45)}% 50%`;
-  $$(root, '.shine').forEach(s => { s.style.opacity = f(p.shine ?? .6); s.style.backgroundPosition = '0 0'; });
+  $$(root, '.shine').forEach(s => { s.style.opacity = f(p.shine ?? .6); });
 }
 function glass(x, y, w, h, inner, cls = '') {
   return `<div class="glass ${cls}" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px">${inner}</div>`;
@@ -128,20 +136,65 @@ const FAST = ['Grow', 'SOP', 'AI', '2000+', 'Branding', '177K of you'];
 /* ------------------------------------------------------------------ */
 const S = [];
 
-/* 1. intro — phone close-up + headline */
+/* 1. intro — fast montage of 3D close-ups (11 cuts in 2.85 s) + headline */
+// wide-angle "laid back" pose, also used for the outro
+const WIDE = { persp: 1100, po: '34% 30%', rx: 44, rz: -8, s: 1.2, glow: .55 };
 S.push([0, 2.85, el => {
-  el.innerHTML = phoneHTML() + `<div class="hd1" style="position:absolute;left:0;right:0;top:150px;text-align:center;font:800 84px/1.12 Inter;letter-spacing:-2px">
-    <div>${['This', 'entire reel'].map((w, i) => `<span class="w${i}">${w}</span>`).join(' ')}</div>
-    <div><span class="w2">was made</span></div>
-    <div><span class="w3">with</span> <span class="w4" style="color:#ff2d1a;text-shadow:0 0 30px rgba(255,45,26,.8)">Claude.</span></div></div>`;
+  const words = ['This', 'entire', 'reel', '<br>was', 'made', '<br>with', '<span style="color:#ff2d1a;text-shadow:0 0 30px rgba(255,45,26,.8)">Claude.</span>'];
+  let rings = '';
+  for (let i = 0; i < 7; i++) rings += `<i style="position:absolute;left:0;top:${70 - i * 13}px;width:340px;height:120px;border-radius:50%;border:5px solid rgba(255,70,40,${f(.95 - i * .1)});box-shadow:0 0 26px rgba(255,45,26,.8),inset 0 0 20px rgba(255,45,26,.5)"></i>`;
+  el.innerHTML = phoneHTML() +
+    `<div class="iconStack" style="position:absolute;left:370px;top:620px;width:340px;height:260px;opacity:0;transform-origin:50% 40%">
+       <div style="position:absolute;left:0;top:30px;width:340px;height:160px;border-radius:50%;background:radial-gradient(ellipse at 50% 50%,rgba(255,60,30,.9),rgba(255,45,26,0) 70%);filter:blur(10px)"></div>${rings}
+       <div class="tile" style="position:absolute;left:90px;top:-120px;width:160px;height:160px;border-radius:40px;overflow:hidden;background:#fff;box-shadow:0 0 40px rgba(255,255,255,.55),0 20px 40px rgba(0,0,0,.5)"><img src="${A}avatar.jpg" style="width:100%;height:100%;display:block"></div>
+       <b style="position:absolute;left:330px;top:150px;font:300 60px Inter;color:#fff">+</b></div>
+     <div class="snapNo layer" style="opacity:0;background:radial-gradient(ellipse 70% 55% at 50% 48%,#8a1508 0%,#3a0904 55%,#000 100%)"></div><div class="snapBars layer" style="opacity:0;background:#000"></div>
+     <div class="hd1" style="position:absolute;left:0;right:0;top:150px;text-align:center;font:800 84px/1.12 Inter;letter-spacing:-2px;z-index:5">${words.map((w, i) => `<span class="w${i}" style="display:inline-block">${w.replace('<br>', '')}</span>${' '}`).join('').replace('<span class="w3"', '<br><span class="w3"').replace('<span class="w5"', '<br><span class="w5"')}</div>`;
   fitIG(el);
-  const av = $(el, '.ig .av');
-  const ws = [0.05, 0.6, 1.4, 1.9, 2.2].map((t0, i) => [t0, $(el, '.w' + i)]);
+  const av = $(el, '.ig .av'), icon = $(el, '.iconStack'), tile = $(el, '.tile');
+  const snapNo = $(el, '.snapNo'), snapBars = $(el, '.snapBars');
+  let builtSnaps = false;
+  const WT = [0.38, 0.75, 1.25, 1.62, 1.75, 2.0, 2.13];
+  const ws = WT.map((t0, i) => [t0, $(el, '.w' + i)]);
+  // [start, shot]
+  const SHOTS = [[0, 'wide'], [.25, 'posts'], [.375, 'header'], [.75, 'icon'], [1.25, 'hlblur'], [1.5, 'hl'], [1.625, 'no'], [1.75, 'bars'], [1.875, 'hl2'], [2.125, 'avatar'], [2.625, 'full']];
   return t => {
-    const k = eio(pr(t, 0, 2.85)), z = eio(pr(t, 2.0, 2.85));
-    setPhone(el, { x: lerp(-60, 60, k) - z * 200, y: lerp(520, 420, k) + z * 520, rx: lerp(55, 48, k), ry: lerp(-14, -6, k), rz: lerp(-30, -24, k), s: lerp(2.5, 2.9, k) + z * 2.2, blur: lerp(7, 3, k) + z * 4, shine: .4 });
-    av.style.boxShadow = `0 0 0 ${f(4 + z * 6)}px #ff2d1a, 0 0 ${f(30 + z * 50)}px #ff2d1a`;
-    ws.forEach(([t0, w]) => { const a = pr(t, t0, t0 + .3); w.style.opacity = a; w.style.filter = `blur(${f((1 - a) * 12)}px)`; });
+    if (!builtSnaps) { // flash-forwards of later shots
+      builtSnaps = true;
+      S[1][2](snapNo)(3.6); $(snapNo, '.no').style.display = 'none'; $(snapNo, '.l2').style.display = 'none';
+      S[11][2](snapBars)(38.3);
+    }
+    let k = 0; SHOTS.forEach((s, i) => { if (t >= s[0]) k = i; });
+    const [s0, shot] = SHOTS[k];
+    const s1 = k + 1 < SHOTS.length ? SHOTS[k + 1][0] : 2.85;
+    const lt = pr(t, s0, s1);
+    icon.style.opacity = shot === 'icon' ? 1 : 0;
+    snapNo.style.opacity = shot === 'no' ? 1 : 0;
+    snapBars.style.opacity = shot === 'bars' ? 1 : 0;
+    av.style.boxShadow = shot === 'avatar' ? `0 0 0 ${f(4 + lt * 8)}px #ff2d1a, 0 0 ${f(40 + lt * 60)}px #ff2d1a` : 'none';
+    let p;
+    switch (shot) {
+      case 'wide': p = { ...WIDE, y: lerp(-150, -190, lt), x: -10 }; break;
+      case 'posts': p = { persp: 1300, rx: 32, rz: -12, s: 3.4, x: lerp(320, -260, lt), y: -760, blur: 9 }; break;
+      case 'header': p = { persp: 1300, rx: 34, rz: -20, s: 2.9, x: lerp(330, 190, eo(lt)), y: 800, blur: lerp(7, .5, eo(pr(lt, 0, .6))) }; break;
+      case 'icon': p = { persp: 1100, rx: 48, rz: 160, s: 3.0, x: -60, y: -80, blur: 7 }; break;
+      case 'hlblur': p = { persp: 1200, rx: 44, rz: -26, s: 3.0, x: lerp(380, 0, lt), y: -150, blur: 11 }; break;
+      case 'hl': p = { persp: 1200, rx: 44, rz: -26, s: 3.0, x: lerp(0, -40, lt), y: -150, blur: 1 }; break;
+      case 'hl2': p = { persp: 1200, rx: 46, rz: -24, s: 2.6, x: lerp(120, 60, lt), y: -40, blur: 1 }; break;
+      case 'avatar': p = { persp: 1000, rx: 40, rz: 172, s: lerp(2.6, 2.9, lt), x: lerp(-480, -520, lt), y: lerp(-470, -505, lt), blur: lerp(6, 1.5, eo(lt)) }; break;
+      case 'full': { const a = eo(pr(t, 2.625, 2.8)); p = { rx: 6, ry: -12, rz: 4, s: lerp(.8, .86, lt), y: lerp(140, 80, a), blur: (1 - a) * 6, glow: .35 }; break; }
+      default: p = { s: 1, op: 0 };
+    }
+    if (shot === 'no' || shot === 'bars') p.op = 0;
+    setPhone(el, { shine: .35, ...p });
+    // the extruded app icon floats and spins slowly
+    tile.style.transform = `translateY(${f(Math.sin(t * 6) * 8 - lt * 20)}px) rotate(${f(lerp(-6, 6, lt))}deg)`;
+    icon.style.transform = `scale(${f(lerp(1.75, 1.95, lt))})`;
+    ws.forEach(([t0, w]) => {
+      const a = pr(t, t0, t0 + .14);
+      w.style.opacity = a; w.style.filter = `blur(${f((1 - a) * 12)}px)`;
+      w.style.transform = `translateX(${f((1 - eo(a)) * 40)}px)`;
+    });
   };
 }]);
 
@@ -227,24 +280,35 @@ S.push([12.6, 16.5, el => {
 }]);
 
 /* 5. the phone, the titanium, the light, the motion blur */
+const MATS = {
+  white: 'linear-gradient(135deg,#fbfbfa 0%,#efefed 45%,#e2e2df 100%)',
+  titanium: 'linear-gradient(135deg,#7f8185 0%,#d2d3d5 22%,#64666a 46%,#aeb0b3 70%,#55575b 100%)',
+  light: 'linear-gradient(135deg,#ffffff 0%,#f4f4f4 30%,#d4d4d6 48%,#ffffff 62%,#cfd0d2 100%)'
+};
 S.push([16.5, 20.3, el => {
-  el.innerHTML = phoneHTML() + glass(60, 120, 960, 130, `<div class="hd"><span class="fn2">phone.js · line 5</span><span></span></div><div class="code ln3" style="padding-top:8px;font-size:24px"></div>`);
+  el.innerHTML = phoneHTML() + glass(60, 110, 960, 140, `<div class="hd"><span class="fn2">phone.js · line 5</span><span></span></div><div class="code ln3" style="padding-top:8px;font-size:25px"></div>`);
   fitIG(el);
-  $(el, '.off').style.opacity = 1;
-  const fn = $(el, '.fn2'), ln = $(el, '.ln3');
+  const off = $(el, '.off'), back = $(el, '.back'), fn = $(el, '.fn2'), ln = $(el, '.ln3'), bump = $(el, '.bump');
+  off.style.opacity = 1;
+  back.style.backgroundSize = '300% 300%';
   const TXT = [[16.5, 'phone.js · line 5', 'W, H, T = <span class="n">78.0</span>, <span class="n">163.4</span>, <span class="n">8.75</span>'],
-    [17.4, 'phone.js · line 68', 'TITANIUM = rgb(<span class="s">"#DEDCD8"</span>), metal <span class="n">1.0</span>, rough <span class="n">0.2</span>'],
-    [18.3, 'scene.js · line 1843', 'light.key({ x: <span class="n">-2</span>, y: <span class="n">4</span>, power: <span class="n">1200</span> })'],
-    [19.1, 'scene.js · line 1843', 'motionBlur.shutter = arg(<span class="s">"--shutter"</span>, <span class="n">1.0</span>)']];
+    [17.25, 'phone.js · line 68', 'TITANIUM = rgb(<span class="s">"#DEDCD8"</span>), metal <span class="n">1.0</span>, rough <span class="n">0.2</span>'],
+    [18.25, 'scene.js · line 1843', 'light.key({ x: <span class="n">-2</span>, y: <span class="n">4</span>, power: <span class="n">1200</span> })'],
+    [19.0, 'scene.js · line 1843', 'motionBlur.shutter = arg(<span class="s">"--shutter"</span>, <span class="n">1.0</span>)']];
   let cur = -1;
   return t => {
     let i = 0; TXT.forEach((x, k) => { if (t >= x[0]) i = k; });
     if (i !== cur) { cur = i; fn.textContent = TXT[i][1]; ln.innerHTML = TXT[i][2]; }
-    const spin = eio(pr(t, 19.1, 19.95));
-    const ry = lerp(205, 165, pr(t, 16.5, 19.1)) + spin * 195;
-    const blur = Math.sin(spin * Math.PI) * 16;
-    const a = eo(pr(t, 16.5, 16.9));
-    setPhone(el, { y: lerp(200, 0, a) + Math.sin(t * 1.4) * 10, rx: 10, ry, rz: lerp(-14, -6, pr(t, 16.5, 20.3)), s: lerp(.82, .92, pr(t, 16.5, 20.3)), blur, shine: t >= 18.3 ? .9 + Math.sin(t * 6) * .1 : .35 });
+    const mat = t < 17.25 ? 'white' : t < 18.25 ? 'titanium' : 'light';
+    back.style.background = MATS[mat]; back.style.backgroundSize = '300% 300%';
+    bump.style.background = mat === 'titanium' ? 'linear-gradient(135deg,#9a9ca0,#5f6165)' : 'linear-gradient(135deg,#f4f4f3,#d6d6d4)';
+    const spin = eio(pr(t, 19.0, 19.55));
+    const ry = lerp(196, 186, pr(t, 16.6, 19.0)) + spin * (360 - 186 + 8);
+    const blur = Math.sin(spin * Math.PI) * 18;
+    const a = eo(pr(t, 16.6, 16.85));
+    const lightOn = mat === 'light' ? 1 : 0;
+    setPhone(el, { x: 0, y: -150 + Math.sin(t * 1.3) * 6, rx: 6, ry, rz: 11, s: lerp(.9, 1.0, a), op: a, blur,
+      shine: mat === 'light' ? 1 : mat === 'titanium' ? .55 : .2, glow: lightOn * .45 + .15, glowY: 0, glowR: 40 });
   };
 }]);
 
@@ -259,44 +323,47 @@ const PCODE = [
   ['', '  <k>&lt;Grid</k> posts={posts} cols={<n>3</n>} /&gt;'],
 ];
 S.push([20.3, 24.5, el => {
-  el.innerHTML = phoneHTML() + glass(150, 640, 780, 330, `<div class="hd"><span><b>ProfileIG.jsx</b> &nbsp;the screen, as code</span><span></span></div><div class="code pc"></div>`, 'pg');
+  el.innerHTML = phoneHTML() + glass(110, 560, 860, 360, `<div class="hd"><span><b>ProfileIG.jsx</b> &nbsp;the screen, as code</span><span></span></div><div class="code pc"></div>`, 'pg');
   fitIG(el);
   const off = $(el, '.off'), pg = $(el, '.pg'), pc = $(el, '.pc');
   return t => {
-    const a = eo(pr(t, 20.3, 20.7));
-    off.style.opacity = t < 20.5 ? 1 - pr(t, 20.3, 20.5) : t < 21.3 ? 0 : t < 23.0 ? pr(t, 21.3, 21.5) : 1 - pr(t, 23.0, 23.8);
-    setPhone(el, { y: lerp(80, 0, a) + Math.sin(t * 1.2) * 8, rx: 6, ry: lerp(-16, 10, pr(t, 20.3, 24.5)), rz: lerp(4, -3, pr(t, 20.3, 24.5)), s: .95, shine: .5 });
-    const b = eo(pr(t, 22.4, 22.75));
-    pg.style.opacity = t < 24.1 ? b : 1 - pr(t, 24.1, 24.45);
+    // screen: off -> on (20.75) -> off (21.6) -> ghost phone behind the code -> on again (24.0)
+    off.style.opacity = t < 20.75 ? 1 : t < 21.6 ? 0 : t < 23.95 ? 1 : 1 - pr(t, 23.95, 24.15);
+    const ghost = t >= 22.4 && t < 23.95 ? 1 : 0;
+    setPhone(el, { y: -90 + Math.sin(t * 1.2) * 6, rx: 4, ry: lerp(-10, 6, pr(t, 20.3, 24.5)), rz: 3, s: .98, shine: .5, op: ghost ? .32 : 1 });
+    const b = eo(pr(t, 22.4, 22.7));
+    pg.style.opacity = t < 23.95 ? b : 1 - pr(t, 23.95, 24.2);
     pg.style.transform = `translateY(${f((1 - b) * 40)}px) scale(${f(lerp(.94, 1, b))})`;
-    const hi = Math.min(6, Math.floor(pr(t, 22.5, 24.0) * 7));
-    pc.innerHTML = codeLines(136, 7, hi, PCODE).replace(/<span class="ln">(\d+)<\/span>/g, (m, n) => `<span class="ln">${n}</span>`);
+    const hi = Math.min(6, Math.floor(pr(t, 22.5, 23.5) * 7));
+    pc.innerHTML = codeLines(136, 7, hi, PCODE);
+    pc.style.opacity = 1 - pr(t, 23.6, 23.8);
   };
 }]);
 
 /* 7. pinned to the four corners */
-S.push([24.5, 26.9, el => {
+S.push([24.5, 26.4, el => {
   el.innerHTML = phoneHTML({ pins: true });
   fitIG(el);
   const pins = $$(el, '.pin'), edge = $(el, '.edge');
   return t => {
-    const k = pr(t, 24.5, 26.9);
-    setPhone(el, { rx: lerp(14, 22, k), ry: lerp(-26, -8, k), rz: lerp(10, 4, k), s: .9 + Math.sin(t * 2) * .01, shine: .5 });
-    pins.forEach((p, i) => { const a = pr(t, 24.6 + i * .35, 24.8 + i * .35); p.style.opacity = a; p.style.transform = `scale(${f(back(a))})`; });
-    edge.style.opacity = pr(t, 25.2, 25.5);
+    setPhone(el, { rx: 6 + Math.sin(t * 1.1) * 4, ry: Math.sin((t - 24.5) * 2.2) * 24, rz: Math.sin((t - 24.5) * 1.6) * 5, s: 1.0, shine: .5 });
+    pins.forEach((p, i) => { const a = pr(t, 24.5 + i * .06, 24.7 + i * .06); p.style.opacity = a; p.style.transform = `scale(${f(back(a))})`; });
+    edge.style.opacity = pr(t, 24.55, 24.8);
   };
 }]);
 
-/* 8. razor sharp — extreme close-up of the live profile */
-S.push([26.9, 28.3, el => {
-  el.innerHTML = phoneHTML() + `<div class="zb" style="position:absolute;left:470px;top:120px;font:600 24px 'JetBrains Mono';color:#ddd;background:rgba(255,255,255,.08);border-radius:20px;padding:6px 16px">×7.7</div>`;
+/* 8. "so it stays razor sharp" — one continuous dolly zoom ×1.0 -> ×7.7 into the live profile */
+S.push([26.4, 28.3, el => {
+  el.innerHTML = phoneHTML() + `<div class="zb" style="position:absolute;left:0;right:0;top:110px;text-align:center"><span style="font:600 24px 'JetBrains Mono';color:#ddd;background:rgba(255,255,255,.08);border-radius:20px;padding:6px 16px">×1.0</span></div>`;
   fitIG(el);
-  const zb = $(el, '.zb');
+  const zb = $(el, '.zb span');
   return t => {
-    const k = eio(pr(t, 26.9, 28.3));
-    const s = lerp(3.6, 4.4, k);
-    setPhone(el, { x: -20 * s / 4.5, y: 1242 * s / 4.5 - 140, rx: 4, ry: lerp(-8, -4, k), rz: lerp(5, 3, k), s, shine: .15 });
-    zb.textContent = '×' + (s * 1.75).toFixed(1);
+    const k = eio(pr(t, 26.4, 27.45));
+    const s = Math.pow(7.7, k) * lerp(1, 1.04, pr(t, 27.45, 28.3));
+    // keep the followers count / name area in frame while zooming
+    const fx = 5, fy = -314;
+    setPhone(el, { x: -fx * s + lerp(0, -120, k), y: -fy * s - 22 + lerp(0, -140, k), rx: lerp(6, 2, k), ry: lerp(-14, -4, k) + Math.sin(t) * 1.5, rz: lerp(2, 4, k), s, shine: lerp(.5, .1, k) });
+    zb.textContent = '×' + s.toFixed(1);
   };
 }]);
 
@@ -446,13 +513,19 @@ S.push([41.9, 46.0, el => {
   };
 }]);
 
-/* 16. outro — the phone */
-S.push([46.0, DUR, el => {
-  el.innerHTML = phoneHTML();
+/* 16. outro — the phone pops out of the comment panel in a black card, wide-angle pose */
+S.push([45.95, DUR, el => {
+  el.innerHTML = `<div class="snapC layer"></div><div class="card" style="position:absolute;border-radius:34px;background:#040404;box-shadow:0 30px 90px rgba(0,0,0,.7)"></div>` + phoneHTML();
   fitIG(el);
+  const snap = $(el, '.snapC'), card = $(el, '.card');
+  S[14][2](snap)(45.5);
   return t => {
-    const k = pr(t, 46.0, 47.0), a = eo(pr(t, 46.0, 46.35));
-    setPhone(el, { y: lerp(60, 0, a), rx: 40, ry: lerp(-24, -18, k), rz: lerp(30, 26, k), s: lerp(1.05, 1.12, k), blur: (1 - a) * 10, shine: .6 });
+    const g = eo(pr(t, 45.95, 46.4));
+    snap.style.opacity = 1 - pr(t, 46.0, 46.35);
+    // card grows from the comment panel to a tall frame, then dissolves into the background
+    const w = lerp(150, 760, g), h = lerp(270, 1620, g), cx = lerp(470, 540, g), cy = lerp(1120, 930, g);
+    Object.assign(card.style, { left: f(cx - w / 2) + 'px', top: f(cy - h / 2) + 'px', width: f(w) + 'px', height: f(h) + 'px', opacity: f(1 - pr(t, 46.45, 46.9) * .85) });
+    setPhone(el, { ...WIDE, x: lerp(-70, 0, g), y: lerp(200, -150, g) + Math.sin(t * 2) * 6, s: lerp(.25, 1.2, g) + pr(t, 46.4, 47) * .05, rz: lerp(-8, -6, pr(t, 46.4, 47)) });
   };
 }]);
 
