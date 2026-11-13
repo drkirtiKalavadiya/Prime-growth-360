@@ -120,14 +120,20 @@ function codeLines(start, n, hiIdx = -1, src = CODE) {
 
 /* kinetic "lyric" slides inside the small phone */
 const SLIDES = [
-  [5.0, '#f2f2f2', '<div style="color:#111;font-size:92px">Grow<br><span style="background:#111;color:#fff;padding:0 16px;font-size:72px">your</span><br><span style="color:#e0281c;font-size:84px;white-space:nowrap">Business</span></div>'],
-  [5.9, '#2a2a2a', '<span style="background:#ececec;color:#111;border-radius:120px;padding:14px 46px;font-size:120px;white-space:nowrap">SOP System</span>'],
-  [6.7, '#000', '<span style="color:#ff2d1a;font-size:190px;text-shadow:0 0 40px #ff2d1a">AI</span>'],
-  [7.5, '#000', '<div style="transform:rotate(-8deg)"><span style="color:#ffd02a;font-size:110px;text-shadow:0 0 28px rgba(255,200,40,.7)">2000+</span><br><span style="color:#ff2d1a;font-size:58px;white-space:nowrap">Business Owners</span></div>'],
-  [8.6, '#000', '<div style="transform:rotate(-6deg)"><span style="font-size:84px">10+ Years</span><br><span style="color:#ff2d1a;font-size:64px">Experience</span><br><span style="font-size:46px">of growth</span></div>'],
-  [9.7, '#000', '<div style="position:relative"><span style="color:#e3241a;font-size:74px;letter-spacing:-3px;white-space:nowrap">BRANDING</span>' +
-    [40, 120, 210, 300].map((x, i) => `<i style="position:absolute;left:${x}px;top:92px;width:${10 + i % 2 * 6}px;height:${60 + i * 22}px;border-radius:0 0 10px 10px;background:#c81d14"></i>`).join('') + '</div>'],
-  [10.6, '#000', '<span style="color:#b9150c;font-size:70px;filter:blur(1px);white-space:nowrap">growth is AI</span>'],
+  // white cards for the first beats, then black — switching about every half second like the reference
+  [5.4, '#f2f2f2', '<span style="color:#111;font-size:120px;transform:rotate(-12deg);display:inline-block">Grow</span>'],
+  [5.75, '#f2f2f2', '<div style="color:#111;font-size:96px">Grow<br><span style="background:#111;color:#fff;padding:0 16px;font-size:76px">your</span></div>'],
+  [6.3, '#f2f2f2', '<div style="font-size:84px;white-space:nowrap"><span style="background:#111;color:#e0281c;padding:0 14px">Business</span><br><span style="color:#111">Growth</span></div>'],
+  [6.9, '#000', '<span style="background:#ececec;color:#111;border-radius:120px;padding:14px 46px;font-size:120px;white-space:nowrap">SOP System</span>'],
+  [7.5, '#f2f2f2', '<div style="color:#111;font-size:96px;white-space:nowrap">2000+<br><span style="font-size:70px">Owners</span></div>'],
+  [8.0, '#000', '<span style="color:#ff2d1a;font-size:190px;text-shadow:0 0 40px #ff2d1a">AI</span>'],
+  [8.5, '#000', '<div style="transform:rotate(-6deg);color:#ffd02a;font-size:90px;text-shadow:0 0 24px rgba(255,208,42,.7)">10+</div>'],
+  [8.9, '#000', '<div style="transform:rotate(-6deg)"><span style="color:#ffd02a;font-size:90px;text-shadow:0 0 24px rgba(255,208,42,.7)">10+ Years</span><br><span style="color:#ff2d1a;font-size:64px">Experience</span></div>'],
+  [10.0, '#000', '<div style="transform:rotate(-6deg)"><span style="color:#ffd02a;font-size:90px;text-shadow:0 0 24px rgba(255,208,42,.7)">10+ Years</span><br><span style="color:#ff2d1a;font-size:64px">Experience</span><br><span style="font-size:48px">of growth</span></div>'],
+  [10.4, '#000', '<div style="position:relative"><span style="color:#e3241a;font-size:80px;letter-spacing:-3px;white-space:nowrap">BRANDING</span>' +
+    [40, 120, 210, 300].map((x, i) => `<i style="position:absolute;left:${x}px;top:76px;width:${10 + i % 2 * 6}px;height:${60 + i * 22}px;border-radius:0 0 10px 10px;background:#c81d14"></i>`).join('') + '</div>'],
+  [11.9, '#000', '<span style="color:#b9150c;font-size:80px;white-space:nowrap">growth is</span>'],
+  [12.3, '#000', '<div class="bars" style="position:absolute;inset:0">' + '<i></i>'.repeat(6) + '</div><span style="position:relative;color:#ff2d1a;font-size:70px;white-space:nowrap;text-shadow:0 0 24px #ff2d1a">growth is AI</span>'],
 ];
 const FAST = ['Grow', 'SOP', 'AI', '2000+', 'Branding', '177K of you'];
 
@@ -199,7 +205,7 @@ S.push([0, 2.85, el => {
 }]);
 
 /* 2. "No After Effects. No keyframes." */
-S.push([2.85, 5.0, el => {
+S.push([2.85, 5.4, el => {
   let rows = '';
   for (let i = 0; i < 8; i++) rows += `<div class="outline" style="top:${i * 270 - 40}px">GROW GROW GROW</div>`;
   el.innerHTML = `<div class="rows">${rows}</div>
@@ -225,7 +231,7 @@ S.push([2.85, 5.0, el => {
 }]);
 
 /* 3. rhythm — small phone with kinetic text + timeline panel */
-S.push([5.0, 12.6, el => {
+S.push([5.4, 12.6, el => {
   let blocks = '';
   const r = [[30, 120, 0], [150, 90, 1], [260, 160, 0], [300, 70, 2], [440, 120, 1], [560, 90, 0], [600, 150, 2], [700, 60, 1]];
   r.forEach(([x, w, row]) => { blocks += `<i style="position:absolute;left:${x}px;top:${row * 22}px;width:${w}px;height:16px;border-radius:4px;background:rgba(255,45,26,.${row ? 35 : 6})"></i>`; });
@@ -241,7 +247,7 @@ S.push([5.0, 12.6, el => {
   const mini = $(el, '.mini'), slide = $(el, '.slide'), fr = $(el, '.fr'), ph = $(el, '.ph'), pn = $(el, '.pn'), fn = $(el, '.fn');
   let cur = -1;
   return t => {
-    const a = eo(pr(t, 5.0, 5.55));
+    const a = eo(pr(t, 5.4, 5.8));
     mini.style.transform = `scale(${f(lerp(2.2, 1, a))}) translateY(${f((1 - a) * 220)}px)`;
     let i = 0; SLIDES.forEach((s, k) => { if (t >= s[0]) i = k; });
     if (i !== cur) { cur = i; slide.innerHTML = SLIDES[i][2]; mini.style.background = SLIDES[i][1]; }
@@ -250,11 +256,11 @@ S.push([5.0, 12.6, el => {
     const enter = pr(lt, 0, .18);
     slide.style.transform = `translateX(${f(sx)}px) scale(${f(lerp(1.25, 1, eo(enter)))})`;
     slide.style.filter = `blur(${f((1 - enter) * 10)}px)`;
-    const frame = 452 + Math.round((t - 5) * 34);
+    const frame = 452 + Math.round((t - 5.4) * 34);
     fr.textContent = frame;
     const px = ((frame - 300) % 700) / 700 * 690;
     ph.style.left = f(px) + 'px'; pn.style.left = f(px + 8) + 'px';
-    const dense = t >= 11.0;
+    const dense = t >= 10.6;
     $(el, '.tl').style.opacity = dense ? 0 : 1; $(el, '.tl2').style.opacity = dense ? 1 : 0;
     fn.textContent = dense ? '"id": "19", "start": 712' : 'script.json';
   };
@@ -262,18 +268,25 @@ S.push([5.0, 12.6, el => {
 
 /* 4. Claude writes the 3D scene — scrolling code */
 S.push([12.6, 16.5, el => {
-  el.innerHTML = glass(130, 470, 820, 640, `<div class="hd"><span><b>Claude</b> <span class="dot">●</span> Writing the 3D scene</span><span></span></div>
+  el.innerHTML = glass(130, 230, 820, 160, `<div class="hd"><span><b>Claude</b> <span class="dot">●</span> Writing the 3D scene</span><span></span></div>
     <div class="hd" style="padding-top:6px"><span>phone_scene.js</span><span>line <b class="ln2">25</b> / 1,063</span></div>
     <div class="code cd"></div>`);
   const g = $(el, '.glass'), cd = $(el, '.cd'), ln = $(el, '.ln2');
   return t => {
-    const a = eo(pr(t, 12.6, 13.0));
-    g.style.transform = `scale(${f(lerp(.85, 1, a))})`; g.style.opacity = a;
-    // fast scroll in the middle, slow at both ends
-    const line = Math.round(t < 14 ? lerp(25, 37, pr(t, 12.6, 14)) : t < 15.4 ? lerp(37, 276, eio(pr(t, 14, 15.4))) : lerp(276, 1058, eio(pr(t, 15.4, 16.1))));
+    const a = eo(pr(t, 12.85, 13.1));
+    g.style.transform = `scale(${f(lerp(.9, 1, a))})`; g.style.opacity = a;
+    // phase 1: Claude types the file line by line and the panel grows; phase 2: fast scroll
+    const typed = Math.floor(pr(t, 12.9, 14.3) * 14) + 2;
+    g.style.height = f(Math.min(640, 130 + typed * 34)) + 'px';
+    let line, html;
+    if (t < 14.3) { line = 20 + typed; html = codeLines(20, typed, typed - 1, CODE.slice(0)); }
+    else {
+      line = Math.round(t < 15.4 ? lerp(37, 276, eio(pr(t, 14.3, 15.4))) : lerp(276, 1058, eio(pr(t, 15.4, 16.1))));
+      html = codeLines(line, 14, 8);
+    }
     ln.textContent = line.toLocaleString('en-US');
-    const speed = t > 14.3 && t < 16.0 ? Math.sin(pr(t, 14.3, 16.0) * Math.PI) : 0;
-    cd.innerHTML = codeLines(line, 16, 8);
+    const speed = t > 14.4 && t < 16.0 ? Math.sin(pr(t, 14.4, 16.0) * Math.PI) : 0;
+    cd.innerHTML = html;
     cd.style.filter = `blur(${f(speed * 6)}px)`;
     cd.style.transform = `translateY(${f(-speed * 30)}px)`;
   };
@@ -299,10 +312,10 @@ S.push([16.5, 20.3, el => {
   return t => {
     let i = 0; TXT.forEach((x, k) => { if (t >= x[0]) i = k; });
     if (i !== cur) { cur = i; fn.textContent = TXT[i][1]; ln.innerHTML = TXT[i][2]; }
-    const mat = t < 17.25 ? 'white' : t < 18.25 ? 'titanium' : 'light';
+    const mat = t < 17.4 ? 'white' : t < 18.5 ? 'titanium' : 'light';
     back.style.background = MATS[mat]; back.style.backgroundSize = '300% 300%';
     bump.style.background = mat === 'titanium' ? 'linear-gradient(135deg,#9a9ca0,#5f6165)' : 'linear-gradient(135deg,#f4f4f3,#d6d6d4)';
-    const spin = eio(pr(t, 19.0, 19.55));
+    const spin = eio(pr(t, 19.1, 19.55));
     const ry = lerp(196, 186, pr(t, 16.6, 19.0)) + spin * (360 - 186 + 8);
     const blur = Math.sin(spin * Math.PI) * 18;
     const a = eo(pr(t, 16.6, 16.85));
@@ -322,110 +335,123 @@ const PCODE = [
   ['', '  <k>&lt;Bio</k>&gt;MSME Business Coach · Gujarat<k>&lt;/Bio&gt;</k>'],
   ['', '  <k>&lt;Grid</k> posts={posts} cols={<n>3</n>} /&gt;'],
 ];
-S.push([20.3, 24.5, el => {
+S.push([20.3, 24.0, el => {
   el.innerHTML = phoneHTML() + glass(110, 560, 860, 360, `<div class="hd"><span><b>ProfileIG.jsx</b> &nbsp;the screen, as code</span><span></span></div><div class="code pc"></div>`, 'pg');
   fitIG(el);
   const off = $(el, '.off'), pg = $(el, '.pg'), pc = $(el, '.pc');
   return t => {
     // screen: off -> on (20.75) -> off (21.6) -> ghost phone behind the code -> on again (24.0)
-    off.style.opacity = t < 20.75 ? 1 : t < 21.6 ? 0 : t < 23.95 ? 1 : 1 - pr(t, 23.95, 24.15);
-    const ghost = t >= 22.4 && t < 23.95 ? 1 : 0;
+    off.style.opacity = t < 20.6 ? 1 : t < 21.5 ? 0 : t < 23.45 ? 1 : 1 - pr(t, 23.45, 23.6);
+    const ghost = t >= 22.45 && t < 23.45 ? 1 : 0;
     setPhone(el, { y: -90 + Math.sin(t * 1.2) * 6, rx: 4, ry: lerp(-10, 6, pr(t, 20.3, 24.5)), rz: 3, s: .98, shine: .5, op: ghost ? .32 : 1 });
-    const b = eo(pr(t, 22.4, 22.7));
-    pg.style.opacity = t < 23.95 ? b : 1 - pr(t, 23.95, 24.2);
+    const b = eo(pr(t, 22.45, 22.7));
+    pg.style.opacity = t < 23.4 ? b : 1 - pr(t, 23.4, 23.6);
     pg.style.transform = `translateY(${f((1 - b) * 40)}px) scale(${f(lerp(.94, 1, b))})`;
     const hi = Math.min(6, Math.floor(pr(t, 22.5, 23.5) * 7));
     pc.innerHTML = codeLines(136, 7, hi, PCODE);
-    pc.style.opacity = 1 - pr(t, 23.6, 23.8);
+    pc.style.opacity = 1 - pr(t, 23.0, 23.2);
   };
 }]);
 
 /* 7. pinned to the four corners */
-S.push([24.5, 26.4, el => {
+S.push([24.0, 25.9, el => {
   el.innerHTML = phoneHTML({ pins: true });
   fitIG(el);
   const pins = $$(el, '.pin'), edge = $(el, '.edge');
   return t => {
-    setPhone(el, { rx: 6 + Math.sin(t * 1.1) * 4, ry: Math.sin((t - 24.5) * 2.2) * 24, rz: Math.sin((t - 24.5) * 1.6) * 5, s: 1.0, shine: .5 });
-    pins.forEach((p, i) => { const a = pr(t, 24.5 + i * .06, 24.7 + i * .06); p.style.opacity = a; p.style.transform = `scale(${f(back(a))})`; });
-    edge.style.opacity = pr(t, 24.55, 24.8);
+    setPhone(el, { rx: 6 + Math.sin(t * 1.1) * 4, ry: Math.sin((t - 24.0) * 2.2) * 24, rz: Math.sin((t - 24.0) * 1.6) * 5, s: 1.0, shine: .5 });
+    pins.forEach((p, i) => { const a = pr(t, 24.0 + i * .06, 24.2 + i * .06); p.style.opacity = a; p.style.transform = `scale(${f(back(a))})`; });
+    edge.style.opacity = pr(t, 24.05, 24.3);
   };
 }]);
 
 /* 8. "so it stays razor sharp" — one continuous dolly zoom ×1.0 -> ×7.7 into the live profile */
-S.push([26.4, 28.3, el => {
+S.push([25.9, 28.0, el => {
   el.innerHTML = phoneHTML() + `<div class="zb" style="position:absolute;left:0;right:0;top:110px;text-align:center"><span style="font:600 24px 'JetBrains Mono';color:#ddd;background:rgba(255,255,255,.08);border-radius:20px;padding:6px 16px">×1.0</span></div>`;
   fitIG(el);
   const zb = $(el, '.zb span');
   return t => {
-    const k = eio(pr(t, 26.4, 27.45));
-    const s = Math.pow(7.7, k) * lerp(1, 1.04, pr(t, 27.45, 28.3));
+    const k = Math.pow(pr(t, 26.0, 27.15), 2.2);
+    const s = Math.pow(7.7, k) * lerp(1, 1.04, pr(t, 27.15, 28.0));
     // keep the followers count / name area in frame while zooming
     const fx = 5, fy = -314;
-    setPhone(el, { x: -fx * s + lerp(0, -120, k), y: -fy * s - 22 + lerp(0, -140, k), rx: lerp(6, 2, k), ry: lerp(-14, -4, k) + Math.sin(t) * 1.5, rz: lerp(2, 4, k), s, shine: lerp(.5, .1, k) });
+    setPhone(el, { x: -fx * (s - 1) + lerp(0, -105, k), y: -fy * (s - 1) + lerp(0, 152, k), rx: lerp(6, 2, k), ry: lerp(-14, -4, k) + Math.sin(t) * 1.5, rz: lerp(2, 4, k), s, shine: lerp(.5, .1, k) });
     zb.textContent = '×' + s.toFixed(1);
   };
 }]);
 
 /* 9. type driven by one file — change a word, the sequence re-renders */
-S.push([28.3, 34.4, el => {
-  el.innerHTML = `<div class="mini" style="background:#000"><div class="bars">${'<i></i>'.repeat(6)}</div>
-      <div class="kt kin" style="color:#ff2d1a;font-size:64px;text-shadow:0 0 26px rgba(255,45,26,.9);white-space:nowrap">1,095 of you</div>
-      <div class="rprof" style="position:absolute;inset:0;opacity:0;display:flex;align-items:center;justify-content:center"></div>
+S.push([28.0, 35.0, el => {
+  el.innerHTML = `<div class="mini" style="background:#000"><div class="bars" style="opacity:0">${'<i></i>'.repeat(6)}</div>
+      <div class="multi kin" style="transform:rotate(-6deg)"><span style="color:#ffd02a;font-size:70px;text-shadow:0 0 20px rgba(255,208,42,.7)">one line</span><span style="color:#ff2d1a;font-size:50px">no keyframes</span><span style="font-size:46px">just type</span><span style="color:#ff2d1a;font-size:72px;margin-top:10px;text-shadow:0 0 20px #ff2d1a">GROWTH</span></div>
+      <div class="kt kin" style="color:#ff2d1a;font-size:64px;text-shadow:0 0 26px rgba(255,45,26,.9);white-space:nowrap;opacity:0">1,095 of you</div>
+      <div class="tl kin" style="opacity:0"></div>
       <div class="rbar" style="position:absolute;left:24px;right:24px;bottom:22px;height:44px;border-radius:22px;background:rgba(40,12,10,.8);border:2px solid rgba(255,255,255,.2);font:500 18px 'JetBrains Mono';color:#ddd;display:flex;align-items:center;padding:0 16px;gap:8px;opacity:0;overflow:hidden">
         <i class="rp" style="position:absolute;left:0;top:0;bottom:0;background:rgba(255,45,26,.35)"></i><span style="color:#ff2d1a;position:relative">●</span><span class="rt" style="position:relative">Rendering 71 / 936 · time-lapse</span></div></div>` +
     glass(160, 1040, 760, 210, `<div class="hd"><span><b>script.json</b> <span class="ed"></span></span><span></span></div><div class="code jc" style="font-size:24px"></div>`, 'jp');
-  const kt = $(el, '.kt'), jc = $(el, '.jc'), ed = $(el, '.ed'), jp = $(el, '.jp'), rbar = $(el, '.rbar'), rp = $(el, '.rp'), rt = $(el, '.rt'), bars = $(el, '.bars'), rprof = $(el, '.rprof');
-  rprof.innerHTML = `<div style="width:300px;height:640px;border-radius:40px;overflow:hidden;border:3px solid #888;transform:perspective(800px) rotateY(-18deg) rotateZ(4deg)">${igHTML()}</div>`;
-  $(rprof, '.ig').style.transform = 'scale(.77)';
+  const mini = $(el, '.mini'), multi = $(el, '.multi'), kt = $(el, '.kt'), tl = $(el, '.tl'), jc = $(el, '.jc'), ed = $(el, '.ed'), jp = $(el, '.jp'),
+    rbar = $(el, '.rbar'), rp = $(el, '.rp'), rt = $(el, '.rt'), bars = $(el, '.bars');
+  // time-lapse frames of the re-render (one every half second, like the reference)
+  const TL = [
+    [31.5, '#000', `<img src="${A}avatar.jpg" style="width:200px;border-radius:50px;filter:blur(10px)">`],
+    [32.0, '#000', '<span style="color:#ff2d1a;font-size:64px;white-space:nowrap">177K <span style="opacity:.4">of</span></span>'],
+    [32.5, '#000', `<div style="position:relative;width:260px;height:260px">${[0, 1, 2, 3, 4].map(i => `<i style="position:absolute;left:0;top:${150 - i * 14}px;width:260px;height:90px;border-radius:50%;border:4px solid rgba(255,70,40,${f(.9 - i * .15)});box-shadow:0 0 20px #ff2d1a"></i>`).join('')}<img src="${A}avatar.jpg" style="position:absolute;left:70px;top:20px;width:120px;border-radius:30px;background:#fff;box-shadow:0 0 30px rgba(255,255,255,.5)"></div>`],
+    [33.0, '#e9e9e9', '<div style="color:#111;font-size:78px;line-height:1">Watch<br><span style="font-size:60px">it grow</span></div>'],
+    [33.5, '#000', `<div style="display:flex;align-items:center;gap:12px"><img src="${A}avatar.jpg" style="width:70px;border-radius:18px"><span style="font-size:46px;letter-spacing:-1px">primegrowth360</span></div>`],
+    [34.0, '#000', '<span style="color:#ff2d1a;font-size:64px;white-space:nowrap;text-shadow:0 0 26px #ff2d1a">177K <span style="opacity:.5">of</span></span>'],
+    [34.3, '#000', '<span style="color:#ff2d1a;font-size:64px;white-space:nowrap;text-shadow:0 0 26px #ff2d1a">177K of you</span>'],
+  ];
+  let tlCur = -1;
   return t => {
-    const a = eo(pr(t, 28.3, 28.7));
-    $(el, '.mini').style.transform = `scale(${f(lerp(1.15, 1, a))})`;
+    const a = eo(pr(t, 28.0, 28.35));
+    mini.style.transform = `scale(${f(lerp(1.15, 1, a))})`;
+    // 28.0 multi-line type, 29.4 "1,095 of you", 30.0 bars behind it
+    multi.style.opacity = t < 28.45 ? 1 : 0;
+    multi.style.filter = `blur(${f((1 - pr(t, 28.0, 28.25)) * 10)}px)`;
+    const showKt = t >= 28.45 && t < 31.5;
+    kt.style.opacity = showKt ? 1 : 0;
+    bars.style.opacity = t >= 28.95 && t < 31.5 ? 1 : 0;
     bars.style.transform = `translateX(${f(Math.sin(t * 1.7) * 40)}px)`;
-    // typing the edit: "1,095" -> "177K"
+    kt.style.transform = `translateX(${f(Math.sin(t * 2.3) * 30)}px)`;
+    // the edit in script.json: "1,095" -> "177K"
     let val = '1,095';
-    if (t >= 30.9) {
-      const d = pr(t, 30.9, 31.3), ty = pr(t, 31.35, 31.8);
+    if (t >= 31.0) {
+      const d = pr(t, 31.0, 31.25), ty = pr(t, 31.3, 31.6);
       val = ty > 0 ? '177K'.slice(0, Math.ceil(ty * 4)) : '1,095'.slice(0, Math.round((1 - d) * 5));
     }
-    const caret = t >= 30.9 && t < 32.1 && Math.floor(t * 4) % 2 ? '|' : '';
+    const caret = t >= 31.0 && t < 32.0 && Math.floor(t * 4) % 2 ? '|' : '';
     jc.innerHTML = `<span class="ln">445</span>"id": <span class="s">"19"</span>,\n<span class="ln">446</span>"start": <span class="n">712</span>,\n<span class="hi"><span class="ln">456</span>"text": <span class="s">"${val}${caret}"</span>,</span>`;
-    ed.textContent = t >= 30.9 ? '· edited' : '';
-    jp.style.opacity = t < 32.1 ? 1 : 1 - pr(t, 32.1, 32.4);
-    const label = t < 31.9 ? '1,095 of you' : '177K of you';
-    // re-render: time-lapse through the sequence
-    const rr = t >= 32.1;
-    rbar.style.opacity = rr ? 1 : 0;
-    const n = Math.round(lerp(71, 936, eio(pr(t, 32.4, 34.2))));
+    ed.textContent = t >= 31.0 ? '· edited' : '';
+    jp.style.opacity = t < 32.0 ? 1 : 1 - pr(t, 32.0, 32.4);
+    // re-render time-lapse
+    let k = -1; TL.forEach((x, i) => { if (t >= x[0]) k = i; });
+    tl.style.opacity = k >= 0 ? 1 : 0;
+    if (k !== tlCur) { tlCur = k; if (k >= 0) { tl.innerHTML = TL[k][2]; mini.style.background = TL[k][1]; } else mini.style.background = '#000'; }
+    const tp = k >= 0 ? pr(t, TL[k][0], TL[k][0] + .15) : 1;
+    tl.style.filter = `blur(${f((1 - tp) * 8)}px)`;
+    rbar.style.opacity = t >= 32.5 ? 1 : 0;
+    const n = Math.round(lerp(71, 936, eio(pr(t, 32.5, 34.3))));
     rp.style.width = f(n / 936 * 100) + '%';
     rt.textContent = `Rendering ${n} / 936 · time-lapse`;
-    if (rr && t < 34.0) {
-      const idx = Math.floor((t - 32.1) / .16);
-      const showProf = idx % 4 === 1;
-      rprof.style.opacity = showProf ? 1 : 0;
-      kt.style.opacity = showProf ? 0 : 1;
-      kt.textContent = FAST[idx % FAST.length];
-      kt.style.color = idx % 3 === 0 ? '#ffd02a' : '#ff2d1a';
-    } else {
-      rprof.style.opacity = 0; kt.style.opacity = 1; kt.textContent = label; kt.style.color = '#ff2d1a';
-    }
-    kt.style.transform = `translateX(${f(Math.sin(t * 2.3) * 30)}px)`;
   };
 }]);
 
-/* 10. 177K of you — full screen */
-S.push([34.4, 35.8, el => {
-  el.innerHTML = `<div class="big kin" style="color:#ff2d1a;font-size:150px;white-space:nowrap;text-shadow:0 0 50px rgba(255,45,26,.9),0 0 120px rgba(255,45,26,.5)">177K of you</div>`;
-  const b = $(el, '.big');
+/* 10. 177K of you — the small phone grows to fill the frame */
+S.push([35.0, 35.6, el => {
+  el.innerHTML = `<div class="gr" style="position:absolute;background:#000;border-radius:44px;overflow:hidden;box-shadow:0 40px 90px rgba(0,0,0,.6)">
+    <div class="big kin" style="color:#ff2d1a;white-space:nowrap;text-shadow:0 0 50px rgba(255,45,26,.9),0 0 120px rgba(255,45,26,.5)">177K of you</div></div>`;
+  const gr = $(el, '.gr'), b = $(el, '.big');
   return t => {
-    const k = pr(t, 34.4, 35.8);
-    b.style.transform = `scale(${f(lerp(.8, 1.12, eo(k)))})`;
-    b.style.filter = `blur(${f(Math.max(0, 1 - k * 4) * 12 + (Math.sin(t * 40) > .9 ? 3 : 0))}px)`;
+    const k = eio(pr(t, 35.0, 35.3));
+    const w = lerp(430, 1080, k), h = lerp(765, 1920, k);
+    Object.assign(gr.style, { left: f(540 - w / 2) + 'px', top: f(lerp(630, 960, k) - h / 2) + 'px', width: f(w) + 'px', height: f(h) + 'px', borderRadius: f(lerp(44, 0, k)) + 'px' });
+    b.style.fontSize = f(lerp(64, 150, k)) + 'px';
+    b.style.filter = `blur(${f(Math.sin(t * 40) > .92 ? 3 : 0)}px)`;
   };
 }]);
 
 /* 11. Zero keyframes. Just type. */
-S.push([35.8, 37.2, el => {
+S.push([35.6, 37.0, el => {
   el.innerHTML = `<div class="kin" style="transform:rotate(-7deg)">
     <div class="z1" style="color:#ffd02a;font-size:210px;text-shadow:0 0 50px rgba(255,208,42,.8)">Zero</div>
     <div class="z2" style="color:#ff2d1a;font-size:130px;text-shadow:0 0 30px rgba(255,45,26,.8)">keyframes</div>
@@ -433,57 +459,58 @@ S.push([35.8, 37.2, el => {
   const z = ['.z1', '.z2', '.z3'].map(s => $(el, s));
   return t => {
     z.forEach((e, i) => {
-      const a = pr(t, 35.85 + i * .22, 36.15 + i * .22);
+      const a = pr(t, 35.65 + i * .22, 35.95 + i * .22);
       e.style.transform = `translateX(${f((1 - eo(a)) * -500)}px)`;
-      e.style.filter = `blur(${f((1 - a) * 18 + pr(t, 36.9, 37.2) * 14)}px)`;
+      e.style.filter = `blur(${f((1 - a) * 18 + pr(t, 36.75, 37.0) * 14)}px)`;
       e.style.opacity = a;
     });
   };
 }]);
 
 /* 12. Just direction. */
-S.push([37.2, 39.0, el => {
-  el.innerHTML = `<div class="bars" style="filter:blur(5px)">${'<i></i>'.repeat(6)}</div>
+S.push([37.0, 38.5, el => {
+  el.innerHTML = `<div class="drip kin" style="transform:rotate(-5deg)"><div style="position:relative"><span style="color:#e3241a;font-size:170px;letter-spacing:-6px;text-shadow:0 0 30px rgba(255,45,26,.6)">BRANDING</span>` + [90, 260, 470, 640].map((x, i) => `<i style="position:absolute;left:${x}px;top:150px;width:${16 + i % 2 * 10}px;height:${90 + i * 40}px;border-radius:0 0 14px 14px;background:#c81d14"></i>`).join('') + `</div></div><div class="bars" style="filter:blur(5px)">${'<i></i>'.repeat(6)}</div>
     <div class="dt kin" style="color:#ff2d1a;font-size:150px;white-space:nowrap;text-shadow:0 0 40px #ff2d1a">grow with AI</div>`;
   const bars = $(el, '.bars'), dt = $(el, '.dt');
   return t => {
-    const k = pr(t, 37.2, 39.0);
+    const k = pr(t, 37.45, 38.5), on = t >= 37.45;
+    $(el, '.drip').style.opacity = on ? 0 : 1;
     bars.style.transform = `translateX(${f(lerp(-120, 120, k))}px) scale(1.2)`;
-    bars.style.opacity = .8;
-    dt.style.filter = `blur(${f(lerp(14, 3, eo(pr(t, 37.2, 38.2))))}px)`;
-    dt.style.opacity = pr(t, 37.3, 37.8);
+    bars.style.opacity = t >= 37.9 ? .8 * pr(t, 37.9, 38.1) : 0;
+    dt.style.filter = `blur(${f(lerp(14, 3, eo(pr(t, 37.45, 38.2))))}px)`;
+    dt.style.opacity = on ? pr(t, 37.5, 37.9) : 0;
   };
 }]);
 
 /* 13. logo card */
-S.push([39.0, 40.0, el => {
+S.push([38.5, 40.0, el => {
   el.innerHTML = `<div class="lg" style="position:absolute;left:0;right:0;top:760px;display:flex;align-items:center;justify-content:center;gap:28px">
       <img src="${A}avatar.jpg" style="width:150px;height:150px;border-radius:38px;box-shadow:0 0 50px rgba(255,45,26,.6)">
       <span style="font:800 104px Inter;letter-spacing:-4px">primegrowth360</span></div>
     <div class="tg" style="position:absolute;left:0;right:0;top:960px;text-align:center;font:500 44px Inter;color:#d9d0ce">Grow with AI.</div>`;
   const lg = $(el, '.lg'), tg = $(el, '.tg');
   return t => {
-    const a = eo(pr(t, 39.0, 39.35));
+    const a = eo(pr(t, 38.5, 38.85));
     lg.style.transform = `scale(${f(lerp(.6, 1, a))})`; lg.style.opacity = a; lg.style.filter = `blur(${f((1 - a) * 12)}px)`;
-    tg.style.opacity = pr(t, 39.3, 39.6);
+    tg.style.opacity = pr(t, 38.8, 39.1);
   };
 }]);
 
 /* 14. full method — lock */
-S.push([40.0, 41.9, el => {
+S.push([40.0, 42.4, el => {
   el.innerHTML = `<svg class="lock" viewBox="0 0 60 80" style="position:absolute;left:495px;top:380px;width:90px">
       <path class="sh" d="M14 34 V22 a16 16 0 0 1 32 0 V34" fill="none" stroke="#ff2d1a" stroke-width="7" stroke-linecap="round"/>
       <rect x="6" y="34" width="48" height="40" rx="9" fill="#ff2d1a"/><circle cx="30" cy="52" r="5" fill="#3a0b06"/><rect x="28" y="54" width="4" height="10" fill="#3a0b06"/></svg>
     <div style="position:absolute;left:0;right:0;top:530px;text-align:center;font:800 62px/1.25 Inter;letter-spacing:-1.5px">The full method<br><span style="font-weight:700;font-size:56px">→ inside the <span style="color:#ff2d1a">Prime Growth 360</span> course</span></div>`;
   const sh = $(el, '.sh');
   return t => {
-    const open = t < 40.9 ? 1 : 1 - eo(pr(t, 40.9, 41.15));
+    const open = t < 40.3 ? 1 : 1 - eo(pr(t, 40.3, 40.5));
     sh.setAttribute('transform', `translate(${f(open * 16)} ${f(-open * 8)}) rotate(${f(open * 28)} 46 34)`);
   };
 }]);
 
 /* 15. Comment AI */
-S.push([41.9, 46.0, el => {
+S.push([42.4, 46.0, el => {
   el.innerHTML = `<div class="c1" style="position:absolute;left:0;right:0;top:230px;text-align:center;font:800 92px Inter;letter-spacing:-2px">Comment</div>
     <div class="c2" style="position:absolute;left:0;right:0;top:345px;text-align:center;font:900 330px/1 Inter;letter-spacing:-10px;color:#ff2d1a;text-shadow:0 0 60px rgba(255,45,26,.7)">AI</div>` +
     glass(40, 840, 1000, 450, `<div style="text-align:center;font:700 26px Inter;color:#fff;padding-top:20px">Comments</div>
@@ -497,19 +524,23 @@ S.push([41.9, 46.0, el => {
               <div class="card" style="opacity:0;margin:12px 0 0 50px;display:flex;gap:14px;align-items:center;background:rgba(0,0,0,.35);border-radius:14px;padding:12px">
                 <img src="${A}post7.jpg" style="width:60px;height:80px;border-radius:8px;object-fit:cover"><div><div style="font-weight:700;font-size:24px;color:#fff">AI Video Course</div><div style="font-size:19px;color:#aaa">The full method</div></div></div></div></div>
           <div class="heart" style="font-size:34px;color:#888">♡</div></div></div>
-      <div style="position:absolute;left:24px;right:24px;bottom:20px;height:60px;border-radius:30px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:space-between;padding:0 10px 0 26px;font:21px Inter;color:#999">Add a comment…<span style="width:44px;height:44px;border-radius:50%;background:#fff;color:#111;display:flex;align-items:center;justify-content:center;font-size:24px">↑</span></div>`, 'cp');
-  const c1 = $(el, '.c1'), c2 = $(el, '.c2'), empty = $(el, '.empty'), cm = $(el, '.cm'), rep = $(el, '.rep'), card = $(el, '.card'), heart = $(el, '.heart'), cp = $(el, '.cp');
+      <div style="position:absolute;left:24px;right:24px;bottom:20px;height:60px;border-radius:30px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:space-between;padding:0 10px 0 26px;font:21px Inter;color:#999"><span class="inp" style="font-weight:600">Add a comment…</span><span class="send" style="width:44px;height:44px;border-radius:50%;background:#fff;color:#111;display:flex;align-items:center;justify-content:center;font-size:24px">↑</span></div>`, 'cp');
+  const c1 = $(el, '.c1'), c2 = $(el, '.c2'), empty = $(el, '.empty'), cm = $(el, '.cm'), rep = $(el, '.rep'), card = $(el, '.card'), heart = $(el, '.heart'), cp = $(el, '.cp'), inp = $(el, '.inp'), send = $(el, '.send');
   return t => {
-    const a = eo(pr(t, 41.9, 42.2));
+    const a = eo(pr(t, 42.4, 42.6));
     c1.style.opacity = a; c1.style.transform = `translateY(${f((1 - a) * 40)}px)`;
-    const b = pr(t, 42.5, 42.8);
+    const b = pr(t, 42.45, 42.7);
     c2.style.opacity = b; c2.style.transform = `translateY(${f((1 - eo(b)) * -80)}px) scale(${f(lerp(1.6, 1, eo(b)))})`;
-    cp.style.opacity = eo(pr(t, 42.0, 42.4));
-    const has = t >= 43.0;
+    cp.style.opacity = eo(pr(t, 42.45, 42.75));
+    const has = t >= 43.4;
+    const typed = 'AI'.slice(0, Math.ceil(pr(t, 42.85, 43.1) * 2));
+    inp.textContent = t >= 43.4 || !typed ? 'Add a comment…' : typed;
+    inp.style.color = typed && t < 43.4 ? '#fff' : '#999';
+    send.style.background = typed && t < 43.4 ? '#ff2d1a' : '#fff'; send.style.color = typed && t < 43.4 ? '#fff' : '#111';
     empty.style.display = has ? 'none' : 'block'; cm.style.display = has ? 'block' : 'none';
-    heart.textContent = t >= 43.6 ? '♥' : '♡'; heart.style.color = t >= 43.6 ? '#ff2d1a' : '#888';
-    heart.style.transform = `scale(${f(t >= 43.6 ? back(pr(t, 43.6, 43.9)) : 1)})`;
-    rep.style.opacity = pr(t, 44.0, 44.3); card.style.opacity = pr(t, 44.5, 44.8);
+    heart.textContent = t >= 43.9 ? '♥' : '♡'; heart.style.color = t >= 43.9 ? '#ff2d1a' : '#888';
+    heart.style.transform = `scale(${f(t >= 43.9 ? back(pr(t, 43.9, 44.15)) : 1)})`;
+    rep.style.opacity = pr(t, 44.0, 44.25); card.style.opacity = pr(t, 44.4, 44.65);
   };
 }]);
 
@@ -533,16 +564,16 @@ S.push([45.95, DUR, el => {
 /* captions: [start, text]  — [word] goes in the red pill              */
 /* ------------------------------------------------------------------ */
 const CAPS = [
-  [0, ''], [5.0, '[First,]'], [5.9, 'the [rhythm.]'], [7.3, 'Claude [maps]'], [8.2, 'every [cut]'], [8.9, 'and every [word]'],
-  [9.8, 'to [the beat,]'], [10.6, 'frame [by]'], [11.4, 'frame by [frame.]'],
-  [12.6, 'Then the [3D.]'], [14.0, 'Claude [writes]'], [14.8, 'the [whole]'], [15.6, '3D [scene:]'],
-  [16.5, 'the [phone,]'], [17.4, 'the [titanium,]'], [18.3, 'the [light,]'], [19.1, 'the motion [blur.]'],
-  [20.3, 'The [screen]'], [21.3, "isn't a [picture.]"], [22.4, "It's real [code,]"],
-  [24.5, 'pinned [to]'], [25.2, 'the four [corners]'], [26.0, '[of] the phone'], [26.6, '[so] it stays'], [27.2, 'razor [sharp.]'],
-  [28.3, 'And [the type]'], [29.4, 'is [driven]'], [30.1, 'by one [file.]'], [30.9, 'Change [a word]'],
-  [32.1, 'and the [whole]'], [32.8, 'sequence [re-renders.]'], [34.4, ''],
-  [35.8, 'Zero [keyframes.]'], [37.2, '[Just]'], [37.9, 'Just [direction.]'], [39.0, ''],
-  [40.2, 'Want the'], [40.9, 'full [method?]'], [41.9, ''], [43.2, "[and] we'll"], [43.8, 'send [you]'], [44.4, 'the [link.]'], [45.3, '']
+  [0, ''], [5.4, '[First,]'], [6.4, 'the [rhythm.]'], [7.4, 'Claude [maps]'], [8.4, '[every]'], [8.9, 'and [every]'], [9.4, '[to]'], [9.9, 'to [the beat,]'],
+  [10.4, '[frame]'], [11.0, 'frame [by]'], [11.5, 'frame by [frame.]'],
+  [12.5, '[Then]'], [13.0, 'Then the [3D.]'], [14.0, '[Claude]'], [14.5, '[the]'], [15.0, 'the whole [3D]'], [15.5, '3D [scene:]'],
+  [16.5, 'the [phone,]'], [17.0, 'the [titanium,]'], [18.0, '[the]'], [18.5, 'the [light,]'], [19.0, 'the [motion]'], [19.5, 'the motion [blur.]'],
+  [20.5, 'The [screen]'], [21.5, "[isn't]"], [22.0, "isn't a [picture.]"], [22.5, "[It's]"], [23.0, "It's [real]"], [23.5, "It's real [code,]"],
+  [24.0, '[pinned]'], [24.5, '[four]'], [25.0, 'four [corners]'], [25.5, 'of the [phone,]'], [26.0, 'so it [stays]'], [26.5, '[razor]'], [27.0, 'razor [sharp.]'],
+  [28.0, '[And]'], [28.5, 'And [the type]'], [29.2, '[driven]'], [29.8, 'driven by [one]'], [30.3, 'driven by one [file.]'],
+  [31.0, '[Change]'], [31.5, 'Change a [word,]'], [32.0, 'and [the]'], [32.5, '[sequence]'], [33.0, 'sequence [re-renders.]'], [35.0, ''],
+  [35.6, '[Zero]'], [36.0, 'Zero [keyframes.]'], [37.0, '[Just]'], [37.6, 'Just [direction.]'], [38.5, ''],
+  [40.5, '[full]'], [41.0, 'full [method?]'], [42.0, ''], [43.0, "and we'll [send]"], [44.0, 'the [link.]'], [45.5, '']
 ];
 const capEl = document.getElementById('cap');
 let capCur = -1;
@@ -557,7 +588,7 @@ function renderCap(t) {
   capEl.style.transform = `scale(${f(lerp(.86, 1, back(a)))})`;
   capEl.style.opacity = a;
   // captions sit lower on the comment screen, higher over the 3D phone shots
-  capEl.style.top = (t >= 16.5 && t < 28.3) || (t >= 35.8 && t < 39) ? '1470px' : t >= 40 && t < 42 ? '1080px' : t >= 42 ? '1380px' : '1350px';
+  capEl.style.top = (t >= 16.5 && t < 28.0) || (t >= 35.6 && t < 38.5) ? '1470px' : t >= 40 && t < 42.4 ? '1080px' : t >= 42.4 ? '1380px' : '1350px';
 }
 
 /* ------------------------------------------------------------------ */
@@ -570,8 +601,8 @@ let cur = -1, upd = null;
 function bg(t) {
   // red radial glow; stronger on the "No" and CTA shots, near-black on the close-ups
   let inner = '#3d0c07', mid = '#1c0503', glowY = 48;
-  if (t >= 2.85 && t < 5) { inner = '#8a1508'; mid = '#3a0904'; }
-  else if (t < 2.85 || (t >= 26.9 && t < 28.3) || (t >= 34.4 && t < 39)) { inner = '#140404'; mid = '#070101'; }
+  if (t >= 2.85 && t < 5.4) { inner = '#8a1508'; mid = '#3a0904'; }
+  else if (t < 2.85 || (t >= 26.4 && t < 28.0) || (t >= 35.0 && t < 38.5)) { inner = '#140404'; mid = '#070101'; }
   else if (t >= 40) { inner = '#5a1209'; mid = '#240604'; glowY = 40; }
   bgEl.style.background = `radial-gradient(ellipse 70% 55% at 50% ${glowY}%, ${inner} 0%, ${mid} 55%, #000 100%)`;
 }
@@ -588,7 +619,7 @@ function render(t) {
   const w = i === 0 ? 1 : pr(lt, 0, .22);
   sceneEl.style.transform = `scale(${f(lerp(1.08, 1, eo(w)))})`;
   sceneEl.style.filter = w < 1 ? `blur(${f((1 - w) * 14)}px)` : 'none';
-  flash.style.opacity = (t >= 4.95 && t < 5.25) ? f((1 - pr(t, 4.95, 5.25)) * .9) : (t >= 38.95 && t < 39.15) ? f((1 - pr(t, 38.95, 39.15)) * .5) : 0;
+  flash.style.opacity = (t >= 5.35 && t < 5.6) ? f((1 - pr(t, 5.35, 5.6)) * .9) : (t >= 38.45 && t < 38.65) ? f((1 - pr(t, 38.45, 38.65)) * .5) : 0;
   bg(t);
   renderCap(t);
 }

@@ -17,8 +17,8 @@ t = np.arange(N) / SR
 mix = np.zeros((N, 2))
 
 # scene cuts (must match reel.js)
-CUTS = [2.85, 5.0, 12.6, 16.5, 20.3, 24.5, 26.9, 28.3, 34.4, 35.8, 37.2, 39.0, 40.0, 41.9, 46.0]
-IMPACTS = [2.85, 34.4, 39.0, 42.5]
+CUTS = [2.85, 5.4, 12.6, 16.5, 20.3, 24.0, 25.9, 28.0, 35.0, 35.6, 37.0, 37.45, 38.5, 40.0, 42.4, 45.95]
+IMPACTS = [2.85, 35.3, 38.5, 42.45]
 
 
 def band(x, lo, hi):
@@ -71,7 +71,7 @@ def hat():
 
 
 beat = 60 / 100
-for a, b in [(5.0, 34.3), (40.0, 46.0)]:
+for a, b in [(5.4, 35.2), (40.0, 46.0)]:
     x = a
     k = 0
     while x < b:
@@ -114,7 +114,7 @@ n = int(1.8 * SR)
 tt = np.arange(n) / SR
 riser = np.sin(2 * np.pi * np.cumsum(200 + 900 * (tt / 1.8) ** 2) / SR) * (tt / 1.8) ** 2
 riser += band(rng.standard_normal(n), 2000, 10000) * (tt / 1.8) ** 3 * .6
-add(riser, 37.2, .22)
+add(riser, 36.7, .22)
 
 # --- UI clicks: typing the edit, comment pop, heart, reply
 def click(f=2400, d=.03):
@@ -123,11 +123,11 @@ def click(f=2400, d=.03):
     return np.sin(2 * np.pi * f * tt) * np.exp(-tt * 120)
 
 
-for x in np.arange(30.95, 31.3, .1):
+for x in np.arange(31.0, 31.25, .08):
     add(click(1800), x, .25)
-for x in np.arange(31.4, 31.8, .11):
+for x in np.arange(31.3, 31.6, .15):
     add(click(2600), x, .25)
-for x, f in [(43.0, 1400), (43.6, 2200), (44.0, 1600), (44.5, 1900), (24.6, 3000), (24.95, 3000), (25.3, 3000), (25.65, 3000)]:
+for x, f in [(42.9, 2600), (43.05, 2600), (43.4, 1400), (43.9, 2200), (44.0, 1600), (44.4, 1900), (24.0, 3000), (24.06, 3000), (24.12, 3000), (24.18, 3000)]:
     add(click(f, .08), x, .35)
 
 # --- master: gentle limiter
