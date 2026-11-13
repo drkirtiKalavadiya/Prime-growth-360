@@ -1,4 +1,4 @@
-"""Builds the reel soundtrack: your voice-over at 1.3x + synthesised music and SFX (numpy only).
+"""Builds the music + SFX bed for the reel (numpy only); mix.sh puts the voice-over on top.
 
 Dark sub drone, a 100 bpm pulse, whooshes on every cut, impacts on the big moments,
 a riser into the logo and small UI clicks. Writes soundtrack.wav next to this file.
@@ -153,31 +153,13 @@ for x, f in clicks:
 mix *= .9 / max(1e-9, np.percentile(np.abs(mix), 99.9))
 mix = np.tanh(mix * 1.2) / np.tanh(1.2)
 
-# --- voice-over (already sped up to 1.3x by ffmpeg) with the music ducked under it
 here = os.path.dirname(os.path.abspath(__file__))
-vpath = os.path.join(here, 'voice-1.3x.wav')
-if os.path.exists(vpath):
-    with wave.open(vpath) as w:
-        v = np.frombuffer(w.readframes(w.getnframes()), dtype='<i2').astype(float) / 32768
-    v = np.pad(v, (0, max(0, N - len(v))))[:N]
-    v *= .5 / max(1e-9, np.percentile(np.abs(v), 99.9))
-    # envelope follower: fast attack, slow release
-    hop = 441
-    rms = np.sqrt(np.convolve(v ** 2, np.ones(hop) / hop, 'same'))
-    env = np.zeros(N)
-    g = 0.0
-    for i in range(0, N, hop):
-        target = min(1.0, rms[i] / .05)
-        g = target if target > g else g * .93
-        env[i:i + hop] = g
-    duck = 1 - .62 * env
-    mix = mix * duck[:, None] * .7 + v[:, None] * 1.0
-    mix *= .95 / max(1e-9, np.abs(mix).max())
+# the voice-over is mixed on top by mix.sh (loudness-matched, music ducked lightly under the voice)
 
 fade = int(.4 * SR)
 mix[-fade:] *= np.linspace(1, 0, fade)[:, None]
 
-out = os.path.join(here, 'soundtrack.wav')
+out = os.path.join(here, 'music.wav')
 with wave.open(out, 'wb') as w:
     w.setnchannels(2)
     w.setsampwidth(2)

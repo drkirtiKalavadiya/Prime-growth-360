@@ -78,7 +78,7 @@ function glass(x, y, w, h, inner, cls = '') {
   return `<div class="glass ${cls}" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px">${inner}</div>`;
 }
 
-/* code shown in the "Claude is writing the scene" panel */
+/* code shown in the "Secret LLM is writing the scene" panel */
 const CODE = [
   ['c', '// phone_scene.js — the whole 3D scene, written as code'],
   ['', '<k>import</k> { phone, light, camera } <k>from</k> <s>"./scene"</s>;'],
@@ -265,16 +265,16 @@ S.push([5.4, 12.6, el => {
   };
 }]);
 
-/* 4. Claude writes the 3D scene — scrolling code */
+/* 4. Secret LLM writes the 3D scene — scrolling code */
 S.push([12.6, 16.5, el => {
-  el.innerHTML = glass(130, 230, 820, 160, `<div class="hd"><span><b>Claude</b> <span class="dot">●</span> Writing the 3D scene</span><span></span></div>
+  el.innerHTML = glass(130, 230, 820, 160, `<div class="hd"><span><b>Secret LLM</b> <span class="dot">●</span> Writing the 3D scene</span><span></span></div>
     <div class="hd" style="padding-top:6px"><span>phone_scene.js</span><span>line <b class="ln2">25</b> / 1,063</span></div>
     <div class="code cd"></div>`);
   const g = $(el, '.glass'), cd = $(el, '.cd'), ln = $(el, '.ln2');
   return t => {
     const a = eo(pr(t, 12.85, 13.1));
     g.style.transform = `scale(${f(lerp(.9, 1, a))})`; g.style.opacity = a;
-    // phase 1: Claude types the file line by line and the panel grows; phase 2: fast scroll
+    // phase 1: the LLM types the file line by line and the panel grows; phase 2: fast scroll
     const typed = Math.floor(pr(t, 12.9, 14.3) * 14) + 2;
     g.style.height = f(Math.min(640, 130 + typed * 34)) + 'px';
     let line, html;
@@ -358,7 +358,7 @@ S.push([24.0, 25.9, el => {
   fitIG(el);
   const pins = $$(el, '.pin'), edge = $(el, '.edge');
   return t => {
-    setPhone(el, { rx: 6 + Math.sin(t * 1.1) * 4, ry: Math.sin((t - 24.0) * 2.2) * 24, rz: Math.sin((t - 24.0) * 1.6) * 5, s: 1.0, shine: .5 });
+    setPhone(el, { rx: 6 + Math.sin(t * 1.1) * 4, ry: Math.sin((t - 24.0) * 2.2) * 24, rz: Math.sin((t - 24.0) * 1.6) * 5, s: .9, y: -70, shine: .5 });
     pins.forEach((p, i) => { const a = pr(t, 24.0 + i * .06, 24.2 + i * .06); p.style.opacity = a; p.style.transform = `scale(${f(back(a))})`; });
     edge.style.opacity = pr(t, 24.05, 24.3);
   };
@@ -554,7 +554,7 @@ S.push([45.95, 47, el => {
     // card grows from the comment panel to a tall frame, then dissolves into the background
     const w = lerp(150, 760, g), h = lerp(270, 1620, g), cx = lerp(470, 540, g), cy = lerp(1120, 930, g);
     Object.assign(card.style, { left: f(cx - w / 2) + 'px', top: f(cy - h / 2) + 'px', width: f(w) + 'px', height: f(h) + 'px', opacity: f(1 - pr(t, 46.45, 46.9) * .85) });
-    setPhone(el, { ...WIDE, x: lerp(-70, 0, g), y: lerp(200, -150, g) + Math.sin(t * 2) * 6, s: lerp(.25, 1.2, g) + pr(t, 46.4, 47) * .05, rz: lerp(-8, -6, pr(t, 46.4, 47)) });
+    setPhone(el, { ...WIDE, x: lerp(-70, 0, g), y: lerp(120, -300, g) + Math.sin(t * 2) * 6, s: lerp(.25, 1.1, g) + pr(t, 46.4, 47) * .05, rz: lerp(-8, -6, pr(t, 46.4, 47)) });
   };
 }]);
 
@@ -724,6 +724,8 @@ function renderCap(a, top) {
 const sceneEl = document.getElementById('scene');
 const bgEl = document.getElementById('bg');
 const flash = document.getElementById('flash');
+const scrim = document.getElementById('scrim');
+const CAP_TOP = 1450;   // subtitle band: y 1450-1550, inside Instagram's safe area
 let cur = -1, upd = null;
 function warp(keys, a) {
   if (a <= keys[0][0]) return keys[0][1] + (a - keys[0][0]);
@@ -759,7 +761,9 @@ function render(T) {
   sceneEl.style.filter = w < 1 ? `blur(${f((1 - w) * 14)}px)` : 'none';
   flash.style.opacity = (a >= 8.5 && a < 8.9) ? f((1 - pr(a, 8.5, 8.9)) * .9) : (a >= 58.0 && a < 58.3) ? f((1 - pr(a, 58.0, 58.3)) * .5) : 0;
   bg(vt, a);
-  if (top) renderCap(a, top); else capEl.innerHTML = '';
+  if (top) renderCap(a, CAP_TOP); else capEl.innerHTML = '';
+  // dark band behind the subtitle so it never sits on top of busy visuals
+  scrim.style.opacity = top && capEl.innerHTML ? 1 : 0;
 }
 
 /* ---- clock & controls ---- */

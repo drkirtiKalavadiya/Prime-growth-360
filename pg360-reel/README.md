@@ -31,15 +31,16 @@ It is built only with HTML, CSS and JavaScript. Your Instagram profile on the 3D
 | `index.html`, `reel.css`, `reel.js` | The reel (each frame is a pure function of time) |
 | `assets/` | Profile photo, 3 highlights and 9 grid posts, cropped from your screenshots |
 | `voiceover-original.mp3` | Your ElevenLabs voice-over (1×) |
-| `make_soundtrack.py` | Builds `soundtrack.wav` / `.mp3`: your voice at 1.3× + synthesised music (109 bpm beat, drone), whooshes on cuts, impacts, riser, UI clicks; music ducks under the voice |
+| `make_soundtrack.py` | Builds `music.wav`: synthesised music (109 bpm beat, drone), whooshes on cuts, impacts, riser, UI clicks |
+| `mix.sh` | Builds `soundtrack.mp3`: voice at 1.3× (−15 LUFS) over loud music (−17 LUFS) with a light dip under the voice, master −14 LUFS |
 | `render.js` | Frame-exact MP4 render: `node render.js` (needs Playwright and ffmpeg) |
 
 ## Rebuild after changes
 ```
-ffmpeg -i voiceover-original.mp3 -af atempo=1.3 -ar 44100 -ac 1 voice-1.3x.wav
-python3 make_soundtrack.py && ffmpeg -y -i soundtrack.wav -b:a 192k soundtrack.mp3
-node render.js
+./mix.sh        # voice 1.3x + music + SFX -> soundtrack.mp3
+node render.js  # frames + soundtrack -> primegrowth360-reel.mp4
 ```
+Music level: change `I=-17` in `mix.sh` (higher, e.g. -16, = louder music).
 
 ## Editing
 In `reel.js`:
@@ -47,4 +48,5 @@ In `reel.js`:
 - `SCN`: which shot plays during which part of the voice, with a time map that lines each animation up with the words.
 - `S`: the shots themselves.
 - `igHTML()`: the profile on the phone.
+- `CAP_TOP`: the subtitle band (y 1450–1550). A dark band behind it keeps subtitles from ever sitting on top of the visuals.
 - To change the speed, set `SPEED` in both `reel.js` and `make_soundtrack.py`, and change the `atempo` value.
