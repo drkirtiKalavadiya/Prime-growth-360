@@ -517,30 +517,17 @@
     <filter id="soft"><feGaussianBlur stdDeviation="2.5"/></filter>
   </defs></svg>`;
 
-  // ---------- timeline (seconds in the voice-over) ----------
-  const CH = {
-    Am: [110, 220, 261.63, 329.63], F: [87.31, 174.61, 220, 261.63], C: [65.41, 130.81, 164.81, 196],
-    Dm: [73.42, 146.83, 174.61, 220], E: [82.41, 164.81, 207.65, 246.94], G: [98, 196, 246.94, 293.66],
+  // ---------- timeline: times, cuts and sound cues live in timeline.js ----------
+  const TL = window.TIMELINE;
+  const ART = {
+    truck: sceneTruck, spill: sceneSpill, driveoff: sceneDriveOff,
+    sparrow: () => sceneBirdSolo('sparrow', { x: 170, s: 2.1, enter: 'hopin', enterStyle: '--from:-110px;--d:.1s', peck: 1.4, away: 3.4, fx: 130 }),
+    crow: () => sceneBirdSolo('crow', { x: 175, s: 2, enter: 'landin', enterStyle: '--d:0s', peck: 1.5, away: 3.0, fx: -150 }),
+    pigeon: () => sceneBirdSolo('pigeon', { x: 190, s: [-2, 2], enter: 'hopin', enterStyle: '--from:-100px;--d:0s', peck: 1, away: 2.3, fx: -140 }),
+    allbirds: sceneAllBirds, grab: sceneGrab, think: sceneThink, worry: sceneWorry, hoard: sceneHoard, kafan: sceneKafan,
+    plan: scenePlan, journey: sceneJourney, family: sceneFamily, quote: sceneQuote, creator: sceneCreator,
   };
-  const SCENES = [
-    { at: 0, svg: sceneTruck, chord: CH.Am },
-    { at: 4.39, svg: sceneSpill, chord: CH.Am },
-    { at: 8.80, svg: sceneDriveOff, chord: CH.F },
-    { at: 14.71, svg: () => sceneBirdSolo('sparrow', { x: 170, s: 2.1, enter: 'hopin', enterStyle: '--from:-110px;--d:.1s', peck: 1.4, away: 3.4, fx: 130 }), chord: CH.C },
-    { at: 19.17, svg: () => sceneBirdSolo('crow', { x: 175, s: 2, enter: 'landin', enterStyle: '--d:0s', peck: 1.5, away: 3.0, fx: -150 }), chord: CH.F },
-    { at: 23.15, svg: () => sceneBirdSolo('pigeon', { x: 190, s: [-2, 2], enter: 'hopin', enterStyle: '--from:-100px;--d:0s', peck: 1, away: 2.3, fx: -140 }), chord: CH.C },
-    { at: 26.26, svg: sceneAllBirds, chord: CH.F },
-    { at: 33.48, svg: sceneGrab, chord: CH.Dm },
-    { at: 40.72, svg: sceneThink, chord: CH.Am },
-    { at: 47.99, svg: sceneWorry, chord: CH.Dm },
-    { at: 57.87, svg: sceneHoard, chord: CH.E },
-    { at: 68.81, svg: sceneKafan, chord: CH.Am },
-    { at: 76.33, svg: scenePlan, chord: CH.F },
-    { at: 84.89, svg: sceneJourney, chord: CH.C },
-    { at: 92.43, svg: sceneFamily, chord: CH.G },
-    { at: 101.01, svg: sceneQuote, chord: CH.C },
-    { at: 105.36, svg: sceneCreator, chord: CH.F },
-  ];
+  const SCENES = TL.SCENES.map((sc) => ({ ...sc, svg: ART[sc.id] }));
   const CUES = [
     [0, 'એક દિવસ એક ટ્રકમાંથી અનાજની એક ગૂણ રસ્તા પર પડી ગઈ.'],
     [4.39, 'ગૂણ ફાટી ગઈ અને આખું અનાજ રસ્તા પર વેરાઈ ગયું.'],
@@ -577,37 +564,7 @@
     [125.41, 'તમારી કલ્પનાને AI ની મદદથી હકીકતમાં ફેરવો!', true],
     [128.78, 'PRIME GROWTH 360 – Learn. Create. Grow.', true],
   ];
-  const FADE = .6;
-
-  // ---------- ambient pad (quiet, under the voice) ----------
-  const Pad = {
-    ctx: null, master: null, voices: [], on: false, muted: false,
-    init() {
-      if (this.ctx) return;
-      const AC = window.AudioContext || window.webkitAudioContext;
-      if (!AC) return;
-      try {
-        const ctx = new AC();
-        const master = ctx.createGain(); master.gain.value = 0;
-        const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 800;
-        master.connect(lp).connect(ctx.destination);
-        this.voices = ['sine', 'triangle', 'sine', 'sine'].map((type, i) => {
-          const osc = ctx.createOscillator(); osc.type = type; osc.frequency.value = CH.Am[i]; osc.detune.value = (i - 1.5) * 4;
-          const g = ctx.createGain(); g.gain.value = i === 0 ? .35 : .2;
-          osc.connect(g).connect(master); osc.start();
-          return osc;
-        });
-        this.ctx = ctx; this.master = master;
-      } catch (e) { this.ctx = null; }
-    },
-    chord(fr) { if (this.ctx) this.voices.forEach((o, i) => o.frequency.setTargetAtTime(fr[i], this.ctx.currentTime, .6)); },
-    set(on) {
-      this.on = on;
-      if (!this.ctx) return;
-      if (on && this.ctx.state === 'suspended') this.ctx.resume();
-      this.master.gain.setTargetAtTime(on && !this.muted ? .025 : 0, this.ctx.currentTime, .4);
-    },
-  };
+  const FADE = .12; // fast cut between scenes
 
   // ---------- player ----------
   const $ = (s) => document.querySelector(s);
@@ -623,12 +580,15 @@
   const svgs = [...scenesEl.children];
   dotsEl.innerHTML = SCENES.map((_, i) => `<button type="button" role="tab" aria-label="દ્રશ્ય ${i + 1}" data-i="${i}"></button>`).join('');
 
-  const audio = new Audio('audio/voiceover.mp3');
+  // audio/mix.mp3 = voice-over + background music + sound effects (built by build-audio.mjs)
+  const audio = new Audio('audio/mix.mp3');
   audio.preload = 'auto';
-  let TOTAL = 129.96;
-  audio.addEventListener('loadedmetadata', () => { if (isFinite(audio.duration)) TOTAL = audio.duration; });
+  let TOTAL = TL.TOTAL;
   let audioOk = true;
-  audio.addEventListener('error', () => { audioOk = false; });
+  audio.addEventListener('error', () => {
+    if (!audio.src.endsWith('voiceover.mp3')) { audio.src = 'audio/voiceover.mp3'; return; }
+    audioOk = false;
+  });
 
   const animCache = new Map();
   function setOn(el, on) {
@@ -639,6 +599,19 @@
   const sceneAt = (t) => { let i = 0; while (i + 1 < SCENES.length && t >= SCENES[i + 1].at) i++; return i; };
   const cueAt = (t) => { let i = 0; while (i + 1 < CUES.length && t >= CUES[i + 1][0]) i++; return i; };
 
+  /** Fast cuts: jump between wide / medium / close framings, with a punch-in on every cut. */
+  function frame(el, sc, local) {
+    let shot = sc.shots[0];
+    for (const sh of sc.shots) if (local >= sh.t) shot = sh;
+    const since = local - shot.t;
+    const scale = shot.s * (1 + .045 * Math.exp(-since * 9)) * (1 + .012 * since);
+    el.style.transformOrigin = `${shot.fx}% ${shot.fy}%`;
+    el.style.transform = `scale(${scale.toFixed(4)})`;
+  }
+  const flash = document.createElement('div');
+  flash.className = 'flash';
+  stage.insertBefore(flash, capEl);
+
   let shownScene = -1, shownCue = -1, capAnims = [];
   /** Draw the frame for time t (seconds). Pure function of t, so preview and export match. */
   function renderAt(t) {
@@ -647,12 +620,16 @@
       const visible = k === i || (k === i - 1 && into < FADE);
       setOn(el, visible);
       el.style.opacity = k === i ? (k === 0 ? 1 : Math.min(1, into / FADE)) : visible ? 1 : 0;
-      if (visible) for (const a of animCache.get(el)) a.currentTime = Math.max(0, t - SCENES[k].at) * 1000;
+      if (visible) {
+        const local = Math.max(0, t - SCENES[k].at);
+        for (const a of animCache.get(el)) a.currentTime = local * 1000;
+        frame(el, SCENES[k], local);
+      }
     });
+    flash.style.opacity = i > 0 && into < .16 ? String(.28 * (1 - into / .16)) : '0';
     if (i !== shownScene) {
       shownScene = i;
       [...dotsEl.children].forEach((d, k) => d.setAttribute('aria-selected', String(k === i)));
-      Pad.chord(SCENES[i].chord);
     }
     const c = cueAt(t);
     if (c !== shownCue) {
@@ -682,14 +659,11 @@
       try { audio.currentTime = t; } catch (e) { /* ignore */ }
       audio.play().catch(() => { /* autoplay blocked: keep running silently */ });
     }
-    if (fromUser) Pad.init();
-    Pad.set(true);
   }
   function pause() {
     playing = false;
     audio.pause();
     playBtn.textContent = '▶';
-    Pad.set(false);
   }
   function finish() {
     pause(); ended = true;
@@ -713,16 +687,15 @@
 
   const toggle = () => (playing ? pause() : play(true));
   const jump = (i) => { seek(SCENES[Math.max(0, Math.min(SCENES.length - 1, i))].at); if (!playing) play(true); };
-  $('#start').addEventListener('click', (e) => { e.stopPropagation(); play(true); });
+  $('#start').addEventListener('click', (e) => { e.stopPropagation(); e.currentTarget.blur(); play(true); });
   playBtn.addEventListener('click', toggle);
   $('#prev').addEventListener('click', () => jump(sceneAt(t) - (t - SCENES[sceneAt(t)].at < 1.5 ? 1 : 0)));
   $('#next').addEventListener('click', () => jump(sceneAt(t) + 1));
   $('#restart').addEventListener('click', () => jump(0));
   muteBtn.addEventListener('click', () => {
     const m = !audio.muted;
-    audio.muted = m; Pad.muted = m;
+    audio.muted = m;
     muteBtn.setAttribute('aria-pressed', String(m));
-    Pad.set(playing);
   });
   dotsEl.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) jump(+b.dataset.i); });
   stage.addEventListener('click', () => { if (overlay.hidden) toggle(); });

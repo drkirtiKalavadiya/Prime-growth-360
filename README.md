@@ -60,7 +60,16 @@ An animated Gujarati moral story in 9:16 reel format, synced to the voice-over i
   node story/render.mjs --stills 5,40,110        # PNG stills at those seconds
   ```
   This needs Playwright with Chromium, and ffmpeg.
-- **Changing the timing:** `SCENES` (scene start times) and `CUES` (caption lines) at the bottom of `story/story.js` are in seconds of the voice-over. If you replace the MP3, update those numbers.
+- **Music, sound effects and fast cuts:**
+  - **Music:** the background score is composed in code, so it's royalty-free. Its mood follows the story: calm, tense, sparse, hopeful, uplifting, then the promo beat.
+  - **Sound effects:** also generated in code: truck, thud, grain, birds, wings, footsteps, clock, pages, coins, heartbeat, door, chime, riser and impact, and typing.
+  - **Mix:** music and effects are mixed under the voice-over with automatic ducking and loudness-normalised to −14 LUFS.
+  - **Rebuild the soundtrack:** run `node story/build-audio.mjs`. This writes `story/audio/mix.mp3`, which the page and the MP4 export both use.
+  - **Adjust levels:** for example `MUSIC_DB=-11 SFX_DB=-6 node story/build-audio.mjs`.
+- **Timing:** everything is timed in seconds of the voice-over.
+  - `story/timeline.js` holds the scene start times, the camera cuts (fast wide/medium/close-up shots), the sound-effect cues and the music sections.
+  - `CUES` in `story/story.js` holds the caption lines.
+  - If you replace the voice-over MP3, update those numbers and rebuild the soundtrack.
 
 ## Development
 

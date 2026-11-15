@@ -61,6 +61,7 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 .scenes, .scene { position: absolute; inset: 0; width: 100%; height: 100%; }
+.flash { position: absolute; inset: 0; background: #fff6e0; opacity: 0; pointer-events: none; }
 .scene { opacity: 0; display: block; }
 /* every animation is paused and driven by story.js from the voice-over clock */
 .scene *, .caption .w { animation-play-state: paused !important; }

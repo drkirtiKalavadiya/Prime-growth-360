@@ -52,7 +52,8 @@ if (stills) {
 const from = Number(opt('from', 0));
 const to = Math.min(Number(opt('to', duration)), duration);
 const frames = Math.ceil((to - from) * fps);
-const audio = path.join(here, 'audio', 'voiceover.mp3');
+const mix = path.join(here, 'audio', 'mix.mp3');
+const audio = fs.existsSync(mix) ? mix : path.join(here, 'audio', 'voiceover.mp3');
 const ff = spawn('ffmpeg', [
   '-y', '-loglevel', 'error',
   '-f', 'image2pipe', '-framerate', String(fps), '-c:v', 'png', '-i', '-',
