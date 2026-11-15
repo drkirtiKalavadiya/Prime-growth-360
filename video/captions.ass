@@ -1,0 +1,19 @@
+[Script Info]
+Title: Perfection vs Unperfection
+ScriptType: v4.00+
+PlayResX: 720
+PlayResY: 1280
+WrapStyle: 0
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Title,Inter ExtraBold,64,&H00FFFFFF,&H00FFFFFF,&H00000000,&H96000000,1,0,0,0,100,100,1,0,1,5,3,8,40,40,150,1
+Style: Fail,Inter ExtraBold,78,&H003C3CFF,&H00FFFFFF,&H00000000,&H96000000,1,0,0,0,100,100,1,0,1,6,3,8,40,40,170,1
+Style: Win,Inter ExtraBold,78,&H0050E650,&H00FFFFFF,&H00000000,&H96000000,1,0,0,0,100,100,1,0,1,6,3,8,40,40,170,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.20,0:00:06.79,Title,,0,0,0,,{\fad(200,150)\fscx40\fscy40\t(0,250,\fscx100\fscy100)}{\c&H3C3CFF&}PERFECTION\N{\c&HFFFFFF&\fs48}vs\N{\c&H50E650&\fs64}UNPERFECTION
+Dialogue: 0,0:00:06.79,0:00:07.87,Fail,,0,0,0,,{\fad(80,80)\fscx40\fscy40\t(0,200,\fscx100\fscy100)}PERFECTION\NFAILS
+Dialogue: 0,0:00:07.87,0:00:12.04,Win,,0,0,0,,{\fad(80,120)\fscx40\fscy40\t(0,200,\fscx100\fscy100)}UNPERFECTION\NWINS
+Dialogue: 0,0:00:12.04,0:00:15.07,Fail,,0,0,0,,{\fad(80,300)\fscx40\fscy40\t(0,200,\fscx100\fscy100)}PERFECTION\NFAILS
