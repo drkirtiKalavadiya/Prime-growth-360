@@ -16,7 +16,9 @@ Every visual is drawn in code with the HTML5 Canvas 2D API: the vehicles, the tr
 | `effects.js` | Easing, spring settle, the mirrored floor reflection, kinetic typography, vignette, film grain, dip-to-black |
 | `scene.js` | The `TIMELINE` config and the director `render(ctx, t)`. Every frame is a pure function of time |
 | `render.js` | Headless Chromium (Playwright) renders each frame and pipes it to ffmpeg (H.264) |
-| `audio.sh` | Generates an ambient pad plus SFX (light-change clicks, rotor flutter, end chime) and muxes it in |
+| `cta.js` | Closing call to action: brand badge, Follow-button tap with confetti, AI Video Paid Course card, pulsing Enrol button |
+| `music.py` | Composes an original energetic 128 BPM track (groove → drop → breakdown → build → drops) plus all SFX, using numpy |
+| `audio.sh` | Mixes voice-over + music (ducked under the voice) + SFX and muxes it into the MP4 |
 | `out/chasing-life.mp4` | The finished video |
 
 ## Preview
@@ -40,6 +42,11 @@ Requirements: Node 18+, `playwright` with Chromium, and `ffmpeg`.
 - The voice-over is `audio/voiceover-gu.mp3` (23.2s). `audio.sh` mixes it in at full level and lowers the music underneath it.
 - The captions are bold Gujarati (Noto Sans Gujarati Black, in `fonts/`, under the OFL licence). They appear **word by word, in time with the voice**. The word being spoken turns gold, and «સુંદરતા» stays gold on the end card.
 - Each caption's `in`/`out` in `scene.js` is when that line is spoken. If you change the voice-over, update those times and the cut times.
+
+## Call to action and music
+
+- The CTA (from 27.4s) asks viewers to follow the **Prime Growth 360** page and enrol in the **AI Video Paid Course**. Its text and timing are in `TIMELINE.cta` in `scene.js`.
+- The music follows the story: groove → impact on the green light → emotional breakdown at the wheelchair → build-up → drop on the moral → big drop on the CTA. If you change scene times, update `CUES` in `music.py` to match.
 
 ## Customise
 

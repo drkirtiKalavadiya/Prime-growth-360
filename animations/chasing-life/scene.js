@@ -16,7 +16,7 @@
     width: 1080,
     height: 1920,
     fps: 30,
-    duration: 28.5,   // voice-over is 23.2s, then the end card (moral) holds
+    duration: 36.5,   // voice-over 0–23.2s → moral end card → CTA
 
     lightX: 822,
     lightGround: 1104,
@@ -54,7 +54,18 @@
     // the moral appears after the voice-over ends (it is not spoken)
     endCard: {
       text: 'બીજાની જિંદગી પાછળ દોડવામાં, તમે તમારી પોતાની જિંદગીની સુંદરતા ભૂલી જાઓ છો',
-      in: 23.9, out: 25.6, y: 900, size: 62,
+      in: 23.9, out: 25.3, y: 900, size: 62,
+    },
+
+    // call to action (times are seconds since ctaCut)
+    ctaCut: 27.4,
+    cta: {
+      follow: { text: 'આ પ્રકારના AI Video બનાવવા માટે\nPrime Growth 360 પેજને Follow કરો', in: 0.7, out: 2.0 },
+      tapAt: 3.0,
+      cardAt: 4.0,
+      course: { text: 'અમે AI Video Paid Course શરૂ કરેલ છે!', in: 4.5, out: 5.3 },
+      enrolAt: 5.6,
+      enrolLabel: 'આજે જ Enrol કરો',
     },
     watermark: { x: 540, y: 1746 },
   };
@@ -202,6 +213,16 @@
         alpha: 1 - Ease.inOutQuad(prog(t, fadeAt, fadeAt + 0.4)),
       });
     });
+    if (t >= T.ctaCut) {
+      G.CTA.drawCTA(ctx, t - T.ctaCut, T.cta);
+      G.FX.vignette(ctx, 0.55);
+      G.FX.grain(ctx, frame, 0.035);
+      G.FX.blackout(ctx, 1 - prog(t, T.ctaCut, T.ctaCut + 0.12));
+      // white impact flash on the drop
+      const fl = 1 - prog(t, T.ctaCut + 0.12, T.ctaCut + 0.45);
+      if (fl > 0) { ctx.save(); ctx.globalAlpha = 0.7 * fl; ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, T.width, T.height); ctx.restore(); }
+      return;
+    }
     if (t >= T.endCut) {
       const E = T.endCard;
       G.FX.wordCaption(ctx, E.text, S.x, E.y, {
@@ -216,7 +237,7 @@
     // dips to black at each cut
     const f = T.fade;
     const dip = (cut) => Math.max(prog(t, cut - f, cut) * (t < cut ? 1 : 0), (1 - prog(t, cut, cut + f)) * (t >= cut ? 1 : 0));
-    G.FX.blackout(ctx, Math.max(dip(T.sceneCut), dip(T.endCut), 1 - prog(t, 0, 0.25)));
+    G.FX.blackout(ctx, Math.max(dip(T.sceneCut), dip(T.endCut), prog(t, T.ctaCut - 0.3, T.ctaCut), 1 - prog(t, 0, 0.25)));
   }
 
   G.Reel = { TIMELINE, render };

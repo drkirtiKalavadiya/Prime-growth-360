@@ -117,12 +117,13 @@
     ctx.font = `900 ${size}px ${GU_FONT}`;
     ctx.textBaseline = 'middle';
     ctx.textAlign = 'left';
-    const words = text.split(/\s+/).filter(Boolean);
+    // "\n" in the text forces a line break
+    const words = text.replace(/\n/g, ' \n ').split(/ +/).filter(Boolean);
     const space = ctx.measureText(' ').width * 1.1;
-    const widths = words.map((w) => ctx.measureText(w).width);
+    const widths = words.map((w) => (w === '\n' ? 0 : ctx.measureText(w).width));
 
     // word timings, weighted by length
-    const lens = words.map((w) => [...w].length + 2);
+    const lens = words.map((w) => (w === '\n' ? 0 : [...w].length + 2));
     const sum = lens.reduce((a, b) => a + b, 0);
     let acc = 0;
     const times = lens.map((l) => { const s = o.start + ((o.end - o.start) * acc) / sum; acc += l; return s; });
@@ -131,6 +132,7 @@
     const lines = [[]];
     let lineW = 0;
     words.forEach((w, i) => {
+      if (w === '\n') { if (lines[lines.length - 1].length) { lines.push([]); lineW = 0; } return; }
       const add = (lines[lines.length - 1].length ? space : 0) + widths[i];
       if (lineW + add > (o.maxWidth || 940) && lines[lines.length - 1].length) { lines.push([]); lineW = 0; }
       lineW += (lines[lines.length - 1].length ? space : 0) + widths[i];
