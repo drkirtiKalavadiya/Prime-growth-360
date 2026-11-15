@@ -112,6 +112,13 @@ add(SFX, riser(1.1), EV['impacts'][3] - 1.1, .35)                       # riser 
 add(SFX, whoosh(.5, 200, 1800), EV['finalJump'], .4)
 add(SFX, boom(), EV['land'], .9)
 for x in EV['thunder']: add(SFX, thunder(), x, .55)
+# closing CTA: card whoosh, Follow tap click, Enrol sparkle
+def ding(f):
+    n = int(1.2 * SR); t = np.arange(n) / SR
+    return sum(np.sin(2 * np.pi * f * m * t) / m for m in (1, 2, 3)) * np.exp(-t * 3.5)
+add(SFX, whoosh(.45, 300, 4000), EV['cta'] - .2, .5)
+add(SFX, pop(), EV['ctaTap'], .9); add(SFX, ding(midi(84)), EV['ctaTap'] + .02, .25)
+add(SFX, ding(midi(88)), EV['ctaEnrol'], .3); add(SFX, ding(midi(91)), EV['ctaEnrol'] + .12, .25)
 crowd = band(rng.standard_normal(N), 250, 1400) * (1 + .6 * np.sin(2 * np.pi * 1.3 * T) * np.sin(2 * np.pi * .37 * T))
 cv = np.clip(T / .5, 0, 1) * np.where(T < HP, 1, .25) * np.clip((EV['land'] + .5 - T) / .5, 0, 1) * .07   # jeers muffled after headphones
 cheer = band(rng.standard_normal(N), 600, 4000) * np.clip((T - EV['land'] - .8) / .5, 0, 1) * .09

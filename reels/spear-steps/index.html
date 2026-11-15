@@ -41,7 +41,7 @@
 //  Canvas 1080x1920 (9:16). Everything is a pure function of time t,
 //  so the same frame can be rendered live or frame-by-frame for export.
 // =====================================================================
-const W = 1080, H = 1920, DURATION = 27.5, BPM = 128;
+const W = 1080, H = 1920, DURATION = 32.5, BPM = 128;
 const cv = document.getElementById('c'), ctx = cv.getContext('2d');
 
 const GU = '"Baloo Bhai 2", "Noto Sans Gujarati", sans-serif';
@@ -68,6 +68,15 @@ const SUBS = [
   [21.00, 22.75, '...અને *સફળતા* મળી ગઈ!', '...and success came!'],
   [22.80, 25.20, 'તું પણ આ *જંગ ના મેદાન* માં ઉતરી જા *ભાઈબંધ!!*', 'You too, step onto the battlefield, brother!!'],
 ];
+// ---------- closing CTA (edit here) ----------
+const CTA_T = 27.0;                                    // CTA card appears
+const CTA = {
+  brand: 'PRIME GROWTH 360',
+  follow: 'આ પ્રકારના *Ai video* બનાવવા માટે *Prime Growth 360* Page ને Follow કરો',
+  course: 'અમે *Ai video Course* લોન્ચ કરેલ છે, એમાં *Enrol* કરો!',
+  followBtn: 'FOLLOW', followedBtn: 'FOLLOWING', enrolBtn: 'ENROL NOW',
+};
+const CTA_TAP = CTA_T + 1.5;                           // finger taps Follow
 const CAPTION_2 = { gu: 'દરેક ભાલો પગથિયું બન્યો.',  en: 'EVERY SPEAR BECAME A STEP.' };
 // crowd bubbles follow the voice-over: [from, to, texts]
 const TAUNT_TL = [
@@ -517,6 +526,79 @@ function drawSubtitle(t) {
   ctx.restore();
 }
 
+// ---------- closing CTA card ----------
+function richText(txt, font, y, maxW, lh, col = '#fff', hi = '#ffd23f') {
+  ctx.font = font; const lines = richLines(txt, maxW);
+  lines.forEach((ln, r) => { let x = -ln.width / 2;
+    for (const o of ln.l) { ctx.fillStyle = o.hi ? hi : col; ctx.fillText(o.w, x, y + r * lh); x += o.width + ln.sp; } });
+  return y + lines.length * lh;
+}
+function ctaButton(y, w, h, label, c1, c2, txtCol, scale, icon) {   // icon: 'plus' | 'check' | null
+  ctx.save(); ctx.translate(0, y + h / 2); ctx.scale(scale, scale);
+  const g = ctx.createLinearGradient(-w / 2, 0, w / 2, 0); g.addColorStop(0, c1); g.addColorStop(1, c2);
+  ctx.shadowColor = c2; ctx.shadowBlur = 30; ctx.fillStyle = g;
+  ctx.beginPath(); ctx.roundRect(-w / 2, -h / 2, w, h, h / 2); ctx.fill(); ctx.shadowBlur = 0;
+  ctx.font = `900 46px ${EN}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = txtCol;
+  const tw = ctx.measureText(label).width, ix = -tw / 2 - 34;
+  ctx.fillText(label, icon ? 18 : 0, 3);
+  if (!icon) { ctx.restore(); return; }
+  ctx.strokeStyle = txtCol; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.beginPath();
+  if (icon === 'check') { ctx.moveTo(ix - 14, 0); ctx.lineTo(ix - 3, 12); ctx.lineTo(ix + 16, -12); }      // ✓
+  else { ctx.moveTo(ix - 14, 0); ctx.lineTo(ix + 14, 0); ctx.moveTo(ix, -14); ctx.lineTo(ix, 14); } // +
+  ctx.stroke(); ctx.restore();
+}
+function drawCTA(t) {
+  const k = prog(t, CTA_T, CTA_T + .45); if (k <= 0) return;
+  const e = ease(k);
+  ctx.save();
+  ctx.fillStyle = `rgba(8,4,14,${.62 * e})`; ctx.fillRect(0, 0, W, H);
+  ctx.translate(W / 2, 960 + 260 * (1 - e)); ctx.globalAlpha = e;
+  // card
+  const cw = 960, ch = 1090, top = -ch / 2;
+  const g = ctx.createLinearGradient(0, top, 0, top + ch); g.addColorStop(0, '#2d1446'); g.addColorStop(1, '#130a1f');
+  ctx.fillStyle = g; ctx.beginPath(); ctx.roundRect(-cw / 2, top, cw, ch, 44); ctx.fill();
+  ctx.lineWidth = 5; ctx.strokeStyle = '#ffb347'; ctx.stroke();
+  // brand
+  ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+  ctx.font = `900 64px ${EN}`; const bw = ctx.measureText(CTA.brand).width;
+  const bg = ctx.createLinearGradient(-bw / 2, 0, bw / 2, 0); bg.addColorStop(0, '#ffd23f'); bg.addColorStop(1, '#ff8a3d');
+  ctx.fillStyle = bg; ctx.fillText(CTA.brand, -bw / 2, top + 130);
+  ctx.fillStyle = '#ffb347'; ctx.fillRect(-120, top + 160, 240, 6);
+  // follow block
+  let y = richText(CTA.follow, `800 60px ${GU}`, top + 260, 860, 78);
+  const tapK = prog(t, CTA_TAP, CTA_TAP + .15), followed = t >= CTA_TAP;
+  const pulse = followed ? 1 + .08 * Math.sin(Math.PI * tapK) : 1 + .04 * Math.sin(t * 9);
+  ctaButton(y - 10, 520, 110, followed ? CTA.followedBtn : CTA.followBtn,
+            followed ? '#5b5b6b' : '#ff2e63', followed ? '#3d3d4a' : '#ff7a3d', '#fff', pulse, followed ? 'check' : 'plus');
+  const fbY = y - 10 + 55;
+  // finger tap on Follow
+  const hk = prog(t, CTA_TAP - .6, CTA_TAP), hOut = prog(t, CTA_TAP + .35, CTA_TAP + .7);
+  if (hk > 0 && hOut < 1) {
+    const hx = 150 + 120 * (1 - ease(hk)), hy = fbY + 40 + 160 * (1 - ease(hk)) + 120 * hOut;
+    if (followed && tapK < 1) { ctx.strokeStyle = `rgba(255,255,255,${1 - tapK})`; ctx.lineWidth = 6; ctx.beginPath(); ctx.arc(hx - 10, hy - 40, 30 + 60 * tapK, 0, 7); ctx.stroke(); }
+    ctx.save(); ctx.translate(hx, hy); ctx.rotate(-.35); ctx.globalAlpha = e * (1 - hOut);
+    ctx.fillStyle = '#fff'; ctx.strokeStyle = '#222'; ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.roundRect(-14, -58, 28, 70, 14); ctx.fill(); ctx.stroke();               // finger
+    ctx.beginPath(); ctx.roundRect(-30, 0, 66, 70, 22); ctx.fill(); ctx.stroke();                 // hand
+    ctx.restore();
+  }
+  // divider
+  y += 150; ctx.fillStyle = 'rgba(255,179,71,.35)'; ctx.fillRect(-380, y, 760, 3);
+  // course block
+  const ck = prog(t, CTA_T + 1.9, CTA_T + 2.3);
+  ctx.globalAlpha = e * ck;
+  y = richText(CTA.course, `800 60px ${GU}`, y + 100, 860, 78);
+  const eb = 1 + .06 * Math.sin(t * 8) + .25 * (1 - ease(ck));
+  ctaButton(y - 10, 600, 120, CTA.enrolBtn + '  →', '#ffd23f', '#ff9f1c', '#2a1240', eb, null);
+  // shimmer sweep across the enrol button
+  const sh = ((t - CTA_T) * .7) % 1;
+  ctx.save(); ctx.beginPath(); ctx.roundRect(-300, y - 10, 600, 120, 60); ctx.clip();
+  const sg = ctx.createLinearGradient(-300 + sh * 900 - 150, 0, -300 + sh * 900, 0);
+  sg.addColorStop(0, 'rgba(255,255,255,0)'); sg.addColorStop(.5, 'rgba(255,255,255,.55)'); sg.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = sg; ctx.fillRect(-300, y - 10, 600, 120); ctx.restore();
+  ctx.restore();
+}
+
 // ---------- golden beam on the hero ----------
 function drawBeam(t) {
   const k = ease(prog(t, LAND, LAND + 1.2)); if (k <= 0) return;
@@ -546,7 +628,8 @@ function renderAt(t) {
   drawLightning(t);
   const fl = flashAmount(t); if (fl > 0) { ctx.fillStyle = `rgba(255,250,235,${fl})`; ctx.fillRect(0, 0, W, H); }
   drawSubtitle(t);
-  caption(CAPTION_2, prog(t, 25.25, 25.75), 150);
+  caption(CAPTION_2, Math.min(prog(t, 25.25, 25.75), 1 - prog(t, CTA_T, CTA_T + .3)), 150);
+  drawCTA(t);
   const fade = Math.max(1 - prog(t, 0, .12), prog(t, DURATION - .6, DURATION));
   if (fade > 0) { ctx.fillStyle = `rgba(0,0,0,${fade})`; ctx.fillRect(0, 0, W, H); }
 }
@@ -556,6 +639,7 @@ window.EVENTS = {
   duration: DURATION, bpm: BPM, headphones: HEADPHONES, land: LAND, finalJump: F0 + .15,
   throws: STEPS.map((_, i) => stepStart(i) + .4 * SP), impacts: IMPACTS,
   jumps: STEPS.map((_, i) => stepStart(i) + 2.45 * SP), lands: STEPS.map((_, i) => stepStart(i) + 3.95 * SP),
+  cta: CTA_T, ctaTap: CTA_TAP, ctaEnrol: CTA_T + 2.4,
   thunder: [LAND, LAND + .45], cuts: SHOTS.map(x => x[0]).filter(x => x > 0),
 };
 
