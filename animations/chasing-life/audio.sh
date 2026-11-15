@@ -31,7 +31,7 @@ ffmpeg -loglevel error -y -f lavfi -i "aevalsrc=exprs='$PAD':s=48000:d=$DUR" \
   "$TMP/pad.wav"
 
 # 2) Sound effects (times in seconds, matching scene.js)
-AMBER=11.2; GREEN=11.95; CHIME=19.6; HELI=1.4
+AMBER=11.2; GREEN=11.95; CHIME=23.85; HELI=1.4
 SFX="if(gte(t,$AMBER),0.30*sin(2*PI*1900*t)*exp(-70*(t-$AMBER)),0)"
 SFX+="+if(gte(t,$GREEN),0.30*sin(2*PI*1900*t)*exp(-70*(t-$GREEN)),0)"
 SFX+="+if(gte(t,$CHIME),0.08*(sin(2*PI*880*t)+0.6*sin(2*PI*1318.5*t)+0.35*sin(2*PI*1760*t))*exp(-1.2*(t-$CHIME)),0)"

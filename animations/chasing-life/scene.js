@@ -16,7 +16,7 @@
     width: 1080,
     height: 1920,
     fps: 30,
-    duration: 24.8,   // voice-over is 23.2s, plus a hold on the end card
+    duration: 28.5,   // voice-over is 23.2s, then the end card (moral) holds
 
     lightX: 822,
     lightGround: 1104,
@@ -35,7 +35,7 @@
     walker: { ground: 1306, t0: 10.3, x0: -60, speed: 112, scale: 1 },
 
     sceneCut: 15.9,    // street → wheelchair
-    endCut: 19.55,     // wheelchair → end card
+    endCut: 23.6,      // wheelchair → end card
     fade: 0.3,
 
     wheelchair: { x: 540, ground: 1082, scale: 1.0 },
@@ -44,15 +44,17 @@
      * in/out = when that line is spoken. Words appear one by one across that span. */
     captionStyle: { x: 540, y: 600, size: 62, maxWidth: 960 },
     captions: [
-      { text: 'કાશ મારી પાસે હેલિકોપ્ટર હોત',            in: 0.0,   out: 2.8,   y: 720 },
-      { text: 'યાર, કાશ મારી પાસે લેમ્બોર્ગિની હોત',      in: 4.35,  out: 6.89 },
-      { text: 'કાશ મારી પાસે જી-વેગન હોત',               in: 8.35,  out: 10.71 },
-      { text: 'કાશ મારે ચાલવું ન પડત',                   in: 11.98, out: 14.71 },
-      { text: 'કાશ હું ફરીથી ચાલી શકત',                  in: 17.05, out: 18.82, y: 640 },
+      { text: 'મારી ઈચ્છા છે કે મારી પાસે એક હેલિકોપ્ટર હોત!', in: 0.0,   out: 2.8,   y: 740 },
+      { text: 'કાશ, મારી પાસે એક લેમ્બોર્ગિની હોત!',          in: 4.35,  out: 6.89 },
+      { text: 'કાશ, મારી પાસે એક G-Wagon હોત!',              in: 8.35,  out: 10.71 },
+      { text: 'કાશ, મારે ચાલવાની જરૂર જ ન પડતી!',            in: 11.98, out: 14.71 },
+      { text: 'પણ જો આજે કોઈને પૂછો કે...',                 in: 17.05, out: 18.82, y: 640, hideAt: 19.75 },
+      { text: 'તો કાશ, હું ફરીથી મારા પગે ચાલી શકતો હોત!',    in: 19.98, out: 23.17, y: 640 },
     ],
+    // the moral appears after the voice-over ends (it is not spoken)
     endCard: {
       text: 'બીજાની જિંદગી પાછળ દોડવામાં, તમે તમારી પોતાની જિંદગીની સુંદરતા ભૂલી જાઓ છો',
-      in: 19.98, out: 23.17, y: 900, size: 62,
+      in: 23.9, out: 25.6, y: 900, size: 62,
     },
     watermark: { x: 540, y: 1746 },
   };
@@ -192,10 +194,12 @@
     // typography (screen space, not affected by the camera)
     const S = T.captionStyle;
     T.captions.forEach((c) => {
-      if (t < c.in - 0.1 || t > c.out + 0.95) return;
+      // a caption fades out shortly after its line ends, or earlier at `hideAt`
+      const fadeAt = Math.min(c.out + 0.55, c.hideAt ?? Infinity);
+      if (t < c.in - 0.1 || t > fadeAt + 0.4) return;
       G.FX.wordCaption(ctx, c.text, S.x, c.y ?? S.y, {
         size: S.size, maxWidth: S.maxWidth, t, start: c.in, end: c.out,
-        alpha: 1 - Ease.inOutQuad(prog(t, c.out + 0.55, c.out + 0.95)),
+        alpha: 1 - Ease.inOutQuad(prog(t, fadeAt, fadeAt + 0.4)),
       });
     });
     if (t >= T.endCut) {
