@@ -41,7 +41,7 @@
 //  Canvas 1080x1920 (9:16). Everything is a pure function of time t,
 //  so the same frame can be rendered live or frame-by-frame for export.
 // =====================================================================
-const W = 1080, H = 1920, DURATION = 35.7;
+const W = 1080, H = 1920, DURATION = 27.5, BPM = 128;
 const cv = document.getElementById('c'), ctx = cv.getContext('2d');
 
 const GU = '"Baloo Bhai 2", "Noto Sans Gujarati", sans-serif';
@@ -54,9 +54,29 @@ const STEPS = [
   { h: 1080, gu: 'મહેનત',  en: 'WORK'    },
   { h: 1380, gu: 'સફળતા',  en: 'SUCCESS' },
 ];
-const CAPTION_1 = { gu: 'તેમણે ફેંકેલો દરેક ભાલો...', en: 'EVERY SPEAR THEY THREW...' };
-const CAPTION_2 = { gu: '...મારું પગથિયું બની ગયો.',  en: '...BECAME A STEP.' };
-const TAUNTS = ['નહીં થાય!', 'NO WAY!', 'છોડી દે!', 'GIVE UP!', 'હારી જઈશ!', 'YOU CAN\'T!'];
+// Voice-over subtitles: [start, end, Gujarati, English]. *word* = highlighted in yellow.
+const SUBS = [
+  [0.00, 1.60, 'લોકો કહેતા હતા કે...', 'People used to say...'],
+  [1.60, 3.80, 'રહેવા દે, *સપના* ના જો!', 'Stop dreaming!'],
+  [3.90, 6.30, 'નવું *શીખવાનું* રહેવા દે, પડી જઈશ!', 'Forget learning, you\'ll fall!'],
+  [6.40, 9.60, '*AI video* બનાવવા નું *Risk* ના લે,', 'Don\'t take the risk of AI videos,'],
+  [9.60, 10.60, 'કઈ નહીં થાય!', 'Nothing will come of it!'],
+  [10.60, 12.45, '*ઈન્સ્ટાગ્રામ* માં વિડિઓ નહીં ચાલે તારા!', 'Your videos won\'t work on Instagram!'],
+  [12.50, 15.70, 'પણ ભાઈબંધ, આપડે તો *બેહરા* હતા', 'But brother, we were deaf to it'],
+  [15.80, 18.75, 'ખાલી *મેહનત* પર વિશ્વાસ હતો', 'We trusted only hard work'],
+  [18.80, 20.95, 'અને *જંગ ના મેદાન* માં ઉતરી ગયા હતા...', '...and stepped onto the battlefield'],
+  [21.00, 22.75, '...અને *સફળતા* મળી ગઈ!', '...and success came!'],
+  [22.80, 25.20, 'તું પણ આ *જંગ ના મેદાન* માં ઉતરી જા *ભાઈબંધ!!*', 'You too, step onto the battlefield, brother!!'],
+];
+const CAPTION_2 = { gu: 'દરેક ભાલો પગથિયું બન્યો.',  en: 'EVERY SPEAR BECAME A STEP.' };
+// crowd bubbles follow the voice-over: [from, to, texts]
+const TAUNT_TL = [
+  [0, 3.8, ['સપના ના જો!', 'રહેવા દે!', 'NO WAY!']],
+  [3.8, 6.4, ['પડી જઈશ!', 'રહેવા દે!', 'GIVE UP!']],
+  [6.4, 10.6, ['Risk ના લે!', 'કઈ નહીં થાય!', 'NO!']],
+  [10.6, 12.6, ['વિડિઓ નહીં ચાલે!', 'NO VIEWS!', '0 LIKES!']],
+  [12.6, 99, ['બ્લા બ્લા...', 'BLAH BLAH', '...']],
+];
 const CHEER = ['વાહ!', 'WOW!', 'શાબાશ!', 'RESPECT!'];
 
 // ---------- helpers ----------
@@ -72,10 +92,16 @@ const edge = y => 300 + 14 * Math.sin(y * 0.011) + 7 * Math.sin(y * 0.031 + 1);
 const PLAT = [LEDGE, ...STEPS.map(s => s.h)];
 const standX = i => i === 0 ? edge(LEDGE) + 50 : edge(PLAT[i]) + 120;
 
-const T0 = 3.0, SD = 4.6;                         // first throw, step duration
-const stepStart = i => T0 + SD * i;
-const impactT = i => stepStart(i) + 1.5;
-const S_END = stepStart(STEPS.length);            // 21.4
+// ---------- timeline (synced to voiceover.mp3) ----------
+const SP = .72;                                   // action speed (step actions are 28% faster than v1)
+const IMPACTS = [4.6, 8.4, 16.9, 21.4];           // spear hits on: શીખવાનું / Risk / મેહનત / સફળતા
+const stepStart = i => IMPACTS[i] - 1.5 * SP;
+const impactT = i => IMPACTS[i];
+const T0 = stepStart(0);
+const F0 = stepStart(3) + 3.95 * SP;              // final jump to the top starts
+const S_END = F0, LAND = F0 + .75;                // lands on top (lightning + beam)
+const HEADPHONES = 13.1;                          // "આપડે તો બેહરા હતા" -> headphones on
+const BEAT = 60 / BPM;
 
 // crowd
 const CROWD = (() => {
@@ -124,8 +150,8 @@ const hipFromHands = (i, p, swing = 0) => { const [hx, hy] = holdPoint(i), o = h
 function heroAt(t) {
   let pose = POSE.stand, hip, f = 1;
   if (t < S_END) {
-    const i = Math.max(0, Math.min(STEPS.length - 1, Math.floor((t - T0) / SD)));
-    const u = t - stepStart(i), x0 = standX(i), p0 = PLAT[i];
+    let i = 0; while (i < STEPS.length - 1 && t >= stepStart(i + 1)) i++;
+    const u = (t - stepStart(i)) / SP, x0 = standX(i), p0 = PLAT[i];
     if (t < T0 || u < 1.35) { pose = t < T0 ? mix(POSE.stand, POSE.look, ease(prog(t, 1, 2))) : POSE.look; hip = standHip(x0, p0, pose); }
     else if (u < 2.1) { const k = Math.sin(Math.PI * prog(u, 1.35, 2.0)); pose = mix(POSE.look, POSE.flinch, k); hip = standHip(x0 - 6 * k, p0, pose); }
     else if (u < 2.45) { pose = mix(POSE.look, POSE.crouch, ease(prog(u, 2.1, 2.45))); hip = standHip(x0, p0, pose); }
@@ -148,21 +174,21 @@ function heroAt(t) {
       hip = [lerp(a[0], b[0], k), lerp(a[1], b[1], k)];
     } else { pose = mix(POSE.crouch, POSE.look, ease(prog(u, 3.95, 4.6))); hip = standHip(standX(i + 1), PLAT[i + 1], pose); }
   } else {
-    const x0 = standX(STEPS.length), p0 = PLAT[STEPS.length], xt = edge(TOP) - 45, xEnd = 120;
-    if (t < 21.75) { pose = mix(POSE.look, POSE.crouch, ease(prog(t, S_END, 21.75))); hip = standHip(x0, p0, pose); }
-    else if (t < 22.45) {
-      const k = prog(t, 21.75, 22.45);
+    const x0 = standX(STEPS.length), p0 = PLAT[STEPS.length], xt = edge(TOP) - 45, xEnd = 150, W0 = LAND + .25, W1 = LAND + 1.1;
+    if (t < F0 + .15) { pose = POSE.crouch; hip = standHip(x0, p0, pose); }
+    else if (t < LAND) {
+      const k = prog(t, F0 + .15, LAND);
       pose = k < .5 ? mix(POSE.crouch, POSE.jump, ease(k * 2)) : mix(POSE.jump, POSE.crouch, ease(k * 2 - 1));
       const a = standHip(x0, p0, POSE.crouch), b = standHip(xt, TOP, POSE.crouch);
       hip = [lerp(a[0], b[0], ease(k)), lerp(a[1], b[1], k) + 110 * Math.sin(Math.PI * k)];
-    } else if (t < 22.8) { pose = mix(POSE.crouch, POSE.stand, ease(prog(t, 22.45, 22.8))); hip = standHip(xt, TOP, pose); }
-    else if (t < 24.3) {
-      const k = prog(t, 22.8, 24.3), w = (t - 22.8) * 9; f = -1;
+    } else if (t < W0) { pose = mix(POSE.crouch, POSE.stand, ease(prog(t, LAND, W0))); hip = standHip(xt, TOP, pose); }
+    else if (t < W1) {
+      const k = prog(t, W0, W1), w = (t - W0) * 11; f = -1;
       pose = { ...POSE.stand, torso: .12, hL: .5 * Math.sin(w), kL: -.5 * Math.max(0, -Math.cos(w)), hR: -.5 * Math.sin(w), kR: -.5 * Math.max(0, Math.cos(w)), sL: -.4 * Math.sin(w), sR: .4 * Math.sin(w) };
       hip = standHip(lerp(xt, xEnd, k), TOP, pose); hip[1] += 2 * Math.abs(Math.sin(w));
     } else {
-      pose = mix(POSE.stand, POSE.cheer, ease(prog(t, 24.3, 24.8)));
-      const hop = t > 24.8 && t < 27 ? Math.abs(Math.sin((t - 24.8) * 6)) * 14 : 0;
+      pose = mix(POSE.stand, POSE.cheer, ease(prog(t, W1, W1 + .35)));
+      const hop = t > W1 + .35 ? Math.abs(Math.sin((t - W1 - .35) * 2 * Math.PI / (BEAT * 2))) * 16 : 0;
       hip = standHip(xEnd, TOP, pose); hip[1] += hop;
     }
   }
@@ -206,8 +232,19 @@ function drawHero(t) {
   line([[nx, ny - 4], [nx, ny + 10]], 14, '#d9906c');
   if (HEAD_IMG.naturalWidth) {
     const hh = HEAD * 3.3, hw = hh * HEAD_IMG.naturalWidth / HEAD_IMG.naturalHeight;
-    ctx.save(); ctx.translate(...hc); ctx.rotate(-p.torso * .5 * f); ctx.scale(f, -1);
+    const hpK = prog(t, HEADPHONES, HEADPHONES + .25);
+    const nod = hpK > 0 ? .07 * Math.sin(t * Math.PI * 2 / BEAT) : 0;     // nods to the beat with headphones on
+    ctx.save(); ctx.translate(...hc); ctx.rotate(-p.torso * .5 * f + nod); ctx.scale(f, -1);
     ctx.drawImage(HEAD_IMG, -hw / 2, -hh * .55, hw, hh);
+    if (hpK > 0) {                                                           // red headphones = "we were deaf"
+      const sc = 1 + .5 * (1 - ease(hpK)); ctx.scale(sc, sc); ctx.globalAlpha = ease(hpK);
+      ctx.strokeStyle = '#1d1d24'; ctx.lineWidth = hw * .09; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.arc(0, hh * .02, hw * .52, Math.PI * 1.08, Math.PI * 1.92); ctx.stroke();
+      for (const sx of [-1, 1]) {
+        ctx.fillStyle = '#e63946'; ctx.beginPath(); ctx.roundRect(sx * hw * .5 - hw * .09, -hh * .02, hw * .18, hh * .3, hw * .07); ctx.fill();
+        ctx.fillStyle = '#1d1d24'; ctx.fillRect(sx * hw * .5 - hw * .03, hh * .03, hw * .06, hh * .2);
+      }
+    }
     ctx.restore();
   } else { ctx.fillStyle = '#e8a985'; ctx.beginPath(); ctx.arc(...hc, HEAD, 0, 7); ctx.fill(); }
 }
@@ -216,18 +253,20 @@ function drawHero(t) {
 function flashAmount(t) {
   let a = 0;
   STEPS.forEach((_, i) => { const d = t - impactT(i); if (d >= 0 && d < .35) a = Math.max(a, .55 * (1 - d / .35)); });
-  const L = [22.45, 26.8, 27.25, 27.5];             // landing + lightning strikes
+  const L = [LAND, LAND + .02, LAND + .45, LAND + .7];   // landing + lightning strikes
+  SHOTS.forEach(sh => { const d = t - sh[0]; if (d >= 0 && d < .12) a = Math.max(a, .3 * (1 - d / .12)); });   // flash on every fast cut
+  { const d = t - HEADPHONES; if (d >= 0 && d < .3) a = Math.max(a, .6 * (1 - d / .3)); }
   L.forEach((s, n) => { const d = t - s; if (d >= 0 && d < .4) a = Math.max(a, (n ? .9 : .5) * (1 - d / .4)); });
   return a;
 }
 function shake(t) {
   let s = 0;
   STEPS.forEach((_, i) => { const d = t - impactT(i); if (d >= 0 && d < .4) s = Math.max(s, 14 * (1 - d / .4)); });
-  [26.8, 27.25].forEach(x => { const d = t - x; if (d >= 0 && d < .6) s = Math.max(s, 20 * (1 - d / .6)); });
+  [LAND, LAND + .45].forEach(x => { const d = t - x; if (d >= 0 && d < .6) s = Math.max(s, 20 * (1 - d / .6)); });
   return [s * Math.sin(t * 97), s * Math.cos(t * 83)];
 }
 function drawLightning(t) {   // screen space bolts at the climax
-  [26.8, 27.25, 27.5].forEach((s, n) => {
+  [LAND, LAND + .45, LAND + .7].forEach((s, n) => {
     const d = t - s; if (d < 0 || d > .3) return;
     const r = rng(300 + n); let x = W * (.15 + .7 * r()), y = 0;
     ctx.save(); ctx.strokeStyle = `rgba(255,255,240,${1 - d / .3})`; ctx.shadowColor = '#ffe9a8'; ctx.shadowBlur = 30; ctx.lineWidth = 6;
@@ -247,17 +286,17 @@ function drawSpear(tip, tail) {
 }
 function spearState(i, t) {
   const s = stepStart(i), h = STEPS[i].h, th = CROWD[THROWER[i]];
-  if (t < s + .4) return null;
+  if (t < s + .4 * SP) return null;
   const x0 = th.x + 10, y0 = 130 * th.s, x1 = edge(h) - 20;
   if (t < impactT(i)) {
-    const k = prog(t, s + .4, impactT(i));
+    const k = prog(t, s + .4 * SP, impactT(i));
     const tip = [lerp(x0, x1, k), y0 + (h - y0) * (1 - Math.pow(1 - k, 2))];
     const vx = x1 - x0, vy = (h - y0) * 2 * (1 - k) + 1e-3, L = Math.hypot(vx, vy);
     return [tip, [tip[0] - vx / L * SPEAR_L, tip[1] - vy / L * SPEAR_L]];
   }
   const dt = t - impactT(i);
   let wob = 14 * Math.exp(-dt * 5) * Math.sin(dt * 45);
-  const dl = t - (stepStart(i) + 3.0);
+  const dl = t - (stepStart(i) + 3.0 * SP);
   if (dl > 0) wob += -10 * Math.exp(-dl * 4) * Math.sin(dl * 30) * (dl < 1.5);
   return [[x1, h], [x1 + SPEAR_L, h + wob]];
 }
@@ -265,15 +304,15 @@ function spearState(i, t) {
 // ---------- crowd ----------
 function drawCrowd(t) {
   CROWD.forEach((c, idx) => {
-    const k = c.s, bob = Math.abs(Math.sin(t * 5 + c.ph)) * 7 * (t < 27.5 ? 1 : .3);
+    const k = c.s, bob = Math.abs(Math.sin(t * 5 + c.ph)) * 7 * (t < LAND + .7 ? 1 : .3);
     const x = c.x, y = bob, col = c.row ? '#1d121c' : '#120a12';
     const ti = THROWER.indexOf(idx);
     let throwA = 0, hasSpear = true;
     if (ti >= 0) {
       const s = stepStart(ti);
-      if (t > s && t < s + .4) throwA = -1.1 * ease(prog(t, s, s + .3));
-      else if (t >= s + .4 && t < s + .7) throwA = lerp(1.2, 0, prog(t, s + .4, s + .7));
-      if (t >= s + .4) hasSpear = false;
+      if (t > s && t < s + .4 * SP) throwA = -1.1 * ease(prog(t, s, s + .3 * SP));
+      else if (t >= s + .4 * SP && t < s + .7 * SP) throwA = lerp(1.2, 0, prog(t, s + .4 * SP, s + .7 * SP));
+      if (t >= s + .4 * SP) hasSpear = false;
     }
     ctx.save(); ctx.translate(x, y); ctx.scale(k, k);
     ctx.strokeStyle = col; ctx.fillStyle = col; ctx.lineCap = 'round';
@@ -293,19 +332,20 @@ function drawCrowd(t) {
   });
   // speech bubbles
   [1, 5, 9, 12, 14].forEach((idx, n) => {
-    const on = Math.sin(t * 1.7 + n * 1.9) > .35 && t > .6;
-    if (!on || t > 35) return;
-    const c = CROWD[idx], cheer = t > 27.8;
-    const txt = cheer ? CHEER[n % CHEER.length] : TAUNTS[(n + Math.floor(t / 3.7)) % TAUNTS.length];
-    bubble(c.x, 175 * c.s, txt, cheer);
+    const on = Math.sin(t * 2.3 + n * 1.9) > -.25;
+    if (!on) return;
+    const c = CROWD[idx], cheer = t > LAND + 1;
+    const seg = TAUNT_TL.find(x => t >= x[0] && t < x[1]);
+    const txt = cheer ? CHEER[n % CHEER.length] : seg[2][(n + Math.floor(t / 1.3)) % seg[2].length];
+    bubble(c.x, 175 * c.s + (n % 2) * 52, txt, cheer, !cheer && t >= HEADPHONES);
   });
 }
-function bubble(x, y, txt, cheer) {
+function bubble(x, y, txt, cheer, muted) {
   ctx.save(); ctx.translate(x, y); ctx.scale(1, -1);
   const isGu = /[઀-૿]/.test(txt);
   ctx.font = isGu ? `800 26px ${GU}` : `900 19px ${EN}`;
   const w = ctx.measureText(txt).width + 22;
-  ctx.fillStyle = cheer ? 'rgba(255,214,102,.95)' : 'rgba(255,255,255,.93)';
+  ctx.fillStyle = cheer ? 'rgba(255,214,102,.95)' : muted ? 'rgba(150,150,160,.6)' : 'rgba(255,255,255,.93)';
   ctx.beginPath(); ctx.roundRect(-w / 2, -40, w, 36, 12); ctx.fill();
   ctx.beginPath(); ctx.moveTo(-6, -5); ctx.lineTo(0, 8); ctx.lineTo(6, -5); ctx.fill();
   ctx.fillStyle = cheer ? '#5a2a00' : '#b3001b'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
@@ -394,8 +434,42 @@ function camera(t) {
   let cx = 0, cy = 0, n = 10;
   for (let i = 0; i < n; i++) { const [a, b] = camTarget(Math.max(0, t - .9 * i / n)); cx += a; cy += b; }
   cx /= n; cy /= n; let z = 1.6;
-  const k = ease(prog(t, 24.6, 28.2));
-  return [lerp(cx, 430, k), lerp(cy, 880, k), lerp(z, .92, k)];
+  const k = ease(prog(t, LAND + .9, LAND + 2.6));
+  return [lerp(cx, 430, k), lerp(cy, 950, k), lerp(z, .92, k)];
+}
+// ---------- FAST CUTS: [start, end, camera(t) -> [cx, cy, zoom]] ----------
+const heroHead = t => { const { hip } = heroAt(t); return [hip[0], hip[1] + TORSO + HEAD * 1.3]; };
+const crowdCam = (x, z) => () => [x, 165, z];
+const faceCam = (z, dx = 0) => t => { const [x, y] = heroHead(t); return [x + dx, y - 30, z]; };
+const spearCam = i => t => { const s = spearState(i, t); return s ? [(s[0][0] + s[1][0]) / 2 + 40, (s[0][1] + s[1][1]) / 2, 1.8] : [500, 300, 1.8]; };
+const labelCam = i => () => [230, STEPS[i].h + 20, 2.3];
+const SHOTS = [
+  [0.00, 0.75, () => [440, 720, 1.0]],               // wide establishing
+  [0.75, 1.60, crowdCam(600, 2.4)],
+  [1.60, 2.40, faceCam(3.0)],
+  [2.40, 3.10, crowdCam(720, 3.0)],
+  ...STEPS.flatMap((_, i) => {
+    const s = stepStart(i), th = CROWD[THROWER[i]], land = s + 3.95 * SP;
+    return [
+      [s, s + .4 * SP, crowdCam(th.x + 40, 2.8)],       // thrower close-up
+      [s + .4 * SP, impactT(i), spearCam(i)],          // follow the spear
+      [impactT(i), impactT(i) + .45, labelCam(i)],     // word punch-in
+      [land, land + .45, faceCam(2.4)],                // hero lands
+    ];
+  }),
+  [10.70, 11.20, crowdCam(560, 2.6)],                // "Instagram..."
+  [11.20, 11.70, faceCam(3.0)],
+  [11.70, 12.35, crowdCam(730, 2.2)],
+  [12.60, 14.00, faceCam(3.2)],                      // "we were deaf" -> headphones
+  [14.00, 14.70, crowdCam(640, 2.6)],
+  [14.70, 15.40, faceCam(2.2, 30)],
+  [19.15, 19.70, crowdCam(650, 2.0)],                // "battlefield"
+  [19.70, 20.20, faceCam(2.8)],
+  [LAND, LAND + .55, faceCam(2.2)],                  // reached the top
+];
+function shotCam(t) {
+  for (let n = SHOTS.length - 1; n >= 0; n--) if (t >= SHOTS[n][0] && t < SHOTS[n][1]) return SHOTS[n][2](t);
+  return null;
 }
 
 // ---------- captions (screen space) ----------
@@ -408,9 +482,44 @@ function caption(c, alpha, y) {
   ctx.restore();
 }
 
+// ---------- voice-over subtitles (bold Gujarati + English) ----------
+function richLines(txt, maxW) {          // split "*word*" highlights, wrap by words
+  const words = []; let hi = false;
+  for (const part of txt.split('*')) { for (const w of part.split(' ')) if (w) words.push({ w, hi }); hi = !hi; }
+  const lines = [[]]; let width = 0; const sp = ctx.measureText(' ').width;
+  for (const o of words) {
+    o.width = ctx.measureText(o.w).width;
+    if (width + o.width > maxW && lines[lines.length - 1].length) { lines.push([]); width = 0; }
+    lines[lines.length - 1].push(o); width += o.width + sp;
+  }
+  return lines.map(l => ({ l, width: l.reduce((a, o) => a + o.width, 0) + sp * (l.length - 1), sp }));
+}
+function drawSubtitle(t) {
+  const sub = SUBS.find(x => t >= x[0] && t < x[1]); if (!sub) return;
+  const k = prog(t, sub[0], sub[0] + .14), pop = 1 + .18 * (1 - ease(k));
+  ctx.save(); ctx.translate(W / 2, 1520); ctx.scale(pop, pop); ctx.globalAlpha = k;
+  ctx.font = `800 70px ${GU}`;
+  const lines = richLines(sub[2], 940), lh = 84;
+  ctx.font = `900 34px ${EN}`; const enW = ctx.measureText(sub[3].toUpperCase()).width;
+  const boxW = Math.max(enW, ...lines.map(x => x.width)) + 70, boxH = lines.length * lh + 70;
+  ctx.fillStyle = 'rgba(10,6,16,.62)'; ctx.beginPath(); ctx.roundRect(-boxW / 2, -lh * .85, boxW, boxH, 26); ctx.fill();
+  ctx.textBaseline = 'alphabetic'; ctx.lineJoin = 'round';
+  lines.forEach((ln, r) => {
+    ctx.font = `800 70px ${GU}`; let x = -ln.width / 2;
+    for (const o of ln.l) {
+      ctx.lineWidth = 10; ctx.strokeStyle = '#000'; ctx.strokeText(o.w, x, r * lh);
+      ctx.fillStyle = o.hi ? '#ffd23f' : '#ffffff'; ctx.fillText(o.w, x, r * lh);
+      x += o.width + ln.sp;
+    }
+  });
+  ctx.font = `900 34px ${EN}`; ctx.textAlign = 'center'; ctx.fillStyle = '#ffb347';
+  ctx.fillText(sub[3].toUpperCase(), 0, lines.length * lh - 18);
+  ctx.restore();
+}
+
 // ---------- golden beam on the hero ----------
 function drawBeam(t) {
-  const k = ease(prog(t, 26.8, 28.5)); if (k <= 0) return;
+  const k = ease(prog(t, LAND, LAND + 1.2)); if (k <= 0) return;
   const [hx] = heroAt(t).hip, w = 70 + 30 * Math.sin(t * 3);
   const g = ctx.createLinearGradient(0, TOP, 0, TOP + 2600);
   g.addColorStop(0, `rgba(255,214,102,${.55 * k})`); g.addColorStop(1, 'rgba(255,214,102,0)');
@@ -422,7 +531,8 @@ function drawBeam(t) {
 // ---------- frame ----------
 function renderAt(t) {
   t = clamp(t, 0, DURATION);
-  let [cx, cy, z] = camera(t); const [kx, ky] = shake(t); cx += kx / z; cy += ky / z;
+  let [cx, cy, z] = shotCam(t) || camera(t); const [kx, ky] = shake(t); cx += kx / z; cy += ky / z;
+  z *= 1 + .045 * Math.exp(-((t % BEAT) * 10));                   // punch-in on every beat
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   drawBackground(cy, z);
   ctx.setTransform(z, 0, 0, -z, W / 2 - cx * z, H / 2 + cy * z);
@@ -435,12 +545,19 @@ function renderAt(t) {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   drawLightning(t);
   const fl = flashAmount(t); if (fl > 0) { ctx.fillStyle = `rgba(255,250,235,${fl})`; ctx.fillRect(0, 0, W, H); }
-  caption(CAPTION_1, Math.min(prog(t, .3, 1.1), 1 - prog(t, 4.8, 5.6)), 260);
-  caption(CAPTION_2, prog(t, 28.6, 29.6), 150);
-  const fade = Math.max(1 - prog(t, 0, .4), prog(t, DURATION - .6, DURATION));
+  drawSubtitle(t);
+  caption(CAPTION_2, prog(t, 25.25, 25.75), 150);
+  const fade = Math.max(1 - prog(t, 0, .12), prog(t, DURATION - .6, DURATION));
   if (fade > 0) { ctx.fillStyle = `rgba(0,0,0,${fade})`; ctx.fillRect(0, 0, W, H); }
 }
 window.renderAt = renderAt; window.DURATION = DURATION;
+// event times for make_audio.py (exported to events.json)
+window.EVENTS = {
+  duration: DURATION, bpm: BPM, headphones: HEADPHONES, land: LAND, finalJump: F0 + .15,
+  throws: STEPS.map((_, i) => stepStart(i) + .4 * SP), impacts: IMPACTS,
+  jumps: STEPS.map((_, i) => stepStart(i) + 2.45 * SP), lands: STEPS.map((_, i) => stepStart(i) + 3.95 * SP),
+  thunder: [LAND, LAND + .45], cuts: SHOTS.map(x => x[0]).filter(x => x > 0),
+};
 
 // ---------- player (with soundtrack.m4a: music + SFX) ----------
 const seek = document.getElementById('seek'), playBtn = document.getElementById('play'), status = document.getElementById('status');
