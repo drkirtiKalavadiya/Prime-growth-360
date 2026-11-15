@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Keep Shooting Reel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Inter:wght@800&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#f2f2f2; --fg:#111; --btn:#111; --btnfg:#fff; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#1a1a1a; --fg:#eee; --btn:#eee; --btnfg:#111; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font-family:system-ui, sans-serif;
+         display:flex; flex-direction:column; align-items:center; gap:12px; padding:16px; }
+  canvas { width:min(100%, 405px); aspect-ratio:9/16; height:auto; background:#fff;
+           box-shadow:0 4px 24px rgba(0,0,0,.15); border-radius:8px; }
+  .controls { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
+  button { background:var(--btn); color:var(--btnfg); border:0; border-radius:6px; padding:10px 14px;
+           font-size:14px; cursor:pointer; }
+  button:disabled { opacity:.5; cursor:default; }
+  #status { font-size:13px; min-height:1em; }
+</style>
+</head>
+<body>
+<canvas id="reel" width="720" height="1280"></canvas>
+<div class="controls">
+  <button id="play">Pause</button>
+  <button id="replay">Replay</button>
+  <button id="record">Record video (WebM)</button>
+</div>
+<div id="status"></div>
+
+<script>
+/* ------------------------------------------------------------------
+   "Getting good at something" reel: Expectation vs Reality.
+   Everything is drawn from a single time value t (seconds), so the
+   animation is deterministic and can be recorded frame-accurately.
+   Edit CONFIG to change text, timing or branding.
+------------------------------------------------------------------- */
+const CONFIG = {
+  title: 'Getting good at something:',
+  expectationLabel: 'Expectation',
+  realityLabel: 'Reality',
+  finalMessage: 'Keep shooting.',
+  brand: 'Prime Growth 360',
+  totalMisses: 1000,
+  duration: 16,          // seconds
+  fps: 30,
+};
+
+const canvas = document.getElementById('reel');
+const ctx = canvas.getContext('2d');
+const W = canvas.width, H = canvas.height;
+const HAND = '"Patrick Hand", "Comic Sans MS", cursive';
+const BOLD = 'Inter, "Helvetica Neue", Arial, sans-serif';
+
+// Panel geometry (canvas pixels)
+const P1 = { x: 48, y: 305, w: 624, h: 370 };
+const P2 = { x: 48, y: 715, w: 624, h: 370 };
+const GROUND = (p) => p.h - 38;          // ground line, panel-local
+const PLAYER_X = 95;
+const RIM = (p) => ({ x: p.w - 88, y: GROUND(p) - 132 });
+
+// ---------- helpers ----------
+function rng(seed) {                      // mulberry32 seeded random
+  return function () {
+    seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+    let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, s) => a + (b - a) * s;
+const easeOut = (s) => 1 - (1 - s) * (1 - s);
+
+// parabolic arc from a to b with apex near peakY
+function arc(a, b, peakY, s) {
+  const x = lerp(a.x, b.x, s);
+  const base = lerp(a.y, b.y, s);
+  const k = Math.min(a.y, b.y) - peakY;
+  return { x, y: base - 4 * k * s * (1 - s) };
+}
+
+function sketchRect(x, y, w, h) {         // double stroke for a hand-drawn feel
+  ctx.lineWidth = 2.4; ctx.strokeStyle = '#222';
+  ctx.strokeRect(x, y, w, h);
+  ctx.lineWidth = 1; ctx.beginPath();
+  ctx.moveTo(x - 6, y + 1.5); ctx.lineTo(x + w + 5, y - 0.5);
+  ctx.moveTo(x + w + 1, y - 5); ctx.lineTo(x + w - 1, y + h + 6);
+  ctx.moveTo(x + w + 6, y + h - 1); ctx.lineTo(x - 5, y + h + 1);
+  ctx.moveTo(x - 1, y + h + 5); ctx.lineTo(x + 1.5, y - 6);
+  ctx.stroke();
+}
+
+function text(str, x, y, size, opts = {}) {
+  ctx.font = `${opts.weight || ''} ${size}px ${opts.font || HAND}`;
+  ctx.fillStyle = opts.color || '#111';
+  ctx.textAlign = opts.align || 'left';
+  ctx.textBaseline = 'alphabetic';
+  ctx.globalAlpha = opts.alpha ?? 1;
+  ctx.fillText(str, x, y);
+  ctx.globalAlpha = 1;
+}
+
+function arrowDown(x, y1, y2) {
+  ctx.strokeStyle = '#222'; ctx.lineWidth = 1.6; ctx.beginPath();
+  ctx.moveTo(x, y1); ctx.lineTo(x, y2);
+  ctx.moveTo(x - 5, y2 - 7); ctx.lineTo(x, y2); ctx.lineTo(x + 5, y2 - 7);
+  ctx.stroke();
+}
+
+function ball(x, y, r = 10, alpha = 1) {
+  ctx.save(); ctx.globalAlpha = alpha;
+  ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
+  ctx.fillStyle = '#e8792b'; ctx.fill();
+  ctx.lineWidth = 1.5; ctx.strokeStyle = '#3a1a05'; ctx.stroke();
+  ctx.lineWidth = 1; ctx.beginPath();
+  ctx.moveTo(x - r, y); ctx.lineTo(x + r, y);
+  ctx.moveTo(x, y - r); ctx.lineTo(x, y + r);
+  ctx.moveTo(x - r * 0.65, y - r * 0.75); ctx.quadraticCurveTo(x - r * 0.2, y, x - r * 0.65, y + r * 0.75);
+  ctx.moveTo(x + r * 0.65, y - r * 0.75); ctx.quadraticCurveTo(x + r * 0.2, y, x + r * 0.65, y + r * 0.75);
+  ctx.stroke(); ctx.restore();
+}
+
+function dashedPath(points, alpha = 1) {
+  if (points.length < 2) return;
+  ctx.save(); ctx.globalAlpha = alpha; ctx.setLineDash([7, 6]);
+  ctx.strokeStyle = '#333'; ctx.lineWidth = 1.5; ctx.beginPath();
+  ctx.moveTo(points[0].x, points[0].y);
+  for (const p of points) ctx.lineTo(p.x, p.y);
+  ctx.stroke(); ctx.restore();
+}
+
+// ---------- characters & props ----------
+function player(p, shooting) {
+  const g = GROUND(p), x = PLAYER_X;
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#111';
+  // shadow
+  ctx.fillStyle = 'rgba(0,0,0,.08)'; ctx.beginPath(); ctx.ellipse(x, g, 28, 4, 0, 0, Math.PI * 2); ctx.fill();
+  // legs + shoes
+  ctx.lineWidth = 3; ctx.beginPath();
+  ctx.moveTo(x - 7, g - 50); ctx.lineTo(x - 9, g - 4);
+  ctx.moveTo(x + 7, g - 50); ctx.lineTo(x + 9, g - 4); ctx.stroke();
+  ctx.fillStyle = '#111';
+  ctx.fillRect(x - 19, g - 7, 14, 6); ctx.fillRect(x + 5, g - 7, 14, 6);
+  // shorts
+  ctx.fillStyle = '#2b4fa8'; ctx.fillRect(x - 15, g - 66, 30, 18); ctx.strokeRect(x - 15, g - 66, 30, 18);
+  // jersey
+  ctx.beginPath();
+  ctx.moveTo(x - 14, g - 118); ctx.lineTo(x + 14, g - 118);
+  ctx.lineTo(x + 16, g - 64); ctx.lineTo(x - 16, g - 64); ctx.closePath();
+  ctx.fillStyle = '#3366cc'; ctx.fill(); ctx.lineWidth = 2; ctx.stroke();
+  text('5', x, g - 88, 15, { align: 'center', color: '#fff' });
+  // head
+  const hx = x, hy = g - 136;
+  ctx.beginPath(); ctx.arc(hx, hy, 15, 0, Math.PI * 2);
+  ctx.fillStyle = '#fff'; ctx.fill(); ctx.lineWidth = 2; ctx.stroke();
+  ctx.fillStyle = '#111'; ctx.beginPath(); ctx.arc(hx + 6, hy, 1.8, 0, Math.PI * 2); ctx.fill();
+  // red cap
+  ctx.beginPath(); ctx.arc(hx, hy - 3, 16, Math.PI, 0); ctx.closePath();
+  ctx.fillStyle = '#d6332b'; ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(hx + 4, hy - 3); ctx.lineTo(hx + 27, hy - 1); ctx.lineWidth = 4;
+  ctx.strokeStyle = '#d6332b'; ctx.stroke(); ctx.strokeStyle = '#111';
+  // arms
+  ctx.lineWidth = 3; ctx.beginPath();
+  if (shooting) {
+    ctx.moveTo(x + 10, g - 114); ctx.lineTo(x + 28, g - 140); ctx.lineTo(x + 44, g - 156);
+    ctx.moveTo(x - 8, g - 114); ctx.lineTo(x + 18, g - 136); ctx.lineTo(x + 36, g - 152);
+  } else {
+    ctx.moveTo(x + 10, g - 112); ctx.lineTo(x + 26, g - 92); ctx.lineTo(x + 24, g - 100);
+    ctx.moveTo(x - 8, g - 112); ctx.lineTo(x + 6, g - 90); ctx.lineTo(x + 16, g - 96);
+  }
+  ctx.stroke();
+  if (!shooting) ball(x + 28, g - 106, 11);
+}
+const HAND_POS = (p) => ({ x: PLAYER_X + 48, y: GROUND(p) - 162 });
+
+function hoop(p, swishAlpha = 0) {
+  const g = GROUND(p), r = RIM(p);
+  ctx.strokeStyle = '#111'; ctx.lineWidth = 3; ctx.lineCap = 'round';
+  // pole
+  ctx.beginPath(); ctx.moveTo(p.w - 40, g); ctx.lineTo(p.w - 40, r.y - 20); ctx.stroke();
+  // backboard
+  ctx.fillStyle = '#fff'; ctx.lineWidth = 2;
+  ctx.fillRect(p.w - 58, r.y - 70, 22, 80); ctx.strokeRect(p.w - 58, r.y - 70, 22, 80);
+  ctx.strokeStyle = '#d6332b'; ctx.strokeRect(p.w - 52, r.y - 40, 10, 24);
+  // net
+  ctx.strokeStyle = '#555'; ctx.lineWidth = 1; ctx.beginPath();
+  for (let i = 0; i <= 5; i++) {
+    const tx = r.x - 24 + i * 9.6, bx = r.x - 15 + i * 6;
+    ctx.moveTo(tx, r.y); ctx.lineTo(bx, r.y + 34);
+    ctx.moveTo(tx, r.y); ctx.lineTo(r.x - 15 + Math.min(5, i + 1) * 6, r.y + 34);
+  }
+  ctx.moveTo(r.x - 20, r.y + 12); ctx.lineTo(r.x + 20, r.y + 12);
+  ctx.moveTo(r.x - 17, r.y + 24); ctx.lineTo(r.x + 17, r.y + 24);
+  ctx.stroke();
+  // rim
+  ctx.strokeStyle = '#d6332b'; ctx.lineWidth = 4;
+  ctx.beginPath(); ctx.moveTo(r.x - 26, r.y); ctx.lineTo(p.w - 58, r.y); ctx.stroke();
+  // swish marks
+  if (swishAlpha > 0) {
+    text('swish', r.x - 8, r.y - 64, 22, { alpha: swishAlpha });
+    ctx.save(); ctx.globalAlpha = swishAlpha; ctx.strokeStyle = '#222'; ctx.lineWidth = 1.6; ctx.beginPath();
+    ctx.moveTo(r.x - 4, r.y - 52); ctx.lineTo(r.x - 1, r.y - 34);
+    ctx.moveTo(r.x - 22, r.y - 44); ctx.lineTo(r.x - 16, r.y - 30);
+    ctx.moveTo(r.x - 46, r.y - 2); ctx.lineTo(r.x - 34, r.y);
+    ctx.moveTo(r.x - 44, r.y + 22); ctx.lineTo(r.x - 34, r.y + 14);
+    ctx.stroke(); ctx.restore();
+  }
+}
+
+// ---------- timeline ----------
+const EXP_SHOT = { start: 0.6, dur: 1.3 };
+const FIRST_LAND = 3.4, LAST_MISS = 12.8;
+const FINAL_SHOT = { start: 12.5, dur: 1.1 };
+const SHOT_FLIGHT = 0.95, DROP = 0.4;
+
+function missCount(t) {
+  if (t < FIRST_LAND) return 0;
+  if (t >= LAST_MISS) return CONFIG.totalMisses;
+  const s = (t - FIRST_LAND) / (LAST_MISS - FIRST_LAND);
+  return 1 + Math.floor((CONFIG.totalMisses - 1) * Math.pow(s, 2.6));
+}
+
+// pre-computed decorative missed shots (accelerating)
+const SHOTS = (() => {
+  const r = rng(42), shots = [];
+  let t = FIRST_LAND - SHOT_FLIGHT;
+  while (t < 12.0) {
+    const prog = clamp((t - 2.4) / 9.6, 0, 1);
+    shots.push({
+      t, prog,
+      endX: lerp(200, RIM(P2).x - 10, Math.pow(prog, 0.7)) + (r() - 0.5) * 60 * (1 - prog * 0.6),
+      hitRim: prog > 0.45 && r() < 0.75,
+      rimJitter: (r() - 0.5) * 22,
+      peak: lerp(GROUND(P2) - 190, 40 + r() * 25, Math.pow(prog, 0.8)),
+      drift: (r() - 0.5) * 40,
+    });
+    t += Math.max(0.12, 0.85 * Math.pow(1 - prog, 1.6));
+  }
+  return shots;
+})();
+
+// pile slots: a heap, bottom rows first with a bit of randomness
+const PILE = (() => {
+  const r = rng(7), slots = [], g = GROUND(P2), cx = P2.w * 0.6, R = 10;
+  const rowCounts = [20, 18, 17, 15, 13, 11, 9, 7, 5, 3, 1];
+  rowCounts.forEach((n, row) => {
+    for (let i = 0; i < n; i++) {
+      slots.push({
+        x: cx + (i - (n - 1) / 2) * (R * 1.9) + (r() - 0.5) * 3 + (row ? 0 : (i - (n - 1) / 2) * 1.2),
+        y: g - R - row * (R * 1.62) + (r() - 0.5) * 2,
+        key: row + r() * 2.2,
+      });
+    }
+  });
+  slots.sort((a, b) => a.key - b.key);
+  return slots;
+})();
+
+function pileTopAt(x, n) {                  // y where a dropped ball should land
+  let top = GROUND(P2) - 10;
+  for (let i = 0; i < n; i++) {
+    const s = PILE[i];
+    if (Math.abs(s.x - x) < 14) top = Math.min(top, s.y - 18);
+  }
+  return top;
+}
+
+function shotPath(s, p) {
+  const a = HAND_POS(p), rim = RIM(p);
+  const end = s.hitRim ? { x: rim.x + s.rimJitter, y: rim.y - 6 } : { x: s.endX, y: GROUND(p) - 40 };
+  return { a, end };
+}
+
+// ---------- scenes ----------
+function drawExpectation(t) {
+  const p = P1; ctx.save(); ctx.translate(p.x, p.y);
+  sketchRect(0, 0, p.w, p.h);
+  text(CONFIG.expectationLabel, 18, 40, 30);
+  ctx.strokeStyle = '#111'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(20, GROUND(p)); ctx.lineTo(p.w - 20, GROUND(p)); ctx.stroke();
+
+  const a = HAND_POS(p), rim = RIM(p), peak = 50;
+  const s = clamp((t - EXP_SHOT.start) / EXP_SHOT.dur, 0, 1);
+  const shooting = t >= EXP_SHOT.start;
+  if (s > 0) {
+    const pts = [];
+    for (let i = 0; i <= 40; i++) pts.push(arc(a, rim, peak, (i / 40) * s));
+    dashedPath(pts);
+    const lab = arc(a, rim, peak, 0.12);
+    text('1 shot', lab.x + 4, lab.y - 6, 22, { alpha: clamp(s * 4, 0, 1) });
+    if (s > 0.08) arrowDown(lab.x + 32, lab.y + 2, lab.y + 20);
+  }
+  hoop(p, t > EXP_SHOT.start + EXP_SHOT.dur ? 1 : 0);
+  if (s > 0 && s < 1) { const b = arc(a, rim, peak, s); ball(b.x, b.y, 11); }
+  else if (s >= 1) {                         // ball drops through the net and fades
+    const d = clamp((t - EXP_SHOT.start - EXP_SHOT.dur) / 0.6, 0, 1);
+    if (d < 1) ball(rim.x, rim.y + 10 + d * 110, 11, 1 - d);
+  }
+  player(p, shooting);
+  ctx.restore();
+}
+
+function drawReality(t) {
+  const p = P2; ctx.save(); ctx.translate(p.x, p.y);
+  sketchRect(0, 0, p.w, p.h);
+  text(CONFIG.realityLabel, 18, 40, 30);
+  ctx.strokeStyle = '#111'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(20, GROUND(p)); ctx.lineTo(p.w - 20, GROUND(p)); ctx.stroke();
+
+  const misses = missCount(t);
+  const shown = Math.min(misses, Math.round(PILE.length * Math.pow(misses / CONFIG.totalMisses, 0.75)));
+  const finalS = clamp((t - FINAL_SHOT.start) / FINAL_SHOT.dur, 0, 1);
+  hoop(p, finalS >= 1 ? 1 : 0);
+
+  for (let i = 0; i < shown; i++) ball(PILE[i].x, PILE[i].y, 10);
+
+  // in-flight missed shots + fading trails
+  let lastLaunch = -1;
+  for (const s of SHOTS) {
+    const age = t - s.t;
+    if (age < 0) break;
+    lastLaunch = s.t;
+    if (age > SHOT_FLIGHT + DROP + 0.6) continue;
+    const { a, end } = shotPath(s, p);
+    const fs = clamp(age / SHOT_FLIGHT, 0, 1);
+    const trailAlpha = age < SHOT_FLIGHT ? 0.8 : clamp(0.8 - (age - SHOT_FLIGHT) / 0.9, 0, 0.8);
+    const pts = [];
+    for (let i = 0; i <= 30; i++) pts.push(arc(a, end, s.peak, (i / 30) * fs));
+    dashedPath(pts, trailAlpha);
+    if (age < SHOT_FLIGHT) {
+      const b = arc(a, end, s.peak, fs); ball(b.x, b.y, 10);
+    } else if (age < SHOT_FLIGHT + DROP) {   // bounce off rim / fall onto the pile
+      const d = (age - SHOT_FLIGHT) / DROP;
+      const x = end.x + s.drift * d - (s.hitRim ? 30 * d : 0);
+      const landY = pileTopAt(x, shown);
+      ball(x, lerp(end.y, landY, d * d), 10);
+    }
+  }
+
+  // final made shot
+  let shooting = lastLaunch >= 0 && t - lastLaunch < 0.3;
+  if (finalS > 0) {
+    shooting = true;
+    const a = HAND_POS(p), rim = RIM(p), peak = 40;
+    const pts = [];
+    for (let i = 0; i <= 40; i++) pts.push(arc(a, rim, peak, (i / 40) * finalS));
+    dashedPath(pts);
+    if (finalS < 1) { const b = arc(a, rim, peak, finalS); ball(b.x, b.y, 10); }
+    else {
+      const d = clamp((t - FINAL_SHOT.start - FINAL_SHOT.dur) / 0.6, 0, 1);
+      if (d < 1) ball(rim.x, rim.y + 10 + d * 100, 10, 1 - d * 0.5);
+    }
+  }
+
+  // miss counter
+  if (misses > 0) {
+    const label = `${misses.toLocaleString('en-US')} ${misses === 1 ? 'miss' : 'misses'}`;
+    text(label, 150, 220, 28);
+    arrowDown(185, 233, 300);
+  }
+  player(p, shooting);
+  ctx.restore();
+}
+
+function render(t) {
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  text(CONFIG.title, W / 2, 260, 44, { font: BOLD, weight: 800, align: 'center' });
+  drawExpectation(t);
+  drawReality(t);
+  const endA = clamp((t - 14.0) / 0.8, 0, 1);
+  if (endA > 0) text(CONFIG.finalMessage, W / 2, 1165, 38, { font: BOLD, weight: 800, align: 'center', alpha: endA });
+  text(CONFIG.brand, W / 2, 1230, 20, { align: 'center', color: '#888', alpha: 1 - endA * 0.4 });
+}
+
+// ---------- playback ----------
+let start = performance.now(), paused = false, pausedAt = 0, recording = false;
+const playBtn = document.getElementById('play');
+const status = document.getElementById('status');
+
+function loop(now) {
+  if (!paused) {
+    let t = (now - start) / 1000;
+    if (t > CONFIG.duration) {
+      if (recording) t = CONFIG.duration;
+      else { start = now; t = 0; }
+    }
+    render(t);
+  }
+  requestAnimationFrame(loop);
+}
+
+playBtn.onclick = () => {
+  if (paused) { start = performance.now() - pausedAt * 1000; paused = false; playBtn.textContent = 'Pause'; }
+  else { pausedAt = (performance.now() - start) / 1000; paused = true; playBtn.textContent = 'Play'; }
+};
+document.getElementById('replay').onclick = () => {
+  start = performance.now(); paused = false; playBtn.textContent = 'Pause';
+};
+
+document.getElementById('record').onclick = async (e) => {
+  if (!window.MediaRecorder) { status.textContent = 'Recording is not supported in this browser.'; return; }
+  const btn = e.target; btn.disabled = true; recording = true;
+  const stream = canvas.captureStream(CONFIG.fps);
+  const mime = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm']
+    .find((m) => MediaRecorder.isTypeSupported(m));
+  const rec = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: 8e6 });
+  const chunks = [];
+  rec.ondataavailable = (ev) => ev.data.size && chunks.push(ev.data);
+  rec.onstop = () => {
+    const url = URL.createObjectURL(new Blob(chunks, { type: 'video/webm' }));
+    const a = document.createElement('a'); a.href = url; a.download = 'keep-shooting.webm'; a.click();
+    status.textContent = 'Saved keep-shooting.webm. Convert to MP4 with: ffmpeg -i keep-shooting.webm keep-shooting.mp4';
+    btn.disabled = false; recording = false;
+  };
+  paused = false; playBtn.textContent = 'Pause'; start = performance.now();
+  rec.start();
+  status.textContent = `Recording ${CONFIG.duration}s…`;
+  setTimeout(() => rec.stop(), CONFIG.duration * 1000 + 300);
+};
+
+// expose for headless rendering (e.g. Playwright frame export)
+window.renderFrame = render;
+window.REEL = CONFIG;
+
+document.fonts.ready.then(() => requestAnimationFrame(loop));
+</script>
+</body>
+</html>
