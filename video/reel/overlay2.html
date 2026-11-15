@@ -1,0 +1,163 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+:root{--gold:#F2C14E;--gold2:#FFE29A;--red:#FF4B4B;--green:#5BE37A;--ink:#0C0C07}
+html,body{margin:0;width:1080px;height:1920px;background:transparent;overflow:hidden}
+#stage{position:absolute;inset:0;overflow:hidden}
+.layer{position:absolute;inset:0;opacity:0}
+.guj{font-family:'Anek Gujarati','Inter Tight',sans-serif}
+.serif{font-family:'Noto Serif Gujarati',serif}
+.tag{position:absolute;left:0;right:0;top:170px;text-align:center;font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:40px;color:var(--gold2);letter-spacing:2px;text-shadow:0 3px 14px rgba(0,0,0,.8)}
+.tag span{border-top:2px solid rgba(242,193,78,.7);border-bottom:2px solid rgba(242,193,78,.7);padding:6px 26px}
+.head{position:absolute;left:40px;right:40px;text-align:center;font-family:'Noto Serif Gujarati',serif;font-weight:900;line-height:1.15;
+  background:linear-gradient(180deg,#FFF3C4 0%,#F2C14E 45%,#B9801F 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 6px 10px rgba(0,0,0,.85)) drop-shadow(0 0 2px rgba(0,0,0,.9))}
+#cap{position:absolute;left:50px;right:50px;top:1400px;text-align:center;font-family:'Anek Gujarati','Inter Tight',sans-serif;font-weight:800;font-size:84px;line-height:1.2;color:#fff;
+  text-shadow:0 0 3px #000,0 4px 0 #000,0 8px 18px rgba(0,0,0,.8)}
+#cap .w{display:inline-block;margin:0 10px;transition:none}
+#cap .w.on{color:var(--gold);text-shadow:none;filter:drop-shadow(0 4px 0 #000) drop-shadow(0 0 3px #000)}
+#flash{position:absolute;inset:0;background:#fff;opacity:0}
+#leak{position:absolute;inset:-200px;opacity:.0;background:radial-gradient(closest-side,rgba(255,150,40,.55),rgba(255,90,20,0) 70%);width:900px;height:900px;mix-blend-mode:screen}
+#dim{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,rgba(12,12,7,.55),rgba(12,12,7,.92));opacity:0}
+.bar{position:absolute;left:140px;right:140px;height:46px;border:4px solid var(--gold);border-radius:30px;padding:6px;box-sizing:border-box;background:rgba(0,0,0,.55)}
+.bar i{display:block;height:100%;border-radius:20px;background:linear-gradient(90deg,#B9801F,#FFE29A)}
+.pill{display:inline-block;padding:14px 40px;border-radius:60px;font-family:'Inter Tight',sans-serif;font-weight:900}
+.card{position:absolute;left:90px;right:90px;border-radius:44px;background:linear-gradient(160deg,rgba(30,26,14,.92),rgba(12,12,7,.95));border:3px solid var(--gold);box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 60px rgba(242,193,78,.25);text-align:center}
+.strike{position:absolute;height:12px;background:var(--red);border-radius:8px;box-shadow:0 3px 8px rgba(0,0,0,.6);transform-origin:left center}
+.bubble{position:absolute;background:#fff;color:#111;border-radius:40px;padding:22px 34px;font-family:'Anek Gujarati',sans-serif;font-weight:800;font-size:48px;box-shadow:0 14px 40px rgba(0,0,0,.5)}
+</style></head><body><div id="stage">
+<div id="leak"></div>
+<div id="scrim" style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,0) 45%,rgba(0,0,0,0) 62%,rgba(0,0,0,.55) 100%)"></div>
+<div id="dim"></div>
+
+<!-- S1 hook 0-2.2 -->
+<div class="layer" id="L1">
+  <div class="tag"><span>Chapter I · The Trap</span></div>
+  <div class="head" id="n99" style="top:330px;font-family:'Inter Tight',sans-serif;font-size:330px">99%</div>
+  <div class="head" id="n99s" style="top:700px;font-size:84px">લોકો <span style="font-family:'Inter Tight'">FAIL</span></div>
+</div>
+<!-- S2 perfection chakkar 2.2-4.75 -->
+<div class="layer" id="L2">
+  <div class="tag"><span>Chapter I · The Trap</span></div>
+  <div class="head" id="h2" style="top:280px;font-size:110px">પરફેક્શન<br><span style="font-size:90px">ના ચક્કર માં</span></div>
+</div>
+<!-- S3 waiting 4.75-11.55 -->
+<div class="layer" id="L3">
+  <div class="tag"><span>Perfection</span></div>
+  <div class="head" id="h3" style="top:260px;font-size:100px">રાહ જોશે…</div>
+  <div id="days" style="position:absolute;top:420px;left:0;right:0;text-align:center;font-family:'Inter Tight';font-weight:900;font-size:64px;color:#fff;text-shadow:0 4px 14px #000">DAY 1</div>
+  <div class="bar" style="top:530px"><i id="barfill" style="width:10%"></i></div>
+  <div id="pct" style="position:absolute;top:595px;left:0;right:0;text-align:center;font-family:'Anek Gujarati';font-weight:800;font-size:46px;color:var(--gold2);text-shadow:0 3px 10px #000">બધુજ પરફેક્ટ થશે… 99%</div>
+</div>
+<!-- S4 unperfection 11.55-17.5 -->
+<div class="layer" id="L4">
+  <div class="tag"><span>Un-Perfection</span></div>
+  <div class="head" id="h4a" style="top:270px;font-size:104px">મેદાન માં<br>ઉતરી જાય છે</div>
+  <div class="head" id="h4b" style="top:330px;font-size:150px;opacity:0">બાકાજીકી!</div>
+</div>
+<!-- S5 fail -> learn 17.5-20.8 -->
+<div class="layer" id="L5">
+  <div class="tag"><span>The Lesson</span></div>
+  <div style="position:absolute;top:270px;left:0;right:0;text-align:center">
+    <span id="failw" style="position:relative;display:inline-block;font-family:'Anek Gujarati';font-weight:800;font-size:96px;color:#fff;text-shadow:0 5px 16px #000">ફેલ થાય
+      <span class="strike" id="strk" style="left:-10px;right:-10px;top:48%"></span></span>
+  </div>
+  <div class="head" id="h5" style="top:420px;font-size:104px">શીખવા તો મળશે</div>
+</div>
+<!-- S6 question 20.8-22.4 -->
+<div class="layer" id="L6">
+  <div class="head" id="h6" style="top:1180px;font-size:112px">શું કહેવું છે<br>તમારુ?</div>
+  <div class="bubble" id="bub" style="top:1500px;left:340px">Comment કરો 👇</div>
+</div>
+<!-- S7 CTA 22.4-27.6 -->
+<div class="layer" id="L7">
+  <div class="tag" style="top:250px"><span>Ai video બનાવવા માટે</span></div>
+  <div class="card" id="card" style="top:380px;padding:60px 40px 70px">
+    <div class="pill" id="launch" style="background:var(--red);color:#fff;font-size:38px;letter-spacing:3px">● NEW LAUNCH</div>
+    <div style="font-family:'Inter Tight';font-weight:900;font-size:120px;line-height:1.05;margin-top:36px;color:#fff">Ai VIDEO<br><span style="color:var(--gold)">COURSE</span></div>
+    <div class="guj" style="font-weight:800;font-size:54px;color:#E7E7E0;margin-top:26px">લોન્ચ કરેલ છે</div>
+    <div class="pill" id="enrol" style="margin-top:46px;background:linear-gradient(180deg,#FFE29A,#F2C14E);color:var(--ink);font-size:64px;padding:22px 70px;box-shadow:0 10px 30px rgba(242,193,78,.45)">
+      <span class="guj" style="font-weight:800">Enrol કરો</span> →</div>
+  </div>
+</div>
+<!-- S8 end card 27.6-30 -->
+<div class="layer" id="L8">
+  <div style="position:absolute;inset:0;background:#0C0C07"></div>
+  <div class="tag" style="top:640px"><span>Prime Growth 360</span></div>
+  <div class="head" id="h8" style="top:740px;font-size:110px">ભલે ફેલ થાવ,<br>શરૂઆત કરો.</div>
+  <div style="position:absolute;top:1120px;left:0;right:0;text-align:center">
+    <div class="pill" id="follow" style="background:var(--gold);color:var(--ink);font-size:60px;padding:22px 80px">+ FOLLOW</div></div>
+</div>
+
+<div id="cap"></div>
+<div id="flash"></div>
+</div>
+<script>
+const CH=[ // [start,end,text]
+[0.05,1.00,"99% લોકો"],[1.00,2.00,"Social Media માં"],[2.00,2.90,"Fail થાય છે"],[2.90,4.45,"પરફેક્શન ના ચક્કર માં"],
+[5.17,5.75,"કેમ કે"],[5.80,7.00,"પરફેક્શન વાળા લોકો"],[7.00,7.90,"રાહ જોશે"],[7.90,9.25,"બધુજ પરફેક્ટ થશે"],[9.35,10.10,"પછી"],[10.19,11.45,"નવી શરૂઆત કરીશ"],
+[11.65,12.80,"જ્યારે અમારા જેવા"],[12.80,14.00,"Un Perfection લોકો"],[14.00,15.60,"મેદાન માં ઉતરી જાય છે"],[15.60,17.30,"અને બાકાજીકી બોલાવે છે"],
+[17.62,18.90,"પછી ભલે ફેલ થાય,"],[18.90,19.80,"પણ કંઈક શીખવા"],[19.80,20.60,"તો મળશે"],
+[21.00,22.25,"શું કહેવું છે તમારુ?"],
+[22.32,23.60,"બાકી આવા Ai video"],[23.60,24.60,"બનાવવા માટે અમે"],[24.60,26.40,"Ai video Course લોન્ચ કરેલ છે"],[26.40,27.55,"એમાં Enrol કરો"]];
+const CUTS=[0.7,1.4,2.2,3.0,3.7,4.75,5.45,6.2,7.0,7.8,8.6,9.4,10.3,11.55,12.1,12.75,13.4,14.0,14.6,15.2,15.65,16.4,17.5,18.1,19.4,20.1,20.8,21.6,22.4,23.2,24.0,24.8,25.6,26.4,27.6];
+const SEC=[["L1",0,2.2],["L2",2.2,4.75],["L3",4.75,11.55],["L4",11.55,17.5],["L5",17.5,20.8],["L6",20.8,22.4],["L7",22.4,27.6],["L8",27.6,30.1]];
+const $=id=>document.getElementById(id);
+const cl=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const eo=x=>1-Math.pow(1-cl(x),3);
+const back=x=>{x=cl(x);const c=1.9;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+function pop(el,t,dur=.35,from=.4){const k=back(t/dur);el.style.transform=`scale(${from+(1-from)*k})`;el.style.opacity=cl(t/(dur*.5));}
+let lastChunk=-1;
+function caption(t){
+  const cap=$('cap');let idx=CH.findIndex(c=>t>=c[0]&&t<c[1]);
+  if(t>=27.6||(t>=20.8&&t<22.4)) idx=-1;
+  if(idx<0){cap.innerHTML='';lastChunk=-1;return;}
+  const [s,e,txt]=CH[idx];const ws=txt.split(' ');
+  if(idx!==lastChunk){cap.innerHTML=ws.map(w=>`<span class="w">${w}</span>`).join(' ');lastChunk=idx;}
+  const tot=ws.reduce((a,w)=>a+w.length+2,0);let acc=0;const p=(t-s)/(e-s)*tot;
+  [...cap.children].forEach((sp,i)=>{const st=acc;acc+=ws[i].length+2;sp.classList.toggle('on',p>=st&&p<acc);});
+  const k=back((t-s)/.18);cap.style.transform=`scale(${.82+.18*k})`;cap.style.opacity=cl((t-s)/.08);
+  cap.style.top=(t>=22.4)? '1500px':'1400px';
+}
+window.setT=function(t){
+  for(const [id,a,b] of SEC){const L=$(id);const on=t>=a&&t<b;L.style.opacity=on?cl(Math.min((t-a)/.12,(b-t)/.12)):0;}
+  // L1
+  pop($('n99'),t-0.05,.4,2.2); $('n99').style.filter=`drop-shadow(0 6px 10px rgba(0,0,0,.85)) blur(${Math.max(0,6-(t-.05)*40)}px)`;
+  pop($('n99s'),t-2.0+1.0,.35,.5); // appears ~1.0
+  // L2
+  pop($('h2'),t-2.25,.4,.5);
+  // L3
+  pop($('h3'),t-6.95,.4,.5);
+  const d=t<7?1:Math.floor(1+Math.pow(cl((t-7)/4.3),2)*364); $('days').textContent='DAY '+d; $('days').style.opacity=cl((t-7)/.2);
+  const bf=10+89*eo((t-7.9)/1.2); $('barfill').style.width=Math.min(bf,99)+'%';
+  $('pct').textContent='બધુજ પરફેક્ટ થશે… '+Math.round(Math.min(bf,99))+'%';
+  $('pct').style.opacity=cl((t-7.9)/.2); document.querySelector('#L3 .bar').style.opacity=cl((t-7.9)/.2);
+  // L4
+  const a4=$('h4a'); pop(a4,t-14.0,.4,.5); if(t>=15.6) a4.style.opacity=cl(1-(t-15.6)/.1);
+  const b4=$('h4b'); pop(b4,t-15.65,.35,2.4); if(t<15.65) b4.style.opacity=0;
+  if(t>=15.65&&t<16.1){const s=(1-(t-15.65)/.45)*16;b4.style.transform+=` translate(${Math.sin(t*90)*s}px,${Math.cos(t*70)*s}px)`;}
+  // L5
+  pop($('failw'),t-17.6,.35,.5); $('strk').style.transform=`scaleX(${eo((t-18.5)/.3)})`;
+  $('failw').style.color=t>18.5?'#bbb':'#fff';
+  pop($('h5'),t-18.95,.4,.5);
+  // L6
+  pop($('h6'),t-20.9,.35,.5); pop($('bub'),t-21.5,.35,.3);
+  // L7
+  $('dim').style.opacity=t>=22.4&&t<27.6?cl((t-22.4)/.4)*.95:0;
+  const c=$('card'); pop(c,t-22.5,.5,.6);
+  $('launch').style.opacity=(t>24.6)?(Math.sin(t*10)>-.3?1:.35):cl((t-22.9)/.2);
+  const en=$('enrol'); const ep=t>26.4?1+.07*Math.sin((t-26.4)*9):1; en.style.transform=`scale(${ep})`;
+  en.style.opacity=cl((t-23.0)/.3);
+  // L8
+  pop($('h8'),t-27.75,.45,.6); pop($('follow'),t-28.3,.4,.3);
+  if(t>29.0){$('follow').style.transform=`scale(${1+.05*Math.sin((t-29)*8)})`;}
+  // leak
+  const lk=$('leak'); lk.style.opacity=t<27.6?(.35+.25*Math.sin(t*.9)):0;
+  lk.style.left=(200+500*Math.sin(t*.35))+'px'; lk.style.top=(300+700*Math.cos(t*.27))+'px';
+  // flash on cuts
+  let fl=0; for(const c of CUTS){const dt=t-c; if(dt>=0&&dt<.12) fl=Math.max(fl,.45*(1-dt/.12));} if(t<.15) fl=.8*(1-t/.15);
+  $('flash').style.opacity=fl;
+  caption(t);
+};
+</script></body></html>
