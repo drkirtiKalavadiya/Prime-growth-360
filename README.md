@@ -45,6 +45,23 @@ js/app.js           Views, forms, router and actions
 tests/              Unit tests for the business logic
 ```
 
+## Story reel: "જીવન જીવવા માટે છે" (`story/`)
+
+An animated Gujarati moral story in 9:16 reel format, synced to the voice-over in `story/audio/voiceover.mp3`. It tells the grain sack story: the birds take only what they need, while the man hoards everything. It ends with a Prime Growth 360 promo for the AI Video Creation course. All artwork is original inline SVG, using the same character, sack and birds in every scene.
+
+- **Watch:** open `story/index.html` and press ▶. Use ⏮/⏭, the scene dots or the ←/→ keys to move between scenes, Space to pause and M to mute.
+- **URL options:**
+  - `?scene=N` jumps to scene N.
+  - `?record` hides the controls, for screen recording.
+  - `?clean` leaves the ending's centre panel empty, so a logo and promo text can be added later in an editor.
+- **Export MP4 (1080×1920, 30 fps, with voice-over):**
+  ```bash
+  node story/render.mjs story/story.mp4          # add --clean for an empty logo area
+  node story/render.mjs --stills 5,40,110        # PNG stills at those seconds
+  ```
+  This needs Playwright with Chromium, and ffmpeg.
+- **Changing the timing:** `SCENES` (scene start times) and `CUES` (caption lines) at the bottom of `story/story.js` are in seconds of the voice-over. If you replace the MP3, update those numbers.
+
 ## Development
 
 No build step and no dependencies. Run the tests with Node 18+:

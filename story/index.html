@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="gu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="અનાજની ગૂણ, પક્ષીઓ અને એક માણસની એનિમેટેડ બોધકથા — ગુજરાતી વૉઇસ-ઓવર સાથે 9:16 રીલ.">
+  <meta name="theme-color" content="#0d1014">
+  <title>જીવન જીવવા માટે છે</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23a77b46'/><ellipse cx='50' cy='58' rx='22' ry='12' fill='%23e8b65a'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;600;700&family=Poppins:wght@600;700;800&display=swap">
+  <link rel="stylesheet" href="story.css">
+</head>
+<body>
+  <main class="app">
+    <div class="stage" id="stage" aria-label="એનિમેટેડ વાર્તા">
+      <div class="scenes" id="scenes"></div>
+      <p class="caption" id="caption" aria-live="polite"></p>
+      <div class="progress" aria-hidden="true"><span id="bar"></span></div>
+
+      <div class="overlay" id="overlay">
+        <h1>જીવન જીવવા માટે છે</h1>
+        <p id="overlay-sub">એક નાની વાર્તા, મોટી સમજ</p>
+        <button class="start" id="start" type="button">▶ વાર્તા શરૂ કરો</button>
+      </div>
+    </div>
+
+    <nav class="controls" aria-label="નિયંત્રણો">
+      <button type="button" id="prev" aria-label="પાછલું દ્રશ્ય" title="પાછલું (←)">⏮</button>
+      <button type="button" id="play" aria-label="ચલાવો / થોભો" title="ચલાવો / થોભો (Space)">▶</button>
+      <button type="button" id="next" aria-label="આગલું દ્રશ્ય" title="આગલું (→)">⏭</button>
+      <button type="button" id="restart" aria-label="ફરીથી શરૂ કરો" title="ફરીથી (R)">↺</button>
+      <button type="button" id="mute" aria-label="અવાજ ચાલુ / બંધ" title="અવાજ (M)">🔊</button>
+    </nav>
+    <div class="dots" id="dots" role="tablist" aria-label="દ્રશ્યો"></div>
+  </main>
+
+  <script src="story.js"></script>
+</body>
+</html>
