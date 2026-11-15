@@ -16,41 +16,43 @@
     width: 1080,
     height: 1920,
     fps: 30,
-    duration: 27,
+    duration: 24.8,   // voice-over is 23.2s, plus a hold on the end card
 
     lightX: 822,
     lightGround: 1104,
     // traffic light: red until amberAt, amber until greenAt, then green
-    amberAt: 15.0,
-    greenAt: 16.0,
+    amberAt: 11.2,
+    greenAt: 11.95,
 
     // vehicles: arrive (t0→t1) from fromX to rear-bumper x, leave at `leave`
-    supercar: { ground: 1112, from: -260, x: 304, t0: 0.0, t1: 1.25, leave: 16.3 },
-    suv:      { ground: 1168, from: -620, x: 222, t0: 4.5, t1: 5.85, leave: 16.6 },
-    sedan:    { ground: 1210, from: -560, x: 204, t0: 8.5, t1: 9.8,  leave: 16.85 },
+    supercar: { ground: 1112, from: -200, x: 304, t0: -0.4, t1: 0.9,  leave: 12.35 },
+    suv:      { ground: 1168, from: -620, x: 222, t0: 2.9,  t1: 4.25, leave: 12.65 },
+    sedan:    { ground: 1210, from: -560, x: 204, t0: 6.9,  t1: 8.2,  leave: 12.9 },
     departAccel: 1150, // px/s²
 
-    heli: { t0: 1.6, t1: 4.4, y: 520, fromX: -330, toX: 1420, mirrorGround: 985 },
+    heli: { t0: -0.2, t1: 3.2, y: 520, fromX: -330, toX: 1420, mirrorGround: 985 },
 
-    walker: { ground: 1306, t0: 13.8, x0: -60, speed: 112, scale: 1 },
+    walker: { ground: 1306, t0: 10.3, x0: -60, speed: 112, scale: 1 },
 
-    sceneCut: 20.15,   // street → wheelchair
-    endCut: 23.15,     // wheelchair → end card
+    sceneCut: 15.9,    // street → wheelchair
+    endCut: 19.55,     // wheelchair → end card
     fade: 0.3,
 
     wheelchair: { x: 540, ground: 1082, scale: 1.0 },
 
-    captionStyle: { x: 540, y: 604, size: 28, cps: 34 },
+    /* Captions are synced to the voice-over (audio/voiceover-gu.mp3).
+     * in/out = when that line is spoken. Words appear one by one across that span. */
+    captionStyle: { x: 540, y: 600, size: 62, maxWidth: 960 },
     captions: [
-      { text: '“I WISH I HAD A HELICOPTER”',       in: 2.9,  out: 5.5,  y: 712 },
-      { text: '“MAN, I WISH I HAD A LAMBORGHINI”', in: 6.0,  out: 10.55 },
-      { text: '“IF ONLY I COULD HAVE A G-WAGON”',  in: 10.9, out: 15.25 },
-      { text: '“I WISH I DIDN’T HAVE TO WALK”',    in: 15.7, out: 19.75 },
-      { text: '“IF ONLY I COULD WALK AGAIN”',      in: 20.6, out: 22.75 },
+      { text: 'કાશ મારી પાસે હેલિકોપ્ટર હોત',            in: 0.0,   out: 2.8,   y: 720 },
+      { text: 'યાર, કાશ મારી પાસે લેમ્બોર્ગિની હોત',      in: 4.35,  out: 6.89 },
+      { text: 'કાશ મારી પાસે જી-વેગન હોત',               in: 8.35,  out: 10.71 },
+      { text: 'કાશ મારે ચાલવું ન પડત',                   in: 11.98, out: 14.71 },
+      { text: 'કાશ હું ફરીથી ચાલી શકત',                  in: 17.05, out: 18.82, y: 640 },
     ],
     endCard: {
-      lines: ['CHASING SOMEONE ELSE’S LIFE', 'BLINDS YOU TO THE BEAUTY OF YOUR OWN'],
-      y: [868, 918], size: 34, start: 23.45, cps: 30, lineGap: 0.75,
+      text: 'બીજાની જિંદગી પાછળ દોડવામાં, તમે તમારી પોતાની જિંદગીની સુંદરતા ભૂલી જાઓ છો',
+      in: 19.98, out: 23.17, y: 900, size: 62,
     },
     watermark: { x: 540, y: 1746 },
   };
@@ -188,14 +190,18 @@
     }
 
     // typography (screen space, not affected by the camera)
-    T.captions.forEach((c) => G.FX.caption(ctx, t, c, T.captionStyle));
+    const S = T.captionStyle;
+    T.captions.forEach((c) => {
+      if (t < c.in - 0.1 || t > c.out + 0.95) return;
+      G.FX.wordCaption(ctx, c.text, S.x, c.y ?? S.y, {
+        size: S.size, maxWidth: S.maxWidth, t, start: c.in, end: c.out,
+        alpha: 1 - Ease.inOutQuad(prog(t, c.out + 0.55, c.out + 0.95)),
+      });
+    });
     if (t >= T.endCut) {
       const E = T.endCard;
-      E.lines.forEach((line, i) => {
-        const start = E.start + i * E.lineGap;
-        G.FX.spacedText(ctx, line, 540, E.y[i], {
-          size: E.size, reveal: (t - start) * E.cps, weight: 600, spacing: 3, glow: 10, rise: 14,
-        });
+      G.FX.wordCaption(ctx, E.text, S.x, E.y, {
+        size: E.size, maxWidth: 900, t, start: E.in, end: E.out, alpha: 1, lineHeight: 1.45, highlight: 'સુંદરતા',
       });
     }
 

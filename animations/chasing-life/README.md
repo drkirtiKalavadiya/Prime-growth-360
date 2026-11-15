@@ -35,6 +35,12 @@ bash animations/chasing-life/audio.sh out/chasing-life-silent.mp4 out/final.mp4 
 
 Requirements: Node 18+, `playwright` with Chromium, and `ffmpeg`.
 
+## Gujarati voice-over and captions
+
+- The voice-over is `audio/voiceover-gu.mp3` (23.2s). `audio.sh` mixes it in at full level and lowers the music underneath it.
+- The captions are bold Gujarati (Noto Sans Gujarati Black, in `fonts/`, under the OFL licence). They appear **word by word, in time with the voice**. The word being spoken turns gold, and «સુંદરતા» stays gold on the end card.
+- Each caption's `in`/`out` in `scene.js` is when that line is spoken. If you change the voice-over, update those times and the cut times.
+
 ## Customise
 
 Everything is in the `TIMELINE` object at the top of `scene.js`:

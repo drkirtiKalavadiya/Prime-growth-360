@@ -103,6 +103,72 @@
     });
   }
 
+  /**
+   * Bold, word-by-word caption synced to speech (works for Gujarati and
+   * other complex scripts, because whole words are shaped together, never
+   * single characters). Each word pops in when it is spoken: the time is
+   * split across words in proportion to their length. The word being
+   * spoken is tinted gold.
+   */
+  const GU_FONT = '"Noto Sans Gujarati", "Shruti", "Lohit Gujarati", ' + FONT;
+  function wordCaption(ctx, text, cx, y, o) {
+    const size = o.size || 58, lh = size * (o.lineHeight || 1.35);
+    ctx.save();
+    ctx.font = `900 ${size}px ${GU_FONT}`;
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'left';
+    const words = text.split(/\s+/).filter(Boolean);
+    const space = ctx.measureText(' ').width * 1.1;
+    const widths = words.map((w) => ctx.measureText(w).width);
+
+    // word timings, weighted by length
+    const lens = words.map((w) => [...w].length + 2);
+    const sum = lens.reduce((a, b) => a + b, 0);
+    let acc = 0;
+    const times = lens.map((l) => { const s = o.start + ((o.end - o.start) * acc) / sum; acc += l; return s; });
+
+    // greedy line wrap
+    const lines = [[]];
+    let lineW = 0;
+    words.forEach((w, i) => {
+      const add = (lines[lines.length - 1].length ? space : 0) + widths[i];
+      if (lineW + add > (o.maxWidth || 940) && lines[lines.length - 1].length) { lines.push([]); lineW = 0; }
+      lineW += (lines[lines.length - 1].length ? space : 0) + widths[i];
+      lines[lines.length - 1].push(i);
+    });
+
+    const top = y - ((lines.length - 1) * lh) / 2;
+    lines.forEach((line, li) => {
+      const total = line.reduce((a, i) => a + widths[i], 0) + space * (line.length - 1);
+      let x = cx - total / 2;
+      line.forEach((i) => {
+        const k = clamp((o.t - times[i]) / 0.18);
+        if (k > 0) {
+          const e = Ease.outCubic(k);
+          const pop = 1 + 0.07 * Math.sin(Math.PI * k);           // quick punch-in
+          const speaking = o.t >= times[i] && o.t < (times[i + 1] ?? o.end) && o.t < o.end;
+          const isHi = o.highlight && words[i].includes(o.highlight);
+          const wx = x + widths[i] / 2, wy = top + li * lh + (1 - e) * 18;
+          ctx.save();
+          ctx.globalAlpha = (o.alpha ?? 1) * e;
+          ctx.translate(wx, wy); ctx.scale(pop, pop); ctx.translate(-widths[i] / 2, 0);
+          // dark outline for punch on any background, then a soft glow
+          ctx.lineJoin = 'round';
+          ctx.lineWidth = size * 0.16;
+          ctx.strokeStyle = 'rgba(0,0,0,0.85)';
+          ctx.strokeText(words[i], 0, 0);
+          ctx.shadowColor = isHi || speaking ? 'rgba(255,200,40,0.65)' : 'rgba(255,255,255,0.35)';
+          ctx.shadowBlur = size * 0.35;
+          ctx.fillStyle = isHi ? '#FFC93C' : speaking ? '#FFE07A' : '#FFFFFF';
+          ctx.fillText(words[i], 0, 0);
+          ctx.restore();
+        }
+        x += widths[i] + space;
+      });
+    });
+    ctx.restore();
+  }
+
   /* ---------- finishing passes ---------- */
   function vignette(ctx, strength = 0.85) {
     const W = ctx.canvas.width, H = ctx.canvas.height;
@@ -147,5 +213,5 @@
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height); ctx.restore();
   }
 
-  G.FX = { clamp, lerp, prog, Ease, settle, reflection, spacedText, caption, vignette, grain, blackout, FONT };
+  G.FX = { clamp, lerp, prog, Ease, settle, reflection, spacedText, caption, wordCaption, vignette, grain, blackout, FONT };
 })(window);
