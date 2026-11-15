@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Chasing Someone Else's Life</title>
+<style>
+  :root { --bg: #050505; --fg: #e8e8e8; --muted: #8a8a8a; --accent: #3b82f6; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg);
+    font: 14px/1.4 Inter, "Helvetica Neue", Arial, sans-serif; }
+  .stage { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 12px 16px; }
+  canvas { display: block; height: calc(100vh - 90px); max-width: 100%; aspect-ratio: 9 / 16; object-fit: contain;
+    background: #000; border-radius: 10px; box-shadow: 0 0 0 1px #1d1d1d, 0 20px 60px rgba(0,0,0,.6); }
+  .bar { display: flex; align-items: center; gap: 10px; width: min(520px, 100%); }
+  button { background: #161616; color: var(--fg); border: 1px solid #2a2a2a; border-radius: 8px; padding: 7px 14px; cursor: pointer; font: inherit; }
+  button:hover { border-color: #444; }
+  input[type=range] { flex: 1; accent-color: var(--accent); }
+  .time { font-variant-numeric: tabular-nums; color: var(--muted); min-width: 92px; text-align: right; }
+  body.render .bar { display: none; }
+  body.render .stage { padding: 0; }
+  body.render canvas { height: auto; width: 1080px; border-radius: 0; box-shadow: none; }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <canvas id="reel" width="1080" height="1920"></canvas>
+    <div class="bar">
+      <button id="play">Pause</button>
+      <input id="scrub" type="range" min="0" max="27" step="0.0333" value="0" />
+      <span class="time" id="time">0.00 / 27.00s</span>
+      <button id="loop">Loop on</button>
+    </div>
+  </div>
+
+  <script src="art.js"></script>
+  <script src="effects.js"></script>
+  <script src="scene.js"></script>
+  <script>
+    (function () {
+      const { TIMELINE: T, render } = window.Reel;
+      const canvas = document.getElementById('reel');
+      const ctx = canvas.getContext('2d');
+      const params = new URLSearchParams(location.search);
+
+      // Renderer API (used by render.js through Playwright)
+      window.renderAt = (t) => { render(ctx, t); };
+      window.frameDataURL = (t, type = 'image/png') => { render(ctx, t); return canvas.toDataURL(type, 0.95); };
+
+      const ready = (document.fonts && document.fonts.ready) || Promise.resolve();
+      ready.then(() => { window.__ready = true; });
+
+      if (params.has('render')) {
+        document.body.classList.add('render');
+        render(ctx, params.has('t') ? parseFloat(params.get('t')) : 0);
+        return;
+      }
+
+      // Interactive preview
+      const playBtn = document.getElementById('play');
+      const loopBtn = document.getElementById('loop');
+      const scrub = document.getElementById('scrub');
+      const timeEl = document.getElementById('time');
+      scrub.max = T.duration;
+      let playing = true, loop = true, t = params.has('t') ? parseFloat(params.get('t')) : 0, last = null;
+
+      function tick(now) {
+        if (last !== null && playing) {
+          t += (now - last) / 1000;
+          if (t >= T.duration) { t = loop ? 0 : T.duration; if (!loop) setPlaying(false); }
+        }
+        last = now;
+        render(ctx, t);
+        scrub.value = t;
+        timeEl.textContent = `${t.toFixed(2)} / ${T.duration.toFixed(2)}s`;
+        requestAnimationFrame(tick);
+      }
+      function setPlaying(p) { playing = p; playBtn.textContent = p ? 'Pause' : 'Play'; }
+      playBtn.onclick = () => { if (!playing && t >= T.duration) t = 0; setPlaying(!playing); };
+      loopBtn.onclick = () => { loop = !loop; loopBtn.textContent = loop ? 'Loop on' : 'Loop off'; };
+      scrub.oninput = () => { t = parseFloat(scrub.value); setPlaying(false); };
+      document.addEventListener('keydown', (e) => {
+        if (e.code === 'Space') { e.preventDefault(); playBtn.click(); }
+        if (e.code === 'ArrowRight') { t = Math.min(T.duration, t + 1 / T.fps); setPlaying(false); }
+        if (e.code === 'ArrowLeft') { t = Math.max(0, t - 1 / T.fps); setPlaying(false); }
+      });
+      ready.then(() => requestAnimationFrame(tick));
+    })();
+  </script>
+</body>
+</html>
