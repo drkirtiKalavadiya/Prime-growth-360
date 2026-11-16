@@ -43,7 +43,7 @@ def main():
         if i in timing:
             start, dur = timing[i]["start"], timing[i]["duration"]
         else:
-            dur = len(re.sub(r"[^A-Za-z]", "", l["spoken"])) / LPS
+            dur = len(re.sub(r"[\W\d_]", "", l["spoken"])) / LPS
             start = cursor
             cursor += dur + l.get("gap_after", 0.45)
         typed = l.get("typed", "") or "--"

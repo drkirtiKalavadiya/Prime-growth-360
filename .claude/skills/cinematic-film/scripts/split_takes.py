@@ -54,7 +54,7 @@ def silences(path):
 
 def weight(text):
     """Rough speaking-time weight: letters, plus allowances for commas and sentence breaks inside the line."""
-    return len(re.sub(r"[^A-Za-z]", "", text)) + 6 * text.count(",") + 14 * len(re.findall(r"[.!?](?=\s+\S)", text.strip()))
+    return len(re.sub(r"[\W\d_]", "", text)) + 6 * text.count(",") + 14 * len(re.findall(r"[.!?](?=\s+\S)", text.strip()))
 
 
 def choose_cuts(cands, w, start, end, p0=0.55):
@@ -144,7 +144,7 @@ def main():
                  "-ar", "48000", "-ac", "1", str(odir / f"seg{line['id']:02d}.wav")])
             pause = sum(min(e, t1) - max(s, t0) for s, e in sil if e > t0 and s < t1)
             speech = max(0.01, (t1 - t0) - pause)
-            letters = len(re.sub(r"[^A-Za-z]", "", line["spoken"]))
+            letters = len(re.sub(r"[\W\d_]", "", line["spoken"]))
             report.append({"id": line["id"], "take": take["take"], "start": round(t0, 3), "end": round(t1, 3),
                            "speech_s": round(speech, 2), "letters": letters, "lps": round(letters / speech, 2), "text": line["text"]})
             last = i == len(lines) - 1
