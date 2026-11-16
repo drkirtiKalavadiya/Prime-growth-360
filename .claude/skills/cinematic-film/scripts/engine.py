@@ -268,8 +268,54 @@ def paint(rgb=(0, 0, 0), a=1.0, stroke=None, blur=None, aa=True):
     return p
 
 
+_COMPLEX = re.compile(r"[\u0900-\u0DFF\u0E00-\u0FFF\u1000-\u109F\u0600-\u06FF]")
+_PARA = {}
+
+
+def _needs_shaping(text):
+    """Indic, Thai, Arabic and similar scripts join letters into clusters; drawing glyph by glyph breaks them.
+    Any non-ASCII text also goes this way, so a role font without a glyph falls back to another face."""
+    return bool(_COMPLEX.search(text or "")) or any(ord(ch) > 127 for ch in (text or ""))
+
+
+def _paragraph(res, text, size, font, rgb=(0, 0, 0), a=1.0, track=0.0):
+    """A shaped one-line paragraph (HarfBuzz via SkParagraph) in the role's typeface."""
+    from skia import textlayout as tl
+    tf = res.typeface(font)
+    key = id(tf)
+    if key not in _PARA:
+        prov = tl.TypefaceFontProvider(); prov.registerTypeface(tf, f"role{key}")
+        mgr = skia.FontMgr.RefDefault()
+        for fam in ("Noto Sans", "DejaVu Sans"):     # Latin fallback for role fonts that only cover one script
+            fb = mgr.matchFamilyStyle(fam, tf.fontStyle())
+            if fb is not None:
+                prov.registerTypeface(fb, fam)
+        fc = tl.FontCollection(); fc.setDefaultFontManager(prov)
+        _PARA[key] = fc
+    ts = tl.TextStyle(); ts.setFontFamilies([f"role{key}", "Noto Sans", "DejaVu Sans"]); ts.setFontSize(size); ts.setColor(color(rgb, a))
+    if track:
+        ts.setLetterSpacing(track * size)
+    ps = tl.ParagraphStyle(); ps.setTextStyle(ts)
+    b = tl.ParagraphBuilder.make(ps, _PARA[key], skia.Unicode())
+    b.pushStyle(ts); b.addText(text)
+    para = b.Build(); para.layout(1e7)
+    return para
+
+
 def draw_text(c, res, text, x, y, size, font="serif", rgb=CREAM, a=1.0, track=0.0, align="left", reveal=None):
     """Draw text with letter tracking (em fraction). reveal=n draws only the first n characters."""
+    if _needs_shaping(text):
+        para = _paragraph(res, text, size, font, rgb, a, track)
+        total = para.LongestLine
+        x0 = x - total / 2 if align == "center" else x - total if align == "right" else x
+        top = y - para.AlphabeticBaseline
+        if reveal is not None and int(reveal) < len(text):
+            frac = max(0.0, int(reveal) / max(1, len(text)))
+            c.save(); c.clipRect(skia.Rect.MakeXYWH(x0 - size, top - size, size + total * frac, para.Height + 2 * size))
+            para.paint(c, x0, top); c.restore()
+        else:
+            para.paint(c, x0, top)
+        return total
     f = res.font(font, size)
     widths = f.getWidths(f.textToGlyphs(text))
     gap = track * size
@@ -287,6 +333,8 @@ def draw_text(c, res, text, x, y, size, font="serif", rgb=CREAM, a=1.0, track=0.
 
 
 def text_width(res, text, size, font="serif", track=0.0):
+    if _needs_shaping(text):
+        return _paragraph(res, text, size, font, track=track).LongestLine
     f = res.font(font, size)
     return sum(f.getWidths(f.textToGlyphs(text))) + track * size * (len(text) - 1)
 

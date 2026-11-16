@@ -1,5 +1,247 @@
 {
  "grade": "natural",
- "photos": [],
- "recreations": []
+ "photos": [
+  {
+   "id": "A01",
+   "file": "A01.jpg",
+   "kind": "photo",
+   "what": "Krishna portrait over a golden coastal city",
+   "source": "AI-generated illustration supplied by the film's owner",
+   "credit": "AI illustration",
+   "license": "Owner-supplied",
+   "license_ok": true
+  },
+  {
+   "id": "A02",
+   "file": "A02.jpg",
+   "kind": "photo",
+   "what": "Golden Dwaraka with harbour and ships",
+   "source": "AI-generated illustration supplied by the film's owner",
+   "credit": "AI illustration",
+   "license": "Owner-supplied",
+   "license_ok": true
+  },
+  {
+   "id": "A03",
+   "file": "A03.jpg",
+   "kind": "photo",
+   "what": "Krishna blowing a conch, Yadavas behind",
+   "source": "AI-generated illustration supplied by the film's owner",
+   "credit": "AI illustration",
+   "license": "Owner-supplied",
+   "license_ok": true
+  },
+  {
+   "id": "A04",
+   "file": "A04.jpg",
+   "kind": "photo",
+   "what": "Crown and peacock feather left on the shore",
+   "source": "AI-generated illustration supplied by the film's owner",
+   "credit": "AI illustration",
+   "license": "Owner-supplied",
+   "license_ok": true
+  },
+  {
+   "id": "A05",
+   "file": "A05.jpg",
+   "kind": "photo",
+   "what": "Storm waves hitting the city walls",
+   "source": "AI-generated illustration supplied by the film's owner",
+   "credit": "AI illustration",
+   "license": "Owner-supplied",
+   "license_ok": true
+  },
+  {
+   "id": "A06",
+   "file": "A06.jpg",
+   "kind": "photo",
+   "what": "Underwater ruined arches",
+   "source": "AI-generated illustration supplied by the film's owner",
+   "credit": "AI illustration",
+   "license": "Owner-supplied",
+   "license_ok": true
+  },
+  {
+   "id": "A07",
+   "file": "A07.jpg",
+   "kind": "photo",
+   "what": "Divers studying a carved slab",
+   "source": "AI-generated illustration supplied by the film's owner",
+   "credit": "AI illustration",
+   "license": "Owner-supplied",
+   "license_ok": true
+  },
+  {
+   "id": "A08",
+   "file": "A08.jpg",
+   "kind": "photo",
+   "what": "Anchor on the seabed (metal hook shape)",
+   "source": "AI-generated illustration supplied by the film's owner",
+   "credit": "AI illustration",
+   "license": "Owner-supplied",
+   "license_ok": true
+  },
+  {
+   "id": "A09",
+   "file": "A09.jpg",
+   "kind": "photo",
+   "what": "Submerged stone walls, a diver",
+   "source": "AI-generated illustration supplied by the film's owner",
+   "credit": "AI illustration",
+   "license": "Owner-supplied",
+   "license_ok": true
+  },
+  {
+   "id": "A10",
+   "file": "A10.jpg",
+   "kind": "photo",
+   "what": "Researchers on a ship with a sonar screen",
+   "source": "AI-generated illustration supplied by the film's owner",
+   "credit": "AI illustration",
+   "license": "Owner-supplied",
+   "license_ok": true
+  },
+  {
+   "id": "A11",
+   "file": "A11.jpg",
+   "kind": "photo",
+   "what": "Temple on the coast at sunset",
+   "source": "AI-generated illustration supplied by the film's owner",
+   "credit": "AI illustration",
+   "license": "Owner-supplied",
+   "license_ok": true
+  },
+  {
+   "id": "A12",
+   "file": "A12.jpg",
+   "kind": "photo",
+   "what": "Split view: city above, ruins below the sea",
+   "source": "AI-generated illustration supplied by the film's owner",
+   "credit": "AI illustration",
+   "license": "Owner-supplied",
+   "license_ok": true
+  },
+  {
+   "id": "A13",
+   "file": "A13.jpg",
+   "kind": "photo",
+   "what": "Krishna walking through the city",
+   "source": "AI-generated illustration supplied by the film's owner",
+   "credit": "AI illustration",
+   "license": "Owner-supplied",
+   "license_ok": true
+  },
+  {
+   "id": "A14",
+   "file": "A14.jpg",
+   "kind": "photo",
+   "what": "Old sage holding a Mahabharata page",
+   "source": "AI-generated illustration supplied by the film's owner",
+   "credit": "AI illustration",
+   "license": "Owner-supplied",
+   "license_ok": true
+  },
+  {
+   "id": "A15",
+   "file": "A15.jpg",
+   "kind": "photo",
+   "what": "Storm and lightning over the city",
+   "source": "AI-generated illustration supplied by the film's owner",
+   "credit": "AI illustration",
+   "license": "Owner-supplied",
+   "license_ok": true
+  },
+  {
+   "id": "A16",
+   "file": "A16.jpg",
+   "kind": "photo",
+   "what": "Krishna reclining under a tree",
+   "source": "AI-generated illustration supplied by the film's owner",
+   "credit": "AI illustration",
+   "license": "Owner-supplied",
+   "license_ok": true
+  },
+  {
+   "id": "A17",
+   "file": "A17.jpg",
+   "kind": "photo",
+   "what": "City breaking apart in the waves",
+   "source": "AI-generated illustration supplied by the film's owner",
+   "credit": "AI illustration",
+   "license": "Owner-supplied",
+   "license_ok": true
+  },
+  {
+   "id": "A18",
+   "file": "A18.jpg",
+   "kind": "photo",
+   "what": "Underwater arches and steps",
+   "source": "AI-generated illustration supplied by the film's owner",
+   "credit": "AI illustration",
+   "license": "Owner-supplied",
+   "license_ok": true
+  },
+  {
+   "id": "A19",
+   "file": "A19.jpg",
+   "kind": "photo",
+   "what": "Carved wheel slab on the seabed",
+   "source": "AI-generated illustration supplied by the film's owner",
+   "credit": "AI illustration",
+   "license": "Owner-supplied",
+   "license_ok": true
+  },
+  {
+   "id": "A20",
+   "file": "A20.jpg",
+   "kind": "photo",
+   "what": "Metal-hook anchor on the seabed",
+   "source": "AI-generated illustration supplied by the film's owner",
+   "credit": "AI illustration",
+   "license": "Owner-supplied",
+   "license_ok": true
+  },
+  {
+   "id": "A21",
+   "file": "A21.jpg",
+   "kind": "photo",
+   "what": "Submerged stone wall",
+   "source": "AI-generated illustration supplied by the film's owner",
+   "credit": "AI illustration",
+   "license": "Owner-supplied",
+   "license_ok": true
+  },
+  {
+   "id": "A22",
+   "file": "A22.jpg",
+   "kind": "photo",
+   "what": "Diver taking notes by ruins",
+   "source": "AI-generated illustration supplied by the film's owner",
+   "credit": "AI illustration",
+   "license": "Owner-supplied",
+   "license_ok": true
+  },
+  {
+   "id": "A23",
+   "file": "A23.jpg",
+   "kind": "photo",
+   "what": "Researcher with ASI vest at sonar screen",
+   "source": "AI-generated illustration supplied by the film's owner",
+   "credit": "AI illustration",
+   "license": "Owner-supplied",
+   "license_ok": true
+  },
+  {
+   "id": "A24",
+   "file": "A24.jpg",
+   "kind": "photo",
+   "what": "Temple on the coast at sunset",
+   "source": "AI-generated illustration supplied by the film's owner",
+   "credit": "AI illustration",
+   "license": "Owner-supplied",
+   "license_ok": true
+  }
+ ],
+ "recreations": [],
+ "ai_images": "All 24 images are AI illustrations supplied by the owner. Each one used is labelled 'AI ચિત્ર' on screen and never used as evidence of a real find or a real person."
 }

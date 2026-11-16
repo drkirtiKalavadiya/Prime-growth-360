@@ -1,10 +1,69 @@
 {
- "maps": [{
-  "name": "world",
-  "source": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json",
-  "object": "countries",
-  "projection": {"type": "equirect", "lon0": 10, "lat0": 0},
-  "drop": ["Antarctica"],
-  "places": {"Addis Ababa": [9.03, 38.74], "Bogota": [4.71, -74.07], "Hanoi": [21.03, 105.85]}
- }]
+ "maps": [
+  {
+   "name": "india",
+   "source": "assets/countries-10m.json",
+   "object": "countries",
+   "projection": {
+    "type": "albers",
+    "lon0": 76,
+    "lat0": 23,
+    "p1": 15,
+    "p2": 30
+   },
+   "keep": [
+    "India"
+   ],
+   "clip": [
+    60,
+    5,
+    98,
+    38
+   ],
+   "neighbors": {
+    "source": "assets/countries-10m.json",
+    "object": "countries",
+    "keep": [
+     "Pakistan",
+     "Nepal",
+     "Bangladesh",
+     "Sri Lanka",
+     "Bhutan",
+     "China",
+     "Myanmar",
+     "Afghanistan"
+    ],
+    "dark": [
+     "Pakistan",
+     "Nepal",
+     "Bangladesh",
+     "Sri Lanka",
+     "Bhutan",
+     "China",
+     "Myanmar",
+     "Afghanistan"
+    ],
+    "clip": [
+     60,
+     5,
+     98,
+     38
+    ]
+   },
+   "places": {
+    "Mathura": [
+     27.49,
+     77.67
+    ],
+    "Dwarka": [
+     22.24,
+     68.97
+    ],
+    "Bet Dwarka": [
+     22.45,
+     69.11
+    ]
+   }
+  }
+ ]
 }

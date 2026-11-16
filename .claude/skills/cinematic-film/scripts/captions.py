@@ -124,7 +124,10 @@ class Captions:
             y = y0 + i * size * 1.25
             cv.save(); cv.translate(0, 3 * k)
             tw = text_width(self.res, ln, size, f)
-            cv.drawString(ln, self.W / 2 - tw / 2, y, self.res.font(f, size), paint((0, 0, 0), 0.85 * a, blur=6 * k))
+            if any(ord(ch) > 127 for ch in ln):      # shaped scripts (Gujarati, Hindi...) go through draw_text
+                draw_text(cv, self.res, ln, self.W / 2, y, size, f, (0, 0, 0), 0.8 * a, 0.0, "center")
+            else:
+                cv.drawString(ln, self.W / 2 - tw / 2, y, self.res.font(f, size), paint((0, 0, 0), 0.85 * a, blur=6 * k))
             cv.restore()
             draw_text(cv, self.res, ln, self.W / 2, y, size, f, (252, 250, 245), a, 0.0, "center")
 
