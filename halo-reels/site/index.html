@@ -1,0 +1,316 @@
+<title>Halo Reels</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Halo Reels: the Claude Code skill that turns one raw talking-head clip into a premium 9:16 reel.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,400..700,0..100&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: one long dark studio — hero with the phone in its orbit, then a contact sheet of the elements, themes, price. */
+:root {
+  --night: #09080B;
+  --panel: #131116;
+  --line: rgba(244, 236, 222, .12);
+  --text: #F4EEE4;
+  --muted: #A9A094;
+  --gold: #E6C27A;
+  --gold-deep: #A87A34;
+  --gold-hi: #FFF3D4;
+  --display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --italic: 'Instrument Serif', Georgia, serif;
+  --body: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--night); color: var(--text); font-family: var(--body); font-size: 17px; line-height: 1.6;
+  -webkit-font-smoothing: antialiased; }
+body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 50; opacity: .06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+a { color: inherit; }
+img, video { max-width: 100%; display: block; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+section { padding-block: 96px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; font-variation-settings: 'SOFT' 50; letter-spacing: -0.03em; line-height: 1.02; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(44px, 7vw, 92px); }
+h2 { font-size: clamp(36px, 5vw, 64px); }
+h3 { font-size: 24px; letter-spacing: -0.02em; }
+.gold { background: linear-gradient(100deg, var(--gold-deep) 0%, var(--gold) 22%, var(--gold-hi) 30%, var(--gold) 38%, #C89A4E 60%, var(--gold) 80%);
+  background-size: 260% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: shine 7s ease-in-out infinite; }
+@keyframes shine { 0%, 100% { background-position: 100% 0; } 50% { background-position: 0 0; } }
+.it { font-family: var(--italic); font-style: italic; font-weight: 400; letter-spacing: -0.01em; }
+.eyebrow { font-size: 13px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); }
+.lead { font-size: 20px; color: var(--muted); max-width: 34em; }
+.btn { display: inline-flex; align-items: center; gap: 10px; padding: 16px 28px; border-radius: 999px; font-weight: 800; font-size: 16px;
+  text-decoration: none; transition: transform .2s ease, box-shadow .2s ease; }
+.btn-gold { color: #1A1206; background: linear-gradient(160deg, var(--gold-hi), var(--gold) 45%, var(--gold-deep));
+  box-shadow: 0 10px 40px rgba(230, 194, 122, .28), inset 0 1px 0 rgba(255, 255, 255, .6); }
+.btn-ghost { color: var(--text); border: 1px solid var(--line); background: rgba(255, 255, 255, .03); }
+.btn:hover { transform: translateY(-2px); }
+.btn:focus-visible, summary:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+/* nav */
+nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 40; backdrop-filter: blur(14px) saturate(140%); -webkit-backdrop-filter: blur(14px) saturate(140%);
+  background: rgba(9, 8, 11, .72); border-bottom: 1px solid var(--line); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 41; background: var(--night); }
+nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 16px; }
+.mark { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -0.02em; text-decoration: none; }
+.mark span { color: var(--gold); }
+nav .btn { padding: 10px 20px; font-size: 14px; }
+nav .links { display: flex; gap: 26px; font-size: 14px; font-weight: 600; color: var(--muted); }
+nav .links a { text-decoration: none; }
+nav .links a:hover { color: var(--text); }
+
+/* hero */
+.hero { overflow: hidden; padding-block: 72px 96px; background: radial-gradient(900px 640px at 78% 30%, rgba(230, 194, 122, .14), transparent 70%); }
+.hero .wrap { display: grid; grid-template-columns: 1.15fr .85fr; gap: 56px; align-items: center; }
+.hero-copy { display: flex; flex-direction: column; gap: 26px; min-width: 0; }
+.cta { display: flex; gap: 14px; flex-wrap: wrap; }
+.proof { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 14px; color: var(--muted); font-weight: 600; }
+.proof b { color: var(--text); }
+.stage { position: relative; display: flex; justify-content: center; }
+.orbit { position: absolute; inset: -12% -40%; width: 180%; height: 124%; pointer-events: none; }
+.phone { position: relative; width: min(330px, 78vw); aspect-ratio: 9 / 16; border-radius: 42px; overflow: hidden; background: #000;
+  border: 1px solid rgba(255, 255, 255, .16); box-shadow: 0 50px 120px rgba(0, 0, 0, .7), 0 0 0 10px rgba(255, 255, 255, .03); }
+.phone video, .phone img { width: 100%; height: 100%; object-fit: cover; }
+
+/* before / after */
+.ba .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+.ba-pics { position: relative; display: flex; align-items: flex-end; justify-content: center; min-height: 520px; }
+.ba-pics figure { margin: 0; position: relative; }
+.ba-pics img { border-radius: 26px; border: 1px solid var(--line); }
+.ba-before { width: 44%; transform: rotate(-6deg) translate(16%, -6%); opacity: .9; }
+.ba-after { width: 56%; box-shadow: 0 40px 90px rgba(0, 0, 0, .65); z-index: 1; }
+.ba-pics figcaption { position: absolute; top: 14px; left: 14px; font-size: 12px; font-weight: 800; letter-spacing: .18em;
+  padding: 6px 10px; border-radius: 8px; background: rgba(9, 8, 11, .7); }
+.ba-after figcaption { color: #1A1206; background: var(--gold); }
+
+/* elements */
+.head { display: flex; flex-direction: column; gap: 16px; margin-bottom: 48px; max-width: 760px; }
+.grid { display: grid; gap: 20px; }
+.els { grid-template-columns: repeat(3, 1fr); }
+.el { background: linear-gradient(160deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .015)); border: 1px solid var(--line);
+  border-radius: 24px; padding: 14px 14px 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.el img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 14px; }
+.el .row { display: flex; align-items: center; gap: 12px; padding-inline: 6px; }
+.code { font-size: 12px; font-weight: 800; letter-spacing: .14em; color: #1A1206; background: var(--gold); padding: 4px 9px; border-radius: 7px; }
+.el h3 { font-size: 20px; }
+.el p { margin: 0; padding-inline: 6px; color: var(--muted); font-size: 15px; }
+
+/* themes */
+.themes { grid-template-columns: repeat(4, 1fr); }
+.theme { margin: 0; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.theme img { width: 100%; aspect-ratio: 9 / 15; object-fit: cover; border-radius: 22px; border: 1px solid var(--line); }
+.theme figcaption { font-weight: 700; }
+.theme figcaption span { display: block; font-weight: 500; color: var(--muted); font-size: 15px; }
+
+/* steps */
+.steps { grid-template-columns: repeat(3, 1fr); counter-reset: s; }
+.step { border-top: 1px solid var(--line); padding-top: 26px; display: flex; flex-direction: column; gap: 12px; counter-increment: s; }
+.step::before { content: counter(s); font-family: var(--display); font-size: 56px; line-height: 1; color: var(--gold); }
+.step p { margin: 0; color: var(--muted); }
+.quote { margin-top: 40px; padding: 22px 26px; border-left: 2px solid var(--gold); background: rgba(255, 255, 255, .03); border-radius: 0 16px 16px 0;
+  font-family: var(--italic); font-style: italic; font-size: 24px; line-height: 1.4; }
+
+/* get + price */
+.get .wrap { display: grid; grid-template-columns: 1fr 420px; gap: 56px; align-items: start; }
+.list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; }
+.list li { display: flex; gap: 14px; }
+.list li::before { content: ""; flex: none; width: 10px; height: 10px; margin-top: 9px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 14px rgba(230, 194, 122, .7); }
+.needs { margin-top: 36px; color: var(--muted); font-size: 15px; }
+.needs h3 { color: var(--text); font-size: 18px; margin-bottom: 10px; font-family: var(--body); letter-spacing: 0; font-weight: 800; }
+.price { position: sticky; top: calc(84px + env(safe-area-inset-top, 0px)); border-radius: 30px; padding: 34px; border: 1px solid rgba(230, 194, 122, .35);
+  background: linear-gradient(160deg, rgba(230, 194, 122, .12), rgba(255, 255, 255, .02) 55%); box-shadow: 0 40px 100px rgba(0, 0, 0, .5);
+  display: flex; flex-direction: column; gap: 18px; }
+.amount { font-family: var(--display); font-weight: 650; font-size: 84px; letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums; }
+.amount small { font-family: var(--body); font-size: 16px; font-weight: 600; color: var(--muted); letter-spacing: 0; margin-left: 8px; }
+.price .btn { justify-content: center; }
+.fine { font-size: 13px; color: var(--muted); margin: 0; }
+
+/* faq */
+.faq { max-width: 820px; }
+details { border-bottom: 1px solid var(--line); padding: 20px 0; }
+summary { cursor: pointer; font-weight: 700; font-size: 19px; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+summary::after { content: "+"; color: var(--gold); font-size: 24px; line-height: 1; transition: transform .2s ease; }
+details[open] summary::after { transform: rotate(45deg); }
+details p { margin: 12px 0 0; color: var(--muted); }
+
+footer { border-top: 1px solid var(--line); padding-block: 40px; color: var(--muted); font-size: 14px; }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; }
+
+@media (max-width: 900px) {
+  section { padding-block: 72px; }
+  .hero .wrap, .ba .wrap, .get .wrap { grid-template-columns: 1fr; }
+  .els, .steps { grid-template-columns: 1fr 1fr; }
+  .themes { grid-template-columns: 1fr 1fr; }
+  .price { position: static; }
+  nav .links { display: none; }
+  .ba-pics { min-height: 0; }
+}
+@media (max-width: 560px) {
+  .els, .steps { grid-template-columns: 1fr; }
+  .lead { font-size: 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gold { animation: none; }
+  .orbit animateMotion, .orbit animateTransform { display: none; }
+  .btn { transition: none; }
+}
+</style>
+
+<nav aria-label="Main">
+  <div class="wrap">
+    <a class="mark" href="#top">Halo<span>.</span>Reels</a>
+    <div class="links"><a href="#elements">Elements</a><a href="#themes">Themes</a><a href="#how">How it works</a><a href="#faq">FAQ</a></div>
+    <a class="btn btn-gold" href="#buy">Get it · $27</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-copy">
+      <div class="eyebrow">A Claude Code skill for creators</div>
+      <h1>Your raw clip, edited like a <span class="gold it">studio</span> did it.</h1>
+      <p class="lead">Send Claude one vertical talking-head clip. Get back a cinematic 9:16 reel: frosted glass, a gold headline behind your head, captions that land on every word, motion blur and sound design. No editing program. No templates.</p>
+      <div class="cta"><a class="btn btn-gold" href="#buy">Get Halo Reels · $27</a><a class="btn btn-ghost" href="#elements">See the elements</a></div>
+      <div class="proof"><span><b>9</b> elements</span><span><b>3</b> themes + your colour</span><span>Motion blur</span><span>Built-in sound</span><span><b>−14</b> LUFS, ready for Instagram</span></div>
+    </div>
+    <div class="stage">
+      <svg class="orbit" viewBox="0 0 600 420" aria-hidden="true">
+        <defs>
+          <linearGradient id="og" x1="0" x2="1"><stop offset="0" stop-color="#E6C27A" stop-opacity=".05"/><stop offset=".5" stop-color="#FFF3D4" stop-opacity=".8"/><stop offset="1" stop-color="#E6C27A" stop-opacity=".05"/></linearGradient>
+          <filter id="glow"><feGaussianBlur stdDeviation="2.5"/></filter>
+        </defs>
+        <g transform="rotate(-14 300 210)">
+          <ellipse id="o1" cx="300" cy="210" rx="250" ry="70" fill="none" stroke="url(#og)" stroke-width="1.4"/>
+          <circle r="4" fill="#FFF3D4" filter="url(#glow)"><animateMotion dur="9s" repeatCount="indefinite" path="M50 210a250 70 0 1 0 500 0a250 70 0 1 0-500 0"/></circle>
+        </g>
+        <g transform="rotate(10 300 210)">
+          <ellipse cx="300" cy="210" rx="290" ry="60" fill="none" stroke="url(#og)" stroke-width="1"/>
+          <circle r="3" fill="#E6C27A" filter="url(#glow)"><animateMotion dur="13s" repeatCount="indefinite" path="M590 210a290 60 0 1 0-580 0a290 60 0 1 0 580 0"/></circle>
+        </g>
+      </svg>
+      <div class="phone"><video autoplay muted loop playsinline preload="metadata" poster="assets/cover.jpg" aria-label="A Halo reel made from one raw clip"><source src="assets/demo.mp4" type="video/mp4"></video></div>
+    </div>
+  </div>
+</header>
+
+<section class="ba">
+  <div class="wrap">
+    <div class="ba-pics">
+      <figure class="ba-before"><img src="assets/before.jpg" alt="The raw clip: a person talking in a plain room"><figcaption>BEFORE</figcaption></figure>
+      <figure class="ba-after"><img src="assets/after.jpg" alt="The same moment as a Halo reel: gold headline behind the head, caption and glass pills"><figcaption>AFTER</figcaption></figure>
+    </div>
+    <div class="head" style="margin:0">
+      <div class="eyebrow">Nobody touched a timeline</div>
+      <h2>Same room. Same clip. <span class="gold">Different league.</span></h2>
+      <p class="lead">Halo keeps you in your own room and grades it dark and cinematic. Graphics sit behind you, half hidden by your head, so the reel looks shot in 3D. Text arrives on the exact word you say, and nothing ever covers your face.</p>
+    </div>
+  </div>
+</section>
+
+<section id="elements">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow">The Library</div>
+      <h2>Nine elements. <span class="it gold">You</span> pick by code.</h2>
+      <p class="lead">Order by code (“Scene 1: CRD, scene 4: CNT”), start from a ready recipe, or just say “you choose”. Claude shows you one still per scene before the final render.</p>
+    </div>
+    <div class="grid els">
+      <article class="el"><img src="assets/crd.jpg" alt="Frosted glass card with three ticked rows behind the speaker's head" loading="lazy"><div class="row"><span class="code">CRD</span><h3>Glass card</h3></div><p>Real frosted glass over your room. Each row ticks on the word you say.</p></article>
+      <article class="el"><img src="assets/hed.jpg" alt="Gold serif headline behind the speaker's head" loading="lazy"><div class="row"><span class="code">HED</span><h3>Headline behind you</h3></div><p>A metallic serif word, half hidden by your head, like a magazine cover.</p></article>
+      <article class="el"><img src="assets/cap.jpg" alt="Kinetic caption with one gold accent word" loading="lazy"><div class="row"><span class="code">CAP</span><h3>Kinetic caption</h3></div><p>Words rise out of a mask, blur to sharp. One gold accent per line, light runs across it.</p></article>
+      <article class="el"><img src="assets/pnl.jpg" alt="Numbered glass panels floating in depth" loading="lazy"><div class="row"><span class="code">PNL</span><h3>Glass panels</h3></div><p>Your steps fly in from depth, numbered, with a light sweep.</p></article>
+      <article class="el"><img src="assets/cnt.jpg" alt="Counter ring showing 50,000 dollars a month" loading="lazy"><div class="row"><span class="code">CNT</span><h3>Counter</h3></div><p>Your number counts up on your word, with an arc of light that fills.</p></article>
+      <article class="el"><img src="assets/bdg.jpg" alt="Gold seal with rotating text ring" loading="lazy"><div class="row"><span class="code">BDG</span><h3>Gold seal</h3></div><p>A seal that lands with a shockwave, your words turning round it.</p></article>
+      <article class="el"><img src="assets/ntf.jpg" alt="Glass notification card at the top of the frame" loading="lazy"><div class="row"><span class="code">NTF</span><h3>Notification</h3></div><p>A glass alert drops in with a spring. Perfect for the call to action.</p></article>
+      <article class="el"><img src="assets/pil.jpg" alt="Glass pills with a gold dot under the caption" loading="lazy"><div class="row"><span class="code">PIL</span><h3>Glass pills</h3></div><p>One pill per word you list, popping in under the caption.</p></article>
+      <article class="el"><img src="assets/it.jpg" alt="Caption with an italic serif accent word" loading="lazy"><div class="row"><span class="code">+IT</span><h3>Italic accent</h3></div><p>Swap the upright gold serif for an elegant italic, for the whole reel or one line.</p></article>
+    </div>
+  </div>
+</section>
+
+<section id="themes">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow">Themes</div>
+      <h2>Three looks, or <span class="gold">yours</span>.</h2>
+      <p class="lead">One theme for the whole reel. Give Claude your hex code and the glow, rim light and accents follow your brand.</p>
+    </div>
+    <div class="grid themes">
+      <figure class="theme"><img src="assets/n1.jpg" alt="Noir theme: black and champagne gold" loading="lazy"><figcaption>N1 · Noir<span>Black and champagne gold</span></figcaption></figure>
+      <figure class="theme"><img src="assets/n2.jpg" alt="Arctic theme: night blue and ice" loading="lazy"><figcaption>N2 · Arctic<span>Night blue and ice</span></figcaption></figure>
+      <figure class="theme"><img src="assets/n3.jpg" alt="Ember theme: warm coral" loading="lazy"><figcaption>N3 · Ember<span>Warm coral</span></figcaption></figure>
+      <figure class="theme"><img src="assets/n4.jpg" alt="Brand colour theme in periwinkle blue" loading="lazy"><figcaption>N4 · Your colour<span>Any hex code</span></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow">How it works</div>
+      <h2>You direct. <span class="it gold">Claude</span> edits.</h2>
+    </div>
+    <div class="grid steps">
+      <div class="step"><h3>Drop your clip</h3><p>A vertical clip on a tripod, 10–15 seconds. Put it in a folder and open Claude Code there.</p></div>
+      <div class="step"><h3>Approve the stills</h3><p>Claude cuts you out, finds every word, plans five scenes and shows one still per scene. Change anything in one sentence.</p></div>
+      <div class="step"><h3>Post the reel</h3><p>Claude renders the finished MP4 with motion blur, transitions and sound, mixed for Instagram. Done.</p></div>
+    </div>
+    <p class="quote">“Make a halo reel from clip.mp4. Theme Noir. You choose the elements.”</p>
+  </div>
+</section>
+
+<section class="get" id="buy">
+  <div class="wrap">
+    <div>
+      <div class="head" style="margin-bottom:32px">
+        <div class="eyebrow">What you get</div>
+        <h2>Everything to make reels nobody else in your niche has.</h2>
+      </div>
+      <ul class="list">
+        <li>The Halo Reels skill for Claude Code, with every 1.x update</li>
+        <li>The Library (PDF): every element with its code, three ready recipes and an order form</li>
+        <li>The Guide (PDF): setup in 10 minutes, how to film, which clips work, how to talk to Claude</li>
+        <li>The Handbook: one ready line to fix every detail</li>
+        <li>A setup check that tells you exactly what to install</li>
+        <li>Built-in sound design you can post anywhere: every sound is synthesised, no licences</li>
+      </ul>
+      <div class="needs">
+        <h3>What you need</h3>
+        A Claude plan with Claude Code (desktop app or terminal) · a Mac, Windows or Linux computer · Python, Node.js and ffmpeg (the setup check installs them with you) · a vertical clip on a tripod.
+      </div>
+    </div>
+    <aside class="price" aria-label="Price">
+      <div class="eyebrow">Halo Reels 1.0</div>
+      <div class="amount">$27<small>one-time</small></div>
+      <ul class="list">
+        <li>Unlimited reels, personal and client work</li>
+        <li>3 themes + your brand colour</li>
+        <li>9 elements, 3 recipes</li>
+        <li>Library, Guide, Handbook</li>
+      </ul>
+      <a class="btn btn-gold" href="https://gumroad.com/" rel="noopener">Get Halo Reels</a>
+      <p class="fine">Instant download through Gumroad. One licence per person.</p>
+    </aside>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="head"><div class="eyebrow">FAQ</div><h2>Questions buyers ask.</h2></div>
+    <div class="faq">
+      <details><summary>Do I need to know how to code?</summary><p>No. Claude Code is only the name of the mode. You write to Claude in normal sentences, like “make my room brighter”.</p></details>
+      <details><summary>Do I need Premiere or CapCut?</summary><p>No. You get a finished MP4 with your voice and the sound design. Open it in any editor afterwards if you want music or a longer edit.</p></details>
+      <details><summary>How long does one reel take?</summary><p>Stills in about a minute. The final 10–15 second reel in about 6–12 minutes on a normal laptop, while you do something else.</p></details>
+      <details><summary>Which languages work?</summary><p>English and the Latin-script languages: Spanish, German, French, Portuguese, Italian, Dutch and more.</p></details>
+      <details><summary>What kind of clip works best?</summary><p>Vertical, on a tripod, seated or standing, chest-up, with a calm room behind you and soft front light. The Guide shows what to do with close-ups, horizontal clips and walking shots.</p></details>
+      <details><summary>Can I use it for clients?</summary><p>Yes. The reels are yours, for your own content and your clients’. The skill itself is licensed to one person and can’t be shared or resold.</p></details>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© Halo Reels</span>
+    <span>Claude is a trademark of Anthropic. Halo Reels is not affiliated with or endorsed by Anthropic.</span>
+  </div>
+</footer>
