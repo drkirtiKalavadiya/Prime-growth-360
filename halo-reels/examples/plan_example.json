@@ -1,0 +1,36 @@
+{
+  "theme": "noir",
+  "clip": "../tests/out/test_clip.mp4",
+  "matte_video": "../tests/out/test_matte.mp4",
+  "words": "words_example.json",
+  "start": 0,
+  "end": 10,
+  "fps": 30,
+  "output": "halo_example.mp4",
+  "language": "en",
+  "motion_blur": 3,
+  "camera": {"open_zoom": 1.14, "open": [0, 1.1], "push": 0.035, "key": {"zoom": 1.08, "in": ["@growth", "@partner"], "out": [6.15, 6.45]}},
+  "segments": [
+    {"kind": "speaker", "from": 0, "to": 2.5, "elements": [
+      {"el": "card", "kicker": "EVERY DAY", "title": "Most *creators*", "rows": [["Views", "@views"], ["Likes", "@likes"], ["Zero clients", "@zero"]]},
+      {"el": "caption", "y": 1330, "top": [["Most", "@most"], ["creators", "@creators"]], "accent": ["post", "@post"], "bottom": [["every", "@every"], ["day", "@day"]]}
+    ]},
+    {"kind": "abstract", "from": 2.5, "to": 4.5, "elements": [
+      {"el": "panels", "y": 330, "items": [["Hook", "@hook"], ["Offer", "@offer"], ["Follow up", "@follow"]]},
+      {"el": "caption", "y": 1380, "top": [["The", "@the"], ["fix", "@fix"]], "accent": ["three steps", "@three"]}
+    ]},
+    {"kind": "speaker", "from": 4.5, "to": 6.45, "elements": [
+      {"el": "headword", "top": [["I'm", "@i'm"], ["your", "@your"]], "accent": ["growth", "@growth"]},
+      {"el": "caption", "y": 1380, "accent": ["partner", "@partner"]},
+      {"el": "chips", "y": 1640, "items": [["Content", "@content"], ["Funnels", "@funnels"], ["Sales", "@sales"]]}
+    ]},
+    {"kind": "abstract", "from": 6.45, "to": 8.35, "elements": [
+      {"el": "counter", "t": "@client", "to": 50000, "prefix": "$", "label": "a month", "dur": 1.1, "y": 700},
+      {"el": "caption", "y": 1300, "top": [["One", "@one"], ["client", "@client"], ["hit", "@hit"]], "accent": ["$50k", "@fifty"], "bottom": [["a month", "@a"]]}
+    ]},
+    {"kind": "speaker", "from": 8.35, "to": 10.0, "elements": [
+      {"el": "notify", "t": "@comment", "app": "Instagram", "title": "New comment", "text": "GROWTH", "icon": "✦", "y": 170},
+      {"el": "caption", "y": 1330, "top": [["Comment", "@comment"]], "accent": ["growth", "@growth#2"], "bottom": [["for the guide", "@for"]]}
+    ]}
+  ]
+}

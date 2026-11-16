@@ -1,0 +1,5 @@
+numpy
+opencv-contrib-python-headless   # includes ximgproc (guided filter for clean hair edges)
+mediapipe>=0.10.14               # person segmentation (Apache-2.0); Linux needs libegl1 + libgles2
+# optional, for automatic word timings:
+# faster-whisper

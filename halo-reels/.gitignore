@@ -1,0 +1,7 @@
+node_modules/
+*_work/
+*.mp4
+
+__pycache__/
+dist/
+tools/_docs/

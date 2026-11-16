@@ -62,3 +62,9 @@ node --test tests/*.test.js
 `rang-reels/` is a separate prototype: premium Gujarati talking-head reels (9:16) made from one clip and one plan
 file, with Gujarati fonts, a person cut-out, an original "Kesar" look and synthesised sounds.
 See [`rang-reels/README.md`](rang-reels/README.md).
+
+## Halo Reels (product, English)
+
+`halo-reels/` is a sellable Claude Code skill: premium English talking-head reels with frosted glass, a metallic
+serif headline behind the head, kinetic captions, motion blur and synthesised sound design, plus a Library PDF,
+a Guide PDF, Gumroad listing copy and a zip builder. See [`halo-reels/README.md`](halo-reels/README.md).
