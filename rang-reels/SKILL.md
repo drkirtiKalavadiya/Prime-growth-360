@@ -15,7 +15,7 @@ Add nothing they did not pick.
 
 ## 2. Prepare
 `npm install` and `pip install -r requirements.txt` once (Linux: `apt-get install libegl1 libgles2`).
-Copy `examples/plan_demo.json` next to the clip, set `clip`, `start`, `end`, `output`, remove `matte_video`.
+Copy `examples/plan_luxe.json` (premium, default) or `examples/plan_demo.json` (kesar) next to the clip, set `clip`, `start`, `end`, `output`, remove `matte_video`.
 Run `python3 reel.py PLAN.json prep`. If `faster-whisper` is installed it prints the words with times; correct the
 spelling in `PLAN_work/words.json` from the creator's script (keep the times).
 
@@ -24,7 +24,7 @@ spelling in `PLAN_work/words.json` from the creator's script (keep the times).
 - Only the speaker's words on screen, on the word (`"@word"` references). One accent word per block, 1–3 small
   words on top. The accent is the word that carries the meaning.
 - Headword (behind the head): top words + accent only. Card: a title with one `*accent*` and 2–3 rows.
-- Toran: 3 short labels (one word each). Stamp: one or two words, near the end of a scene.
+- Toran / panels: 3 short labels (one word each). Stamp / badge: one or two words (luxe: `ring` text runs round the seal), near the end of a scene.
 - Captions in front sit low (y 1250–1400); chips under them (y ≥ 1600 when a caption is there).
 
 ## 4. Stills, then render
@@ -38,3 +38,5 @@ Then `python3 reel.py PLAN.json render`. Check a contact sheet of the MP4 (every
 - Text too big: `accent_size` on that element; long accents shrink automatically to fit.
 - Room too dark or too bright: `grade.room` (0.4–0.7).
 - No sound effects: `"sfx": "off"`.
+- Draft renders faster: `"motion_blur": 1` (final: 3).
+- Another brand colour in luxe: `"accent": "#hex"`.

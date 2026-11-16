@@ -300,18 +300,27 @@ function buildToran(spec, layer) {
   } };
 }
 
-const BUILDERS = { caption: buildTextBlock, headword: buildTextBlock, card: buildCard, ring: buildRing, glow: buildGlow,
-  stamp: buildStamp, chips: buildChips, bandhani: buildBandhani, toran: buildToran };
-const BACK_KINDS = new Set(['headword', 'card', 'ring', 'glow', 'bandhani', 'toran']);
-const Z = { bandhani: 0, glow: 1, ring: 2, toran: 3, card: 4, headword: 5, caption: 10, chips: 11, stamp: 12 };
+const THEMES = { kesar: { caption: buildTextBlock, headword: buildTextBlock, card: buildCard, ring: buildRing, glow: buildGlow,
+  stamp: buildStamp, chips: buildChips, bandhani: buildBandhani, toran: buildToran } };
+window.THEMES = THEMES;
+const BACK_KINDS = new Set(['headword', 'card', 'ring', 'glow', 'bandhani', 'toran', 'panels', 'dust']);
+const Z = { bandhani: 1, glow: 2, dust: 3, ring: 4, toran: 5, panels: 5, card: 6, headword: 7, caption: 10, chips: 11, stamp: 12, badge: 12 };
+let ROOM = null, ROOM_SRC = null, BLUR_EXIT = false;
 
 /* ---------- setup / frame ---------- */
 window.setup = async function (plan, head) {
   PLAN = plan; HEAD = head;
-  await document.fonts.load('800 100px "Baloo Bhai 2"', 'ગુજરાતી');
-  await document.fonts.load('600 100px "Noto Sans Gujarati"', 'ગુજરાતી');
+  const theme = plan.theme || 'luxe';
+  const B = Object.assign({}, THEMES.kesar, THEMES[theme] || {});
+  document.body.dataset.theme = theme;
+  if (plan.accent) document.documentElement.style.setProperty('--gold', plan.accent);
+  BLUR_EXIT = theme !== 'kesar';
+  const loads = [['800 100px "Baloo Bhai 2"'], ['600 100px "Noto Sans Gujarati"'], ['700 100px "Noto Serif Gujarati"'],
+    ['500 100px "Hind Vadodara"'], ['700 100px "Anek Gujarati Variable"']];
+  for (const [f] of loads) { try { await document.fonts.load(f, 'ગુજરાતી Ag'); } catch (e) { /* font not in this theme */ } }
   await document.fonts.ready;
   const back = document.getElementById('back'), front = document.getElementById('front');
+  ROOM = el('img', 'el room', back); ROOM.style.zIndex = 0; ROOM.style.display = 'none';
   ITEMS = [];
   for (const seg of plan.segments) {
     const specs = [];
@@ -321,9 +330,10 @@ window.setup = async function (plan, head) {
     } else {
       specs.push({ el: 'bandhani', t: seg.from, seed: 7 + plan.segments.indexOf(seg) });
     }
+    if (B.dust && seg.dust !== false) specs.push({ el: 'dust', t: seg.from, seed: 3 + plan.segments.indexOf(seg), kind: seg.kind });
     specs.push(...(seg.elements || []));
     for (const spec of specs) {
-      const b = BUILDERS[spec.el];
+      const b = B[spec.el];
       if (!b) throw new Error('unknown element: ' + spec.el);
       const layer = BACK_KINDS.has(spec.el) ? back : front;
       const it = b(spec, layer, spec.el);
@@ -350,18 +360,24 @@ function firstTime(spec, fallback) {
   return ts.length ? Math.min(...ts) : fallback;
 }
 
-window.frame = function (t) {
+/* room = file URL of the graded room frame (speaker scenes) or null */
+window.frame = async function (t, room) {
+  if (room) {
+    if (room !== ROOM_SRC) { ROOM.src = room; ROOM_SRC = room; await ROOM.decode(); }
+    ROOM.style.display = '';
+  } else ROOM.style.display = 'none';
   for (const x of ITEMS) {
     const { life } = x;
     const alive = t >= x.seg.from && t < x.seg.to && t >= life.t0 - 1e-6 && (life.out === undefined || t < life.out + 0.32);
     if (!alive) { x.it.node.style.display = 'none'; continue; }
     x.it.node.style.display = '';
     x.it.update(t, life);
-    if (life.out !== undefined && t >= life.out) {           // exit: fade and drift up
+    if (life.out !== undefined && t >= life.out) {           // exit: fade and drift up (and blur, premium themes)
       const q = easeInOut(prog(t, life.out, 0.3));
-      x.it.node.style.opacity = String((+x.it.node.style.opacity || 1) * (1 - q));
+      x.it.node.style.opacity = String((x.it.node.style.opacity === '' ? 1 : +x.it.node.style.opacity) * (1 - q));
       x.it.node.style.translate = `0 ${-40 * q}px`;
-    } else x.it.node.style.translate = '';
+      if (BLUR_EXIT) x.it.node.style.filter = `blur(${12 * q}px)`;
+    } else { x.it.node.style.translate = ''; if (BLUR_EXIT && x.it.node.dataset.keepFilter !== '1') x.it.node.style.filter = ''; }
   }
   return true;
 };

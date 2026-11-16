@@ -1,0 +1,32 @@
+{
+  "theme": "luxe",
+  "clip": "../tests/out/test_clip.mp4",
+  "matte_video": "../tests/out/test_matte.mp4",
+  "start": 0, "end": 10, "fps": 30,
+  "output": "luxe_reel.mp4",
+  "language": "gu",
+  "motion_blur": 3,
+  "camera": {"open_zoom": 1.14, "open": [0, 1.1], "push": 0.035, "key": {"zoom": 1.08, "in": [4.4, 5.4], "out": [6.3, 6.6]}},
+  "segments": [
+    {"kind": "speaker", "from": 0, "to": 2.4, "elements": [
+      {"el": "card", "kicker": "PRIME GROWTH 360", "title": "તમારો *બિઝનેસ*", "rows": [["ગ્રાહક", 0.75], ["વેચાણ", 1.15], ["નફો", 1.55]]},
+      {"el": "caption", "y": 1330, "top": [["આજે", 0.2], ["શીખો", 0.42]], "accent": ["ગ્રોથ", 0.75], "bottom": [["ના ત્રણ નિયમ", 1.35]]}
+    ]},
+    {"kind": "abstract", "from": 2.4, "to": 4.4, "elements": [
+      {"el": "panels", "y": 330, "items": [["ગ્રાહક", 2.5], ["ભરોસો", 2.75], ["વેચાણ", 3.0]]},
+      {"el": "caption", "y": 1370, "top": [["પહેલો", 2.65]], "accent": ["નિયમ", 3.05], "bottom": [["ભરોસો", 3.55], ["બનાવો", 3.75]]}
+    ]},
+    {"kind": "speaker", "from": 4.4, "to": 6.6, "elements": [
+      {"el": "headword", "top": [["હું", 4.5], ["છું", 4.62]], "accent": ["પ્રાઇમ", 4.78]},
+      {"el": "caption", "y": 1370, "top": [["તમારો", 5.05]], "accent": ["ગ્રોથ પાર્ટનર", 5.22]},
+      {"el": "chips", "y": 1660, "items": [["WhatsApp", 5.5], ["CRM", 5.75], ["ઇનવૉઇસ", 6.0]]}
+    ]},
+    {"kind": "abstract", "from": 6.6, "to": 8.4, "elements": [
+      {"el": "badge", "text": "૧૦૦%", "ring": "  ✦  મફત  ✦  સરળ", "t": 6.7, "x": 540, "y": 720, "rotate": 0},
+      {"el": "caption", "y": 1300, "top": [["બધું", 6.85]], "accent": ["મફત", 7.1], "bottom": [["અને", 7.6], ["સરળ", 7.8]]}
+    ]},
+    {"kind": "speaker", "from": 8.4, "to": 10.0, "elements": [
+      {"el": "caption", "y": 1330, "top": [["આજે", 8.5], ["જ", 8.62]], "accent": ["શરૂ કરો", 8.8], "bottom": [["લિંક બાયોમાં", 9.3]]}
+    ]}
+  ]
+}

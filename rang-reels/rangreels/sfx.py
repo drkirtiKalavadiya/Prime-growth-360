@@ -64,28 +64,57 @@ def rise(dur=0.9):
     return x / (np.abs(x).max() + 1e-9)
 
 
-SOUNDS = dict(whoosh=whoosh, pop=pop, tick=tick, thud=thud, chime=chime, rise=rise)
+def shimmer():
+    """a soft glassy sparkle for a gold accent word"""
+    n = int(SR * 1.1); t = np.arange(n) / SR
+    rnd = np.random.default_rng(21)
+    x = np.zeros(n)
+    for k in range(14):
+        f = rnd.uniform(2600, 6800); t0 = k * 0.045 + rnd.uniform(0, 0.02)
+        e = np.where(t > t0, np.exp(-(t - t0) * 9), 0)
+        x += np.sin(2 * np.pi * f * t) * e * (1 - k / 16)
+    x *= np.minimum(1, t / 0.01)
+    return x / np.abs(x).max()
+
+
+def sub():
+    """a deep cinematic hit for a badge landing"""
+    n = int(SR * 1.4); t = np.arange(n) / SR
+    x = np.sin(2 * np.pi * (48 + 40 * np.exp(-t * 8)) * t) * np.exp(-t * 2.6) + 0.25 * _lowpass(_noise(n, 13), 0.05) * np.exp(-t * 6)
+    x *= np.minimum(1, t / 0.004)
+    return x / np.abs(x).max()
+
+
+def glass():
+    """a tiny glass tap for rows and pills"""
+    n = int(SR * 0.35); t = np.arange(n) / SR
+    x = sum(a * np.sin(2 * np.pi * f * t) * np.exp(-t * d) for f, a, d in [(3150, 1, 22), (4720, .5, 30), (6300, .25, 40)])
+    x *= np.minimum(1, t / 0.0015)
+    return x / np.abs(x).max()
+
+
+SOUNDS = dict(shimmer=shimmer, sub=sub, glass=glass, whoosh=whoosh, pop=pop, tick=tick, thud=thud, chime=chime, rise=rise)
 
 
 def cues(plan):
-    """[(time, sound, gain_db)] by rule"""
+    """[(time, sound, gain_db)] by rule, per theme"""
+    lux = plan.get('theme', 'luxe') != 'kesar'
     out = [(0.0, 'rise', -14)]
     segs = plan['segments']
     for s in segs[1:]:
-        out.append((s['from'] - 0.18, 'whoosh', -11))
+        out.append((s['from'] - (0.28 if lux else 0.18), 'whoosh', -10 if lux else -11))
     for s in segs:
         for e in s.get('elements', []):
             k = e.get('el')
             if k in ('caption', 'headword') and e.get('accent'):
-                out.append((e['accent'][1] + 0.05, 'pop', -13))
-            if k == 'card':
-                out += [(r[1], 'tick', -17) for r in e.get('rows', [])]
-            if k == 'chips':
-                out += [(r[1], 'tick', -17) for r in e.get('items', [])]
-            if k == 'toran':
-                out += [(r[1] + 0.1, 'chime', -22) for r in e.get('items', [])]
-            if k == 'stamp':
-                out.append((e['t'] + 0.22, 'thud', -9))
+                out.append((e['accent'][1] + (0.3 if lux else 0.05), 'shimmer' if lux else 'pop', -21 if lux else -13))
+            for key in ('rows', 'items'):
+                if k in ('card', 'chips') and e.get(key):
+                    out += [(r[1], 'glass' if lux else 'tick', -22 if lux else -17) for r in e[key]]
+            if k in ('toran', 'panels'):
+                out += [(r[1] + 0.1, 'whoosh' if lux else 'chime', -20 if lux else -22) for r in e.get('items', [])]
+            if k in ('stamp', 'badge'):
+                out.append((e['t'] + (0.05 if lux else 0.22), 'sub' if lux else 'thud', -8 if lux else -9))
     return sorted(out)
 
 

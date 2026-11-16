@@ -9,18 +9,30 @@ from . import plan as P, prep, compose, sfx
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-def layers(plan, rplan, head, fps, frames):
+def layers(plan, rplan, head, fps, frames, looks):
     work = plan['_work']
     ldir = os.path.join(work, 'layers'); os.makedirs(ldir, exist_ok=True)
-    todo = [f for f in frames if not os.path.exists(os.path.join(ldir, f'L_{f:04d}.png'))]
-    if not todo:
+    rdir = os.path.join(work, 'room'); os.makedirs(rdir, exist_ok=True)
+    shots = []
+    for fi in frames:
+        seg = compose.segment_at(rplan, fi / fps)
+        room = None
+        if seg['kind'] == 'speaker':
+            rp = os.path.join(rdir, f'r_{fi:04d}.jpg')
+            if not os.path.exists(rp):
+                f = cv2.imread(os.path.join(work, 'frames', f'f_{fi:04d}.png'))
+                cv2.imwrite(rp, looks.room_bg(f), [cv2.IMWRITE_JPEG_QUALITY, 95])
+            room = 'file://' + rp
+        for k, t in enumerate(compose.shot_times(rplan, fi, fps)):
+            name = f'{fi:04d}_{k}'
+            if not (os.path.exists(os.path.join(ldir, f'B_{name}.jpg')) and os.path.exists(os.path.join(ldir, f'F_{name}.png'))):
+                shots.append(dict(name=name, t=round(t, 5), room=room))
+    if not shots:
         return
     clean = {k: v for k, v in rplan.items() if not k.startswith('_')}
-    job = dict(plan=clean, head=head, fps=fps, frames=todo, out=ldir)
     jp = os.path.join(work, 'layers_job.json')
-    json.dump(job, open(jp, 'w', encoding='utf-8'), ensure_ascii=False)
-    node_modules = os.path.join(HERE, 'node_modules', '@fontsource')
-    if not os.path.isdir(node_modules):
+    json.dump(dict(plan=clean, head=head, out=ldir, shots=shots), open(jp, 'w', encoding='utf-8'), ensure_ascii=False)
+    if not os.path.isdir(os.path.join(HERE, 'node_modules', '@fontsource')):
         raise SystemExit(f'fonts missing: run "npm install" in {HERE}')
     subprocess.run(['node', os.path.join(HERE, 'engine', 'render_layers.mjs'), jp], check=True)
 
@@ -29,7 +41,7 @@ def plan_hash(rplan, head):
     import hashlib
     clean = {k: v for k, v in rplan.items() if not k.startswith('_')}
     s = json.dumps([clean, head], sort_keys=True, ensure_ascii=False)
-    s += ''.join(open(os.path.join(HERE, 'engine', f), encoding='utf-8').read() for f in ('stage.js', 'stage.css', 'stage.html'))
+    s += ''.join(open(os.path.join(HERE, 'engine', f), encoding='utf-8').read() for f in ('stage.js', 'stage.css', 'stage.html', 'luxe.js', 'luxe.css'))
     return hashlib.sha1(s.encode()).hexdigest()
 
 
@@ -45,15 +57,16 @@ def main(argv):
     rplan = P.resolve(plan, words)
     head = tr['head']
     work = plan['_work']
-    h = plan_hash(rplan, head); hp = os.path.join(work, 'layers.hash')
+    looks = compose.Looks(rplan, head)
+    h = plan_hash(rplan, head) + json.dumps(rplan.get('grade', {})) + rplan.get('theme', 'luxe'); hp = os.path.join(work, 'layers.hash')
     if '--force' in rest or not os.path.exists(hp) or open(hp).read() != h:
         shutil.rmtree(os.path.join(work, 'layers'), ignore_errors=True)
+        shutil.rmtree(os.path.join(work, 'room'), ignore_errors=True)
         open(hp, 'w').write(h)
-    looks = compose.Looks(rplan, head)
     if cmd == 'stills':
         times = [float(x) for x in rest if not x.startswith('--')] or [s['from'] + 0.75 * (s['to'] - s['from']) for s in rplan['segments']]
         fis = sorted({min(n - 1, int(round(t * fps))) for t in times})
-        layers(plan, rplan, head, fps, fis)
+        layers(plan, rplan, head, fps, fis, looks)
         sdir = os.path.join(work, 'stills'); os.makedirs(sdir, exist_ok=True)
         for fi in fis:
             p = os.path.join(sdir, f's_{fi / fps:06.2f}.png')
@@ -61,7 +74,7 @@ def main(argv):
         return 0
     if cmd == 'render':
         last = min(n, int(round(rplan['segments'][-1]['to'] * fps)))
-        layers(plan, rplan, head, fps, list(range(last)))
+        layers(plan, rplan, head, fps, list(range(last)), looks)
         mixw = sfx.mix(rplan, os.path.join(work, 'audio.wav'), os.path.join(work, 'mix.wav'))
         out = P.asset(plan, plan.get('output', 'reel.mp4'))
         compose.encode(rplan, looks, work, last, fps, mixw, out)

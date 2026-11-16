@@ -70,3 +70,5 @@ body { width: 2160px; height: 1920px; position: relative; overflow: hidden; }
   font-size: 50px; line-height: 1.05; color: var(--cream); padding: 0 18px; }
 .tassel { position: absolute; left: 50%; top: 300px; width: 26px; height: 26px; margin-left: -13px; border-radius: 50%;
   background: radial-gradient(circle at 35% 35%, #FFF1C4, var(--gold) 55%, #A86A12); }
+
+.room { width: 1080px; height: 1920px; }

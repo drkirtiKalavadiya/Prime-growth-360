@@ -5,6 +5,15 @@ the speaker in their own room, darkened and warm, with a **bandhani dot mandala*
 cards and big words behind the head, **Gujarati text that lands on the spoken word**, abstract scenes with a
 **toran** and a **stamp**, synthesised sound effects and a −14 LUFS mix.
 
+**Two themes** (`"theme"` in the plan):
+- **`luxe`** (default, premium): black glass and champagne gold. Real frosted glass over the speaker's own room,
+  gold serif Gujarati (Noto Serif Gujarati) with a travelling light sweep and a feathered reveal, words that rise out
+  of a line mask with blur-to-sharp, tilted orbit lines with travelling light behind the head, gold bokeh at three
+  depths, 3D glass panels flying in from depth, a gold seal with a rotating text ring, motion blur on every frame,
+  zoom-blur + light-flash transitions, a slow camera push, split-tone grade and light leaks. `"accent": "#hex"`
+  changes the gold.
+- **`kesar`**: festive maroon and saffron with bandhani dots, toran and a rubber stamp.
+
 Everything here is original: the "Kesar" look, the elements, the code and the sounds (synthesised in
 `rangreels/sfx.py`, nothing downloaded). Fonts are Baloo Bhai 2 and Noto Sans Gujarati (SIL OFL, via npm).
 
@@ -15,8 +24,9 @@ cd rang-reels
 npm install                                   # Gujarati fonts
 pip install -r requirements.txt               # Linux: also apt-get install libegl1 libgles2
 python3 tests/make_test_clip.py tests/out     # a synthetic test clip + its matte
-python3 reel.py examples/plan_demo.json stills 1.9 3.9 6.2   # check stills first
-python3 reel.py examples/plan_demo.json render               # -> examples/demo_reel.mp4
+python3 reel.py examples/plan_luxe.json stills 1.9 3.9 6.2   # check stills first
+python3 reel.py examples/plan_luxe.json render               # -> examples/luxe_reel.mp4 (premium)
+python3 reel.py examples/plan_demo.json render               # -> examples/demo_reel.mp4 (kesar)
 ```
 
 With a real clip: set `"clip"` in the plan and leave `"matte_video"` out (the person cut-out is then made with
@@ -59,7 +69,7 @@ Times are reel seconds (0 = `start` in the clip) or word references from `words.
     {"kind": "abstract", "from": 2.4, "to": 4.4, "elements": [ ... ]} ] }
 ```
 
-Optional keys: `matte_video` (your own matte, white = person), `words`, `language` (default `gu`),
+Optional keys: `theme` (`luxe` | `kesar`), `accent`, `motion_blur` (sub-frames per frame, luxe default 3; 1 for quick drafts), `camera.push`, `matte_video` (your own matte, white = person), `words`, `language` (default `gu`),
 `grade.room` (0.5 = how dark the room gets), `sfx` (`"auto"` or `"off"`), `max_length` (default 15 s).
 
 ### Elements (library codes)
@@ -68,12 +78,12 @@ Optional keys: `matte_video` (your own matte, white = person), `words`, `languag
 |---|---|---|---|
 | **R** | `ring` | speaker, behind the head | automatic; `"ring": false` on the segment turns it off |
 | **G** | `glow` | speaker, behind everything | automatic; `"glow": false` turns it off |
-| **K** | `card` | speaker, behind the head | `title` (`*accent*`), `rows` [[label, t], ...], `x`, `y` |
+| **K** | `card` | speaker, behind the head | `title` (`*accent*`), `rows` [[label, t], ...], `kicker` (luxe), `x`, `y` |
 | **H** | `headword` | speaker, behind the head | `top` [[word, t]], `accent` [word, t] (no bottom line: the head would hide it) |
 | **C** | `caption` | any, in front | `top`, `accent`, `bottom`, `y` (centre), `accent_size`, `small_size` |
 | **P** | `chips` | any, in front | `items` [[label, t], ...], `y` |
-| **S** | `stamp` | any, in front | `text`, `t`, `x`, `y`, `rotate`, `size` |
-| **T** | `toran` | abstract, background | `items` [[label, t], ...] (3–4), `y` |
+| **S** | `stamp` / `badge` | any, in front | `text`, `t`, `x`, `y`, `rotate`, `size`; luxe: `ring` (text round the seal), `scale` |
+| **T** | `toran` / `panels` | abstract, background | `items` [[label, t], ...] (3–4), `y`; luxe draws 3D glass panels |
 | **B** | `bandhani` | abstract | automatic background of every abstract scene |
 
 Every element also takes `out` (fade out at that time); otherwise it stays until the scene cut.
@@ -85,5 +95,5 @@ Every element also takes `out` (fade out at that time); otherwise it stays until
 - Stills first, then the full render.
 
 ## Status
-Prototype. Tested end to end on the synthetic clip (10 s reel in about 4–5 minutes on 2 CPUs,
-−14.0 LUFS). Next: test on real Gujarati recordings, tune the matte on hair, more themes, a buyer PDF library.
+Prototype. Tested end to end on the synthetic clip: kesar 10 s reel in about 4–5 minutes, luxe (3× motion blur)
+in about 8 minutes on 2 CPUs; −14 LUFS. Next: test on real Gujarati recordings, tune the matte on hair, more themes, a buyer PDF library.
