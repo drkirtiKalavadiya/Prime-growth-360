@@ -5,3 +5,4 @@ node_modules/
 __pycache__/
 dist/
 tools/_docs/
+!site/assets/demo.mp4
