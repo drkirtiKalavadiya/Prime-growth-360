@@ -56,3 +56,9 @@ node --test tests/*.test.js
 ## Notes and limitations
 - Data lives in the browser's local storage, so clearing browser data erases it. Use the backup feature.
 - Each browser or device keeps its own data. Sharing data across a team in real time would need a backend, which is a possible next step.
+
+## Rang Reels (prototype)
+
+`rang-reels/` is a separate prototype: premium Gujarati talking-head reels (9:16) made from one clip and one plan
+file, with Gujarati fonts, a person cut-out, an original "Kesar" look and synthesised sounds.
+See [`rang-reels/README.md`](rang-reels/README.md).

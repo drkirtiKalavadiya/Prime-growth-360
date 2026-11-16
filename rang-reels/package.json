@@ -1,0 +1,12 @@
+{
+  "name": "rang-reels",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Gujarati-first premium talking-head reels: graphics engine (HTML, rendered in headless Chromium).",
+  "type": "module",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@fontsource/baloo-bhai-2": "5.3.0",
+    "@fontsource/noto-sans-gujarati": "5.3.0"
+  }
+}
