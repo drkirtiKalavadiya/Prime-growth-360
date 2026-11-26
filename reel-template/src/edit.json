@@ -1,0 +1,648 @@
+{
+ "_readme": "All times are in SECONDS. Change this file for each new video. y = vertical centre as fraction of height (0 top, 1 bottom). size = font px at 1080 wide. behind=true puts the text behind the speaker (needs public/subject.webm).",
+ "durationSec": 35.6,
+ "video": "input.mp4",
+ "subject": "subject.webm",
+ "music": {
+  "file": "sfx/music_pad.wav",
+  "volume": 0.1
+ },
+ "captions": [
+  {
+   "t": 2.17,
+   "w": "the"
+  },
+  {
+   "t": 2.47,
+   "w": "previous"
+  },
+  {
+   "t": 2.84,
+   "w": "listing"
+  },
+  {
+   "t": 3.24,
+   "w": "agents"
+  },
+  {
+   "t": 5.34,
+   "w": "and"
+  },
+  {
+   "t": 8.44,
+   "w": "because"
+  },
+  {
+   "t": 8.81,
+   "w": "your"
+  },
+  {
+   "t": 9.05,
+   "w": "house"
+  },
+  {
+   "t": 9.44,
+   "w": "hasn't"
+  },
+  {
+   "t": 9.74,
+   "w": "sold"
+  },
+  {
+   "t": 10.05,
+   "w": "doesn't"
+  },
+  {
+   "t": 10.68,
+   "w": "mean"
+  },
+  {
+   "t": 11.08,
+   "w": "not"
+  },
+  {
+   "t": 11.34,
+   "w": "worth"
+  },
+  {
+   "t": 11.58,
+   "w": "what"
+  },
+  {
+   "t": 11.78,
+   "w": "you're"
+  },
+  {
+   "t": 11.98,
+   "w": "asking."
+  },
+  {
+   "t": 12.7,
+   "w": "could"
+  },
+  {
+   "t": 13.0,
+   "w": "just"
+  },
+  {
+   "t": 13.25,
+   "w": "have"
+  },
+  {
+   "t": 13.55,
+   "w": "wrong"
+  },
+  {
+   "t": 13.95,
+   "w": "agent"
+  },
+  {
+   "t": 14.21,
+   "w": "the"
+  },
+  {
+   "t": 14.45,
+   "w": "wrong"
+  },
+  {
+   "t": 14.95,
+   "w": "marketing."
+  },
+  {
+   "t": 15.5,
+   "w": "You"
+  },
+  {
+   "t": 15.75,
+   "w": "heard"
+  },
+  {
+   "t": 15.95,
+   "w": "right"
+  },
+  {
+   "t": 16.55,
+   "w": "we"
+  },
+  {
+   "t": 16.75,
+   "w": "listed"
+  },
+  {
+   "t": 17.05,
+   "w": "four"
+  },
+  {
+   "t": 17.42,
+   "w": "properties"
+  },
+  {
+   "t": 18.28,
+   "w": "raised"
+  },
+  {
+   "t": 18.69,
+   "w": "the"
+  },
+  {
+   "t": 18.99,
+   "w": "prices"
+  },
+  {
+   "t": 19.42,
+   "w": "and"
+  },
+  {
+   "t": 19.72,
+   "w": "sold"
+  },
+  {
+   "t": 19.95,
+   "w": "them"
+  },
+  {
+   "t": 20.19,
+   "w": "under"
+  },
+  {
+   "t": 20.52,
+   "w": "60"
+  },
+  {
+   "t": 20.92,
+   "w": "days"
+  },
+  {
+   "t": 21.4,
+   "w": "while"
+  },
+  {
+   "t": 21.6,
+   "w": "they'd"
+  },
+  {
+   "t": 21.92,
+   "w": "previously"
+  },
+  {
+   "t": 22.56,
+   "w": "been"
+  },
+  {
+   "t": 22.76,
+   "w": "listed"
+  },
+  {
+   "t": 23.09,
+   "w": "for"
+  },
+  {
+   "t": 24.75,
+   "w": "If"
+  },
+  {
+   "t": 24.95,
+   "w": "you're"
+  },
+  {
+   "t": 25.13,
+   "w": "interested"
+  },
+  {
+   "t": 25.56,
+   "w": "in"
+  },
+  {
+   "t": 25.75,
+   "w": "getting"
+  },
+  {
+   "t": 25.99,
+   "w": "your"
+  },
+  {
+   "t": 26.26,
+   "w": "house"
+  },
+  {
+   "t": 26.59,
+   "w": "sold"
+  },
+  {
+   "t": 27.23,
+   "w": "give"
+  },
+  {
+   "t": 27.49,
+   "w": "me"
+  },
+  {
+   "t": 27.83,
+   "w": "call"
+  },
+  {
+   "t": 28.46,
+   "w": "at"
+  },
+  {
+   "t": 31.87,
+   "w": "or"
+  },
+  {
+   "t": 32.13,
+   "w": "message"
+  },
+  {
+   "t": 32.6,
+   "w": "me"
+  },
+  {
+   "t": 33.1,
+   "w": "and"
+  },
+  {
+   "t": 33.37,
+   "w": "send"
+  },
+  {
+   "t": 33.75,
+   "w": "this"
+  },
+  {
+   "t": 33.95,
+   "w": "to"
+  },
+  {
+   "t": 34.17,
+   "w": "somebody"
+  },
+  {
+   "t": 34.4,
+   "w": "who"
+  },
+  {
+   "t": 34.6,
+   "w": "to"
+  },
+  {
+   "t": 34.8,
+   "w": "their"
+  },
+  {
+   "t": 35.0,
+   "w": "house"
+  },
+  {
+   "t": 35.2,
+   "w": "sold.",
+   "end": 35.6
+  }
+ ],
+ "headlines": [
+  {
+   "start": 0.0,
+   "end": 2.05,
+   "lines": [
+    {
+     "text": "Last",
+     "color": "white",
+     "size": 125,
+     "y": 0.29,
+     "behind": true
+    },
+    {
+     "text": "year",
+     "color": "orange",
+     "size": 306,
+     "y": 0.365,
+     "behind": true
+    },
+    {
+     "text": "sold",
+     "color": "white",
+     "size": 143,
+     "y": 0.47,
+     "in": 0.45,
+     "out": 1.15
+    },
+    {
+     "text": "four",
+     "color": "white",
+     "size": 195,
+     "y": 0.475,
+     "in": 1.2
+    },
+    {
+     "text": "properties",
+     "color": "white",
+     "size": 88,
+     "y": 0.535,
+     "in": 1.25
+    }
+   ]
+  },
+  {
+   "start": 3.9,
+   "end": 5.15,
+   "lines": [
+    {
+     "text": "just",
+     "color": "white",
+     "size": 109,
+     "y": 0.37,
+     "behind": true
+    },
+    {
+     "text": "couldn't",
+     "color": "white",
+     "size": 196,
+     "y": 0.44,
+     "behind": true
+    },
+    {
+     "text": "sell!",
+     "color": "orange",
+     "size": 195,
+     "y": 0.655
+    }
+   ]
+  },
+  {
+   "start": 5.7,
+   "end": 6.8,
+   "lines": [
+    {
+     "text": "the",
+     "color": "white",
+     "size": 75,
+     "y": 0.545
+    },
+    {
+     "text": "raised",
+     "color": "white",
+     "size": 208,
+     "y": 0.585
+    },
+    {
+     "text": "the price",
+     "color": "white",
+     "size": 91,
+     "y": 0.635
+    }
+   ]
+  },
+  {
+   "start": 7.0,
+   "end": 8.3,
+   "lines": [
+    {
+     "text": "every",
+     "color": "orange",
+     "size": 228,
+     "y": 0.33,
+     "behind": true
+    },
+    {
+     "text": "single",
+     "color": "white",
+     "size": 228,
+     "y": 0.44,
+     "in": 7.25
+    },
+    {
+     "text": "time",
+     "color": "white",
+     "size": 228,
+     "y": 0.53,
+     "in": 7.9
+    }
+   ]
+  },
+  {
+   "start": 23.3,
+   "end": 24.7,
+   "lines": [
+    {
+     "text": "six",
+     "color": "orange",
+     "size": 325,
+     "y": 0.295,
+     "behind": true
+    },
+    {
+     "text": "months",
+     "color": "white",
+     "size": 156,
+     "y": 0.39,
+     "behind": true
+    },
+    {
+     "text": "one",
+     "color": "white",
+     "size": 195,
+     "y": 0.475,
+     "in": 23.75
+    },
+    {
+     "text": "year",
+     "color": "white",
+     "size": 214,
+     "y": 0.56,
+     "in": 23.85
+    }
+   ]
+  }
+ ],
+ "phone": {
+  "start": 28.73,
+  "end": 31.85,
+  "text": "(561) 346-1881",
+  "size": 70,
+  "yFrom": 0.68,
+  "yTo": 0.585,
+  "moveAt": 29.6
+ },
+ "houseStrike": {
+  "start": 8.6,
+  "strikeAt": 9.62,
+  "bwAt": 10.45,
+  "end": 12.6,
+  "y": 0.36
+ },
+ "zooms": [
+  {
+   "t": 3.9,
+   "scale": 1.15
+  },
+  {
+   "t": 5.2,
+   "scale": 1.0
+  },
+  {
+   "t": 10.45,
+   "scale": 1.15
+  },
+  {
+   "t": 12.6,
+   "scale": 1.0,
+   "cut": true
+  },
+  {
+   "t": 16.45,
+   "scale": 1.12
+  },
+  {
+   "t": 21.35,
+   "scale": 1.0
+  },
+  {
+   "t": 33.4,
+   "scale": 1.12
+  }
+ ],
+ "whips": [
+  8.34
+ ],
+ "sfx": [
+  {
+   "t": 0.0,
+   "file": "boom.wav",
+   "vol": 0.8
+  },
+  {
+   "t": 0.0,
+   "file": "whoosh.wav",
+   "vol": 0.6
+  },
+  {
+   "t": 0.75,
+   "file": "shimmer.wav",
+   "vol": 0.5
+  },
+  {
+   "t": 1.2,
+   "file": "pop.wav",
+   "vol": 0.6
+  },
+  {
+   "t": 1.85,
+   "file": "whoosh.wav",
+   "vol": 0.45
+  },
+  {
+   "t": 3.85,
+   "file": "boom.wav",
+   "vol": 0.9
+  },
+  {
+   "t": 3.8,
+   "file": "whoosh.wav",
+   "vol": 0.6
+  },
+  {
+   "t": 5.0,
+   "file": "whoosh.wav",
+   "vol": 0.4
+  },
+  {
+   "t": 5.6,
+   "file": "whoosh.wav",
+   "vol": 0.55
+  },
+  {
+   "t": 6.9,
+   "file": "whoosh.wav",
+   "vol": 0.6
+  },
+  {
+   "t": 7.5,
+   "file": "shimmer.wav",
+   "vol": 0.45
+  },
+  {
+   "t": 8.22,
+   "file": "whip.wav",
+   "vol": 0.9
+  },
+  {
+   "t": 8.45,
+   "file": "downlifter.wav",
+   "vol": 0.55
+  },
+  {
+   "t": 8.6,
+   "file": "whoosh.wav",
+   "vol": 0.4
+  },
+  {
+   "t": 9.6,
+   "file": "slash.wav",
+   "vol": 0.8
+  },
+  {
+   "t": 10.42,
+   "file": "boom.wav",
+   "vol": 0.9
+  },
+  {
+   "t": 12.6,
+   "file": "shimmer.wav",
+   "vol": 0.5
+  },
+  {
+   "t": 12.6,
+   "file": "boom.wav",
+   "vol": 0.5
+  },
+  {
+   "t": 16.42,
+   "file": "boom.wav",
+   "vol": 0.7
+  },
+  {
+   "t": 21.32,
+   "file": "boom.wav",
+   "vol": 0.7
+  },
+  {
+   "t": 23.2,
+   "file": "whoosh.wav",
+   "vol": 0.6
+  },
+  {
+   "t": 23.3,
+   "file": "boom.wav",
+   "vol": 0.8
+  },
+  {
+   "t": 23.8,
+   "file": "shimmer.wav",
+   "vol": 0.5
+  },
+  {
+   "t": 24.55,
+   "file": "whoosh.wav",
+   "vol": 0.4
+  },
+  {
+   "t": 28.7,
+   "file": "pop.wav",
+   "vol": 0.7
+  },
+  {
+   "t": 28.75,
+   "file": "shimmer.wav",
+   "vol": 0.45
+  },
+  {
+   "t": 31.7,
+   "file": "whoosh.wav",
+   "vol": 0.5
+  },
+  {
+   "t": 33.37,
+   "file": "boom.wav",
+   "vol": 0.75
+  }
+ ]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "orange-kinetic-reel-template",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "studio": "remotion studio",
+    "render": "remotion render Reel out/reel.mp4 --concurrency=2",
+    "matte": "python3 scripts/make_matte.py public/input.mp4",
+    "sfx": "python3 scripts/make_sfx.py",
+    "transcribe": "node scripts/transcribe.mjs public/input.mp4"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.547",
+    "@remotion/google-fonts": "^4.0.547",
+    "@remotion/install-whisper-cpp": "^4.0.547",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.547"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.32",
+    "typescript": "^5.9.3"
+  }
+}

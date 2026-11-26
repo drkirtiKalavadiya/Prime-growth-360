@@ -1,0 +1,6 @@
+node_modules/
+out/
+public/input.mp4
+public/subject.webm
+scripts/.models/
+whisper.cpp/
