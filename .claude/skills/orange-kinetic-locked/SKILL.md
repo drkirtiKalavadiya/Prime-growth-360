@@ -34,6 +34,20 @@ That single command:
 4. verifies the lock again: the edit may differ from the master only in time values
 5. renders with Remotion
 
+### Green-screen or landscape recordings
+
+If the clip is shot on a green screen (check a frame), don't use the generic crop + MediaPipe path. Key it instead: it gives a cleaner cut-out and lets you place the user in an office-style set like the reference (wall, teal screens with boats, warm wood desk in front):
+
+```bash
+python3 $SK/scripts/greenscreen_footage.py their.mp4 $SK/template/public --start 0 --dur <seconds>
+python3 $SK/scripts/retime.py --exact --duration <seconds> --out $SK/template/src/edit.json   # or --words … for a script recording
+python3 $SK/scripts/verify_lock.py
+cd $SK/template && npx remotion render Reel out.mp4
+```
+It auto-frames the person (top of head at 33% height, shoulders ~82% width), removes green spill, sharpens the upscale, and writes both `input.mp4` and `subject.webm`. The backdrop is footage, not part of the lock.
+
+If the recording is much longer than 35.6 s and isn't the locked script, say so before rendering. Ask whether to (a) re-record the script, (b) use the first 35.6 s with the original timings (on-screen words won't match the speech), or (c) break the text lock for new words. Don't pick for them.
+
 Flags: `--exact` keeps the original timings (use when the user deliberately spoke in sync with the original). `--no-subject` puts all text in front (use only if the cut-out cannot run). Env `CHROME=/path/to/chromium` if Remotion can't download its browser (in Claude Code cloud: `CHROME=/opt/pw-browsers/chromium`).
 
 **Requirements:** ffmpeg, Node 18+, Python 3 with `mediapipe opencv-python-headless numpy faster-whisper`. On Linux, MediaPipe also needs `libegl1 libgles2` (apt). Install what's missing, then run. Do not swap in other tools that would change the look.
