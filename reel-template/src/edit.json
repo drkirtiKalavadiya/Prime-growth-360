@@ -507,142 +507,142 @@
   {
    "t": 0.0,
    "file": "boom.wav",
-   "vol": 0.8
+   "vol": 0.56
   },
   {
    "t": 0.0,
    "file": "whoosh.wav",
-   "vol": 0.6
+   "vol": 0.42
   },
   {
    "t": 0.75,
    "file": "shimmer.wav",
-   "vol": 0.5
+   "vol": 0.35
   },
   {
    "t": 1.2,
    "file": "pop.wav",
-   "vol": 0.6
+   "vol": 0.42
   },
   {
    "t": 1.85,
    "file": "whoosh.wav",
-   "vol": 0.45
+   "vol": 0.32
   },
   {
    "t": 3.85,
    "file": "boom.wav",
-   "vol": 0.9
+   "vol": 0.63
   },
   {
    "t": 3.8,
    "file": "whoosh.wav",
-   "vol": 0.6
+   "vol": 0.42
   },
   {
    "t": 5.0,
    "file": "whoosh.wav",
-   "vol": 0.4
+   "vol": 0.28
   },
   {
    "t": 5.6,
    "file": "whoosh.wav",
-   "vol": 0.55
+   "vol": 0.39
   },
   {
    "t": 6.9,
    "file": "whoosh.wav",
-   "vol": 0.6
+   "vol": 0.42
   },
   {
    "t": 7.5,
    "file": "shimmer.wav",
-   "vol": 0.45
+   "vol": 0.32
   },
   {
    "t": 8.22,
    "file": "whip.wav",
-   "vol": 0.9
+   "vol": 0.63
   },
   {
    "t": 8.45,
    "file": "downlifter.wav",
-   "vol": 0.55
+   "vol": 0.39
   },
   {
    "t": 8.6,
    "file": "whoosh.wav",
-   "vol": 0.4
+   "vol": 0.28
   },
   {
    "t": 9.6,
    "file": "slash.wav",
-   "vol": 0.8
+   "vol": 0.56
   },
   {
    "t": 10.42,
    "file": "boom.wav",
-   "vol": 0.9
+   "vol": 0.63
   },
   {
    "t": 12.6,
    "file": "shimmer.wav",
-   "vol": 0.5
+   "vol": 0.35
   },
   {
    "t": 12.6,
    "file": "boom.wav",
-   "vol": 0.5
+   "vol": 0.35
   },
   {
    "t": 16.42,
    "file": "boom.wav",
-   "vol": 0.7
+   "vol": 0.49
   },
   {
    "t": 21.32,
    "file": "boom.wav",
-   "vol": 0.7
+   "vol": 0.49
   },
   {
    "t": 23.2,
    "file": "whoosh.wav",
-   "vol": 0.6
+   "vol": 0.42
   },
   {
    "t": 23.3,
    "file": "boom.wav",
-   "vol": 0.8
+   "vol": 0.56
   },
   {
    "t": 23.8,
    "file": "shimmer.wav",
-   "vol": 0.5
+   "vol": 0.35
   },
   {
    "t": 24.55,
    "file": "whoosh.wav",
-   "vol": 0.4
+   "vol": 0.28
   },
   {
    "t": 28.7,
    "file": "pop.wav",
-   "vol": 0.7
+   "vol": 0.49
   },
   {
    "t": 28.75,
    "file": "shimmer.wav",
-   "vol": 0.45
+   "vol": 0.32
   },
   {
    "t": 31.7,
    "file": "whoosh.wav",
-   "vol": 0.5
+   "vol": 0.35
   },
   {
    "t": 33.37,
    "file": "boom.wav",
-   "vol": 0.75
+   "vol": 0.52
   }
  ]
 }

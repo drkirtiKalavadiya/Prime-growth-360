@@ -14,9 +14,9 @@ export const COLORS = {
 };
 
 export const CAPTION = {
-  size: 60, // ~38px on the 720-wide original
+  size: 110, // ~74px font-size on the 720-wide original ("give" = 170px wide)
   weight: 800,
-  y: 0.565, // centre of the word, as a fraction of frame height (chest level)
+  y: 0.575, // centre of the word, as a fraction of frame height (chest level)
   letterSpacing: '-0.01em',
   shadow: '0 4px 14px rgba(0,0,0,0.45), 0 1px 3px rgba(0,0,0,0.35)',
   popFrames: 4, // scale 0.82 -> 1.0 on each new word
