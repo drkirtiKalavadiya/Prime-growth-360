@@ -1,6 +1,6 @@
 {
- "_readme": "All times are in SECONDS. Change this file for each new video. y = vertical centre as fraction of height (0 top, 1 bottom). size = font px at 1080 wide. behind=true puts the text behind the speaker (needs public/subject.webm).",
- "durationSec": 35.6,
+ "_readme": "Gujarati sales-coach version: same style system as realtor_en.json, words = speaker's own.",
+ "durationSec": 36.2,
  "video": "input.mp4",
  "subject": "subject.webm",
  "music": {
@@ -9,499 +9,445 @@
  },
  "captions": [
   {
-   "t": 2.17,
-   "w": "the"
+   "t": 2.26,
+   "w": "આજનો"
   },
   {
-   "t": 2.47,
-   "w": "previous"
+   "t": 3.18,
+   "w": "વિડિયો"
   },
   {
-   "t": 2.84,
-   "w": "listing"
+   "t": 4.95,
+   "w": "જેથી"
   },
   {
-   "t": 3.24,
-   "w": "agents"
+   "t": 5.4,
+   "w": "આ"
   },
   {
-   "t": 5.34,
-   "w": "and"
+   "t": 5.56,
+   "w": "વિડિયો"
   },
   {
-   "t": 8.44,
-   "w": "because"
+   "t": 7.72,
+   "w": "જો"
   },
   {
-   "t": 8.81,
-   "w": "your"
+   "t": 8.2,
+   "w": "તમારે"
   },
   {
-   "t": 9.05,
-   "w": "house"
+   "t": 10.36,
+   "w": "આ"
   },
   {
-   "t": 9.44,
-   "w": "hasn't"
+   "t": 10.5,
+   "w": "વિડિયો"
   },
   {
-   "t": 9.74,
-   "w": "sold"
+   "t": 10.88,
+   "w": "તમારા"
   },
   {
-   "t": 10.05,
-   "w": "doesn't"
+   "t": 11.42,
+   "w": "માટે"
   },
   {
-   "t": 10.68,
-   "w": "mean"
+   "t": 11.72,
+   "w": "છે"
   },
   {
-   "t": 11.08,
-   "w": "not"
+   "t": 11.92,
+   "w": "તો"
   },
   {
-   "t": 11.34,
-   "w": "worth"
+   "t": 12.38,
+   "w": "ચાલો"
   },
   {
-   "t": 11.58,
-   "w": "what"
+   "t": 12.74,
+   "w": "શરૂ"
   },
   {
-   "t": 11.78,
-   "w": "you're"
+   "t": 13.14,
+   "w": "કરીએ"
   },
   {
-   "t": 11.98,
-   "w": "asking."
+   "t": 13.48,
+   "w": "મિત્રો"
   },
   {
-   "t": 12.7,
-   "w": "could"
+   "t": 18.0,
+   "w": "તો"
   },
   {
-   "t": 13.0,
-   "w": "just"
+   "t": 18.24,
+   "w": "વેચાણ"
   },
   {
-   "t": 13.25,
-   "w": "have"
+   "t": 18.6,
+   "w": "એ"
   },
   {
-   "t": 13.55,
-   "w": "wrong"
+   "t": 18.84,
+   "w": "શક્યતાઓની"
   },
   {
-   "t": 13.95,
-   "w": "agent"
+   "t": 19.54,
+   "w": "રમત"
   },
   {
-   "t": 14.21,
-   "w": "the"
+   "t": 19.88,
+   "w": "છે"
   },
   {
-   "t": 14.45,
-   "w": "wrong"
+   "t": 20.26,
+   "w": "તો"
   },
   {
-   "t": 14.95,
-   "w": "marketing."
+   "t": 20.78,
+   "w": "ચાલો"
   },
   {
-   "t": 15.5,
-   "w": "You"
+   "t": 21.16,
+   "w": "ધ્યાનથી"
   },
   {
-   "t": 15.75,
-   "w": "heard"
+   "t": 21.62,
+   "w": "સમજીએ"
   },
   {
-   "t": 15.95,
-   "w": "right"
+   "t": 22.16,
+   "w": "જો"
   },
   {
-   "t": 16.55,
-   "w": "we"
+   "t": 22.66,
+   "w": "તમે"
   },
   {
-   "t": 16.75,
-   "w": "listed"
+   "t": 22.9,
+   "w": "દસ"
   },
   {
-   "t": 17.05,
-   "w": "four"
+   "t": 23.22,
+   "w": "લોકોને"
   },
   {
-   "t": 17.42,
-   "w": "properties"
+   "t": 23.72,
+   "w": "મળો"
   },
   {
-   "t": 18.28,
-   "w": "raised"
+   "t": 24.0,
+   "w": "છો"
   },
   {
-   "t": 18.69,
-   "w": "the"
+   "t": 24.2,
+   "w": "અને"
   },
   {
-   "t": 18.99,
-   "w": "prices"
+   "t": 24.78,
+   "w": "માત્ર"
   },
   {
-   "t": 19.42,
-   "w": "and"
+   "t": 25.16,
+   "w": "બે"
   },
   {
-   "t": 19.72,
-   "w": "sold"
+   "t": 25.4,
+   "w": "જ"
   },
   {
-   "t": 19.95,
-   "w": "them"
+   "t": 25.7,
+   "w": "લોકો"
   },
   {
-   "t": 20.19,
-   "w": "under"
+   "t": 25.92,
+   "w": "ખરીદે"
   },
   {
-   "t": 20.52,
-   "w": "60"
+   "t": 26.36,
+   "w": "છે"
   },
   {
-   "t": 20.92,
-   "w": "days"
+   "t": 27.0,
+   "w": "અને"
   },
   {
-   "t": 21.4,
-   "w": "while"
+   "t": 27.34,
+   "w": "તમારે"
   },
   {
-   "t": 21.6,
-   "w": "they'd"
+   "t": 27.92,
+   "w": "જો"
   },
   {
-   "t": 21.92,
-   "w": "previously"
+   "t": 28.1,
+   "w": "સેલ્સ"
   },
   {
-   "t": 22.56,
-   "w": "been"
+   "t": 28.4,
+   "w": "વધારવું"
   },
   {
-   "t": 22.76,
-   "w": "listed"
+   "t": 28.74,
+   "w": "હોય"
   },
   {
-   "t": 23.09,
-   "w": "for"
+   "t": 28.82,
+   "w": "તો"
   },
   {
-   "t": 24.75,
-   "w": "If"
+   "t": 28.98,
+   "w": "શું"
   },
   {
-   "t": 24.95,
-   "w": "you're"
+   "t": 29.2,
+   "w": "કરવું"
   },
   {
-   "t": 25.13,
-   "w": "interested"
+   "t": 29.44,
+   "w": "જોઈએ?"
   },
   {
-   "t": 25.56,
-   "w": "in"
+   "t": 29.74,
+   "w": "તો"
   },
   {
-   "t": 25.75,
-   "w": "getting"
+   "t": 32.5,
+   "w": "જેથી"
   },
   {
-   "t": 25.99,
-   "w": "your"
+   "t": 34.18,
+   "w": "જેથી"
   },
   {
-   "t": 26.26,
-   "w": "house"
+   "t": 34.78,
+   "w": "તમારું"
   },
   {
-   "t": 26.59,
-   "w": "sold"
+   "t": 35.22,
+   "w": "સેલ્સ"
   },
   {
-   "t": 27.23,
-   "w": "give"
-  },
-  {
-   "t": 27.49,
-   "w": "me"
-  },
-  {
-   "t": 27.83,
-   "w": "call"
-  },
-  {
-   "t": 28.46,
-   "w": "at"
-  },
-  {
-   "t": 31.87,
-   "w": "or"
-  },
-  {
-   "t": 32.13,
-   "w": "message"
-  },
-  {
-   "t": 32.6,
-   "w": "me"
-  },
-  {
-   "t": 33.1,
-   "w": "and"
-  },
-  {
-   "t": 33.37,
-   "w": "send"
-  },
-  {
-   "t": 33.75,
-   "w": "this"
-  },
-  {
-   "t": 33.95,
-   "w": "to"
-  },
-  {
-   "t": 34.17,
-   "w": "somebody"
-  },
-  {
-   "t": 34.4,
-   "w": "who"
-  },
-  {
-   "t": 34.6,
-   "w": "to"
-  },
-  {
-   "t": 34.8,
-   "w": "their"
-  },
-  {
-   "t": 35.0,
-   "w": "house"
-  },
-  {
-   "t": 35.2,
-   "w": "sold.",
-   "end": 35.6
+   "t": 35.54,
+   "w": "વધે",
+   "end": 36.2
   }
  ],
  "headlines": [
   {
    "start": 0.0,
-   "end": 2.05,
+   "end": 2.26,
    "lines": [
     {
-     "text": "Last",
+     "text": "નમસ્કાર",
      "color": "white",
-     "size": 125,
+     "size": 100,
      "y": 0.29,
      "behind": true
     },
     {
-     "text": "year",
+     "text": "મિત્રો",
      "color": "orange",
-     "size": 306,
-     "y": 0.365,
-     "behind": true
-    },
-    {
-     "text": "sold",
-     "color": "white",
-     "size": 143,
-     "y": 0.47,
-     "in": 0.45,
-     "out": 1.15
-    },
-    {
-     "text": "four",
-     "color": "white",
-     "size": 195,
-     "y": 0.475,
-     "in": 1.2
-    },
-    {
-     "text": "properties",
-     "color": "white",
-     "size": 88,
-     "y": 0.535,
-     "in": 1.25
-    }
-   ]
-  },
-  {
-   "start": 3.9,
-   "end": 5.15,
-   "lines": [
-    {
-     "text": "just",
-     "color": "white",
-     "size": 109,
+     "size": 230,
      "y": 0.37,
      "behind": true
     },
     {
-     "text": "couldn't",
+     "text": "પંકજ સંચાણીયા",
      "color": "white",
-     "size": 196,
+     "size": 96,
+     "y": 0.475,
+     "in": 0.9
+    },
+    {
+     "text": "સેલ્સ કોચ",
+     "color": "white",
+     "size": 70,
+     "y": 0.535,
+     "in": 1.72
+    }
+   ]
+  },
+  {
+   "start": 3.5,
+   "end": 4.95,
+   "lines": [
+    {
+     "text": "ખૂબ જ",
+     "color": "white",
+     "size": 84,
+     "y": 0.37,
+     "behind": true
+    },
+    {
+     "text": "મહત્વનો",
+     "color": "white",
+     "size": 190,
      "y": 0.44,
      "behind": true
     },
     {
-     "text": "sell!",
+     "text": "છે!",
      "color": "orange",
-     "size": 195,
-     "y": 0.655
+     "size": 150,
+     "y": 0.655,
+     "in": 4.4
     }
    ]
   },
   {
-   "start": 5.7,
-   "end": 6.8,
+   "start": 5.98,
+   "end": 7.72,
    "lines": [
     {
-     "text": "the",
+     "text": "પૂરો જોવા",
      "color": "white",
-     "size": 75,
+     "size": 72,
      "y": 0.545
     },
     {
-     "text": "raised",
+     "text": "નમ્ર વિનંતી",
      "color": "white",
-     "size": 208,
-     "y": 0.585
-    },
-    {
-     "text": "the price",
-     "color": "white",
-     "size": 91,
-     "y": 0.635
+     "size": 150,
+     "y": 0.6,
+     "in": 6.94
     }
    ]
   },
   {
-   "start": 7.0,
-   "end": 8.3,
+   "start": 8.54,
+   "end": 10.36,
    "lines": [
     {
-     "text": "every",
+     "text": "સેલ્સ",
      "color": "orange",
-     "size": 228,
+     "size": 175,
      "y": 0.33,
      "behind": true
     },
     {
-     "text": "single",
+     "text": "વોરિયર",
      "color": "white",
-     "size": 228,
+     "size": 175,
      "y": 0.44,
-     "in": 7.25
+     "in": 8.96
     },
     {
-     "text": "time",
+     "text": "બનવું હોય તો",
      "color": "white",
-     "size": 228,
+     "size": 90,
      "y": 0.53,
-     "in": 7.9
+     "in": 9.28
     }
    ]
   },
   {
-   "start": 23.3,
-   "end": 24.7,
+   "start": 14.22,
+   "end": 17.9,
    "lines": [
     {
-     "text": "six",
+     "text": "sales is a",
+     "color": "white",
+     "size": 96,
+     "y": 0.29,
+     "behind": true
+    },
+    {
+     "text": "game",
      "color": "orange",
-     "size": 325,
+     "size": 235,
+     "y": 0.365,
+     "behind": true,
+     "in": 14.96
+    },
+    {
+     "text": "of probability",
+     "color": "white",
+     "size": 90,
+     "y": 0.47,
+     "in": 15.4
+    }
+   ]
+  },
+  {
+   "start": 32.88,
+   "end": 34.18,
+   "lines": [
+    {
+     "text": "20",
+     "color": "orange",
+     "size": 250,
      "y": 0.295,
      "behind": true
     },
     {
-     "text": "months",
+     "text": "લોકો",
      "color": "white",
-     "size": 156,
+     "size": 120,
      "y": 0.39,
-     "behind": true
+     "behind": true,
+     "in": 33.04
     },
     {
-     "text": "one",
+     "text": "ખરીદે",
      "color": "white",
-     "size": 195,
+     "size": 150,
      "y": 0.475,
-     "in": 23.75
-    },
-    {
-     "text": "year",
-     "color": "white",
-     "size": 214,
-     "y": 0.56,
-     "in": 23.85
+     "in": 33.56
     }
    ]
   }
  ],
  "phone": {
-  "start": 28.73,
-  "end": 31.85,
-  "text": "(561) 346-1881",
-  "size": 70,
+  "start": 30.38,
+  "end": 32.5,
+  "text": "100 લોકોને મળવું જોઈએ",
+  "size": 66,
   "yFrom": 0.68,
   "yTo": 0.585,
-  "moveAt": 29.6
+  "moveAt": 31.1
  },
  "houseStrike": {
-  "start": 8.6,
-  "strikeAt": 9.62,
-  "bwAt": 10.45,
-  "end": 12.6,
+  "start": 22.9,
+  "strikeAt": 24.78,
+  "bwAt": 25.16,
+  "end": 27.0,
   "y": 0.36
  },
  "zooms": [
   {
-   "t": 3.9,
+   "t": 3.5,
    "scale": 1.15
   },
   {
-   "t": 5.2,
+   "t": 4.95,
    "scale": 1.0
   },
   {
-   "t": 10.45,
+   "t": 14.22,
+   "scale": 1.12
+  },
+  {
+   "t": 18.0,
+   "scale": 1.0
+  },
+  {
+   "t": 25.16,
    "scale": 1.15
   },
   {
-   "t": 12.6,
+   "t": 27.0,
    "scale": 1.0,
    "cut": true
   },
   {
-   "t": 16.45,
-   "scale": 1.12
-  },
-  {
-   "t": 21.35,
-   "scale": 1.0
-  },
-  {
-   "t": 33.4,
+   "t": 32.88,
    "scale": 1.12
   }
  ],
  "whips": [
-  8.34
+  11.88
  ],
  "sfx": [
   {
@@ -515,134 +461,159 @@
    "vol": 0.42
   },
   {
-   "t": 0.75,
+   "t": 0.44,
    "file": "shimmer.wav",
    "vol": 0.35
   },
   {
-   "t": 1.2,
+   "t": 0.9,
    "file": "pop.wav",
    "vol": 0.42
   },
   {
-   "t": 1.85,
+   "t": 1.72,
+   "file": "pop.wav",
+   "vol": 0.3
+  },
+  {
+   "t": 2.1,
    "file": "whoosh.wav",
    "vol": 0.32
   },
   {
-   "t": 3.85,
+   "t": 3.45,
+   "file": "whoosh.wav",
+   "vol": 0.42
+  },
+  {
+   "t": 3.5,
    "file": "boom.wav",
    "vol": 0.63
   },
   {
-   "t": 3.8,
-   "file": "whoosh.wav",
-   "vol": 0.42
+   "t": 4.4,
+   "file": "pop.wav",
+   "vol": 0.4
   },
   {
-   "t": 5.0,
+   "t": 4.85,
    "file": "whoosh.wav",
    "vol": 0.28
   },
   {
-   "t": 5.6,
+   "t": 5.9,
    "file": "whoosh.wav",
-   "vol": 0.39
+   "vol": 0.385
   },
   {
-   "t": 6.9,
+   "t": 7.6,
+   "file": "whoosh.wav",
+   "vol": 0.28
+  },
+  {
+   "t": 8.45,
    "file": "whoosh.wav",
    "vol": 0.42
   },
   {
-   "t": 7.5,
+   "t": 8.96,
    "file": "shimmer.wav",
-   "vol": 0.32
+   "vol": 0.315
   },
   {
-   "t": 8.22,
+   "t": 11.88,
    "file": "whip.wav",
    "vol": 0.63
   },
   {
-   "t": 8.45,
+   "t": 12.1,
    "file": "downlifter.wav",
-   "vol": 0.39
+   "vol": 0.385
   },
   {
-   "t": 8.6,
-   "file": "whoosh.wav",
-   "vol": 0.28
-  },
-  {
-   "t": 9.6,
-   "file": "slash.wav",
-   "vol": 0.56
-  },
-  {
-   "t": 10.42,
-   "file": "boom.wav",
-   "vol": 0.63
-  },
-  {
-   "t": 12.6,
-   "file": "shimmer.wav",
-   "vol": 0.35
-  },
-  {
-   "t": 12.6,
-   "file": "boom.wav",
-   "vol": 0.35
-  },
-  {
-   "t": 16.42,
-   "file": "boom.wav",
-   "vol": 0.49
-  },
-  {
-   "t": 21.32,
-   "file": "boom.wav",
-   "vol": 0.49
-  },
-  {
-   "t": 23.2,
+   "t": 14.1,
    "file": "whoosh.wav",
    "vol": 0.42
   },
   {
-   "t": 23.3,
+   "t": 14.22,
    "file": "boom.wav",
-   "vol": 0.56
+   "vol": 0.63
   },
   {
-   "t": 23.8,
+   "t": 14.96,
    "file": "shimmer.wav",
    "vol": 0.35
   },
   {
-   "t": 24.55,
+   "t": 17.7,
    "file": "whoosh.wav",
    "vol": 0.28
   },
   {
-   "t": 28.7,
+   "t": 18.0,
+   "file": "boom.wav",
+   "vol": 0.49
+  },
+  {
+   "t": 22.9,
+   "file": "whoosh.wav",
+   "vol": 0.28
+  },
+  {
+   "t": 24.76,
+   "file": "slash.wav",
+   "vol": 0.56
+  },
+  {
+   "t": 25.13,
+   "file": "boom.wav",
+   "vol": 0.63
+  },
+  {
+   "t": 27.0,
+   "file": "shimmer.wav",
+   "vol": 0.35
+  },
+  {
+   "t": 27.0,
+   "file": "boom.wav",
+   "vol": 0.35
+  },
+  {
+   "t": 30.35,
    "file": "pop.wav",
    "vol": 0.49
   },
   {
-   "t": 28.75,
+   "t": 30.4,
    "file": "shimmer.wav",
-   "vol": 0.32
+   "vol": 0.315
   },
   {
-   "t": 31.7,
+   "t": 32.4,
    "file": "whoosh.wav",
    "vol": 0.35
   },
   {
-   "t": 33.37,
+   "t": 32.8,
+   "file": "whoosh.wav",
+   "vol": 0.42
+  },
+  {
+   "t": 32.88,
    "file": "boom.wav",
-   "vol": 0.52
+   "vol": 0.56
+  },
+  {
+   "t": 33.3,
+   "file": "shimmer.wav",
+   "vol": 0.35
+  },
+  {
+   "t": 34.1,
+   "file": "whoosh.wav",
+   "vol": 0.28
   }
  ]
 }

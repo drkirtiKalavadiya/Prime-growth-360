@@ -1,10 +1,14 @@
 // Every visual constant measured from the reference reel lives here.
 // Measured on the 720x1280 original; values below are scaled for the 1080x1920 render.
 import {loadFont} from '@remotion/google-fonts/Poppins';
+import {loadFont as loadGujarati} from '@remotion/google-fonts/NotoSansGujarati';
 
 const {fontFamily} = loadFont('normal', {weights: ['700', '800', '900'], subsets: ['latin']});
+const gu = loadGujarati('normal', {weights: ['700', '800', '900'], subsets: ['gujarati']});
 
-export const FONT = fontFamily; // Poppins: geometric sans, matches the caption + headline glyphs
+// Poppins: geometric sans, matches the caption + headline glyphs.
+// Poppins has no Gujarati letters, so Gujarati text falls back to Noto Sans Gujarati (same heavy weights).
+export const FONT = `${fontFamily}, ${gu.fontFamily}`;
 
 export const COLORS = {
   orange: '#FF6600', // sampled median RGB(253,100,0) from "year", "sell!", "six", phone number
