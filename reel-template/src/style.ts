@@ -37,3 +37,9 @@ export const HEADLINE = {
 
 // Base colour grade applied to the footage (punchy, saturated office look)
 export const GRADE = 'saturate(1.18) contrast(1.06) brightness(1.02)';
+
+// Gujarati glyphs sit smaller than Latin at the same px size; scale them so they read like the Poppins words.
+export const GU_SCALE = 1.3;
+export const isGujarati = (s: string) => /[઀-૿]/.test(s);
+export const sizeFor = (s: string, px: number) => (isGujarati(s) ? px * GU_SCALE : px);
+export const spacingFor = (s: string, latin: string) => (isGujarati(s) ? '0em' : latin);

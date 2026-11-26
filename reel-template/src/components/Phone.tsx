@@ -1,6 +1,6 @@
 import React from 'react';
 import {interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
-import {COLORS, FONT} from '../style';
+import {COLORS, FONT, sizeFor, spacingFor} from '../style';
 import {clamp01, easeIn, easeOut} from './anim';
 import {DirBlur} from './DirBlur';
 
@@ -41,8 +41,8 @@ export const Phone: React.FC<{cfg: PhoneCfg}> = ({cfg}) => {
         style={{
           fontFamily: FONT,
           fontWeight: 800,
-          fontSize: cfg.size,
-          letterSpacing: '-0.02em',
+          fontSize: sizeFor(cfg.text, cfg.size),
+          letterSpacing: spacingFor(cfg.text, '-0.02em'),
           backgroundImage: `linear-gradient(100deg, ${COLORS.orange} 0%, ${COLORS.orange} 38%, #fff 50%, ${COLORS.orange} 62%, ${COLORS.orange} 100%)`,
           backgroundSize: '300% 100%',
           backgroundPosition: `${sweep}% 0`,

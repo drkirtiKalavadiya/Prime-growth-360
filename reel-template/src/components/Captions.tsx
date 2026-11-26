@@ -1,6 +1,6 @@
 import React from 'react';
 import {spring, useCurrentFrame, useVideoConfig} from 'remotion';
-import {CAPTION, COLORS, FONT} from '../style';
+import {CAPTION, COLORS, FONT, sizeFor, spacingFor} from '../style';
 
 export type Caption = {t: number; w: string; end?: number};
 
@@ -27,8 +27,8 @@ export const Captions: React.FC<{items: Caption[]}> = ({items}) => {
         textAlign: 'center',
         fontFamily: FONT,
         fontWeight: CAPTION.weight,
-        fontSize: CAPTION.size,
-        letterSpacing: CAPTION.letterSpacing,
+        fontSize: sizeFor(c.w, CAPTION.size),
+        letterSpacing: spacingFor(c.w, CAPTION.letterSpacing),
         color: COLORS.white,
         textShadow: CAPTION.shadow,
         transform: `translateY(-50%) scale(${0.82 + 0.18 * s})`,

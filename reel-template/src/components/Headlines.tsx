@@ -1,6 +1,6 @@
 import React from 'react';
 import {useCurrentFrame, useVideoConfig} from 'remotion';
-import {COLORS, FONT, HEADLINE} from '../style';
+import {COLORS, FONT, HEADLINE, sizeFor, spacingFor} from '../style';
 import {stretchInDriftOut} from './anim';
 import {DirBlur} from './DirBlur';
 
@@ -47,9 +47,9 @@ export const Headlines: React.FC<{items: Headline[]; layer: 'behind' | 'front'; 
                 whiteSpace: 'nowrap',
                 fontFamily: FONT,
                 fontWeight: HEADLINE.weight,
-                fontSize: l.size,
+                fontSize: sizeFor(l.text, l.size),
                 lineHeight: HEADLINE.lineHeight,
-                letterSpacing: HEADLINE.letterSpacing,
+                letterSpacing: spacingFor(l.text, HEADLINE.letterSpacing),
                 color: COLORS[l.color],
                 textShadow: '0 6px 26px rgba(0,0,0,0.22)',
                 opacity: a.opacity,
